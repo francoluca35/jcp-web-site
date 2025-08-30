@@ -4,7 +4,7 @@ import { CheckCircle, Award, Truck, ArrowRight, Zap, Settings } from "lucide-rea
 
 export function HeroSection() {
   return (
-    <section id="inicio" className="relative bg-gradient-to-br from-[#1a1a1a] via-[#495057] to-[#1a1a1a] py-24 overflow-hidden">
+    <section id="inicio" className=" relative bg-gradient-to-br from-[#1a1a1a] via-[#495057] to-[#1a1a1a] py-24 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b35]/10 to-[#ffd23f]/10"></div>
