@@ -10,7 +10,7 @@ import {
   Mail, 
   Clock,
   MessageSquare,
-  Calculator,
+  Settings,
   Award
 } from "lucide-react";
 
@@ -26,7 +26,7 @@ export function ContactSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center bg-gradient-to-r from-[#ff6b35]/10 to-[#ffd23f]/10 rounded-full px-6 py-3 mb-6 border border-[#ff6b35]/20">
-            <Calculator className="h-5 w-5 text-[#ff6b35] mr-2" />
+            <Settings className="h-5 w-5 text-[#ff6b35] mr-2" />
             <span className="text-[#1a1a1a] font-bold uppercase tracking-wide">Solicitud Industrial</span>
           </div>
           <h2 className="text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-6">
@@ -46,7 +46,7 @@ export function ContactSection() {
               <CardHeader className="bg-gradient-to-r from-[#1a1a1a] to-[#495057] text-white rounded-t-lg">
                 <CardTitle className="flex items-center space-x-3">
                   <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-3">
-                    <Calculator className="h-6 w-6 text-white" />
+                    <Settings className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <span className="text-2xl font-black uppercase tracking-wide">SOLICITAR COTIZACIÓN</span>
