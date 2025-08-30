@@ -6,6 +6,7 @@ import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
 
 export default function App() {
+
   return (
     <div className="min-h-screen bg-[#f8f9fa]">
       <Header />
@@ -16,6 +17,7 @@ export default function App() {
         <ContactSection />
       </main>
       <Footer />
+      
     </div>
   );
 }

@@ -77,9 +77,11 @@ export function PartsAndServicesSection() {
             <Cog className="h-5 w-5 text-[#ffd23f] mr-2 animate-spin" />
             <span className="text-white font-bold uppercase tracking-wide">Soporte Industrial 24/7</span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-black text-white mb-6">
-            REPUESTOS &
-            <span className="block bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">SERVICIOS</span>
+          <h2 className="text-4xl lg:text-6xl font-black text-white mb-6">
+            REPUESTOS & 
+            <span className=" bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">
+               SERVICIOS
+               </span>
           </h2>
           <p className="text-xl text-[#adb5bd] max-w-3xl mx-auto leading-relaxed">
             Mantenimiento predictivo, repuestos originales y servicio técnico especializado.
@@ -88,22 +90,24 @@ export function PartsAndServicesSection() {
         </div>
 
         <Tabs defaultValue="repuestos" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-12 bg-[#495057]/30 backdrop-blur-sm border border-[#ff6b35]/20 rounded-2xl p-2">
-            <TabsTrigger 
-              value="repuestos" 
-              className="flex items-center space-x-2 text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white font-bold py-4 rounded-xl transition-all duration-300"
-            >
-              <Package className="h-5 w-5" />
-              <span className="uppercase tracking-wide">Repuestos</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="servicios" 
-              className="flex items-center space-x-2 text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white font-bold py-4 rounded-xl transition-all duration-300"
-            >
-              <Wrench className="h-5 w-5" />
-              <span className="uppercase tracking-wide">Servicios</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex justify-center mb-12">
+            <TabsList className="bg-[#374151] rounded-full p-2 flex items-center  border border-[#4b5563] max-w-full ">
+              <TabsTrigger 
+                value="repuestos" 
+                className="flex items-center space-x-3 text-white data-[state=active]:-ml-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 font-bold py-4 px-8 rounded-full transition-all duration-300 hover:bg-[#4b5563] hover:scale-102"
+              >
+                <Package className="h-5 w-5" />
+                <span className="uppercase tracking-wide text-lg font-black">REPUESTOS</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="servicios" 
+                className="flex items-center space-x-3 text-white data-[state=active]:-mr-1  data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 font-bold py-4 px-8 rounded-full transition-all duration-300 hover:bg-[#4b5563] hover:scale-102 hover:-mr-2"
+              >
+                <Wrench className="h-5 w-5" />
+                <span className="uppercase tracking-wide text-lg font-black">SERVICIOS</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="repuestos">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
