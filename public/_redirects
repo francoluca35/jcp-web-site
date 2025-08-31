@@ -1,0 +1,5 @@
+# Netlify Forms redirects
+/api/*  /.netlify/functions/*  200
+
+# Handle form submissions
+/*    /index.html   200

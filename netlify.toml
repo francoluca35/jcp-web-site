@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Enable form detection
+[forms]
+  enabled = true
+
+# Handle form submissions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/*"
+  status = 200
+
+# Handle static files
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

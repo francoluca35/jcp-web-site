@@ -1,11 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   images: {
-    domains: ['images.unsplash.com'], // Para permitir imágenes de Unsplash
-    unoptimized: true, // Para desarrollo, optimizar en producción
+    unoptimized: true
   },
-  trailingSlash: false,
-  output: 'standalone', // Para deployment
+  // Enable static generation for Netlify
+  experimental: {
+    appDir: true,
+  },
+  // Handle form submissions
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/.netlify/functions/:path*',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

@@ -12,27 +12,34 @@
 
 ## 🚀 Pasos para configurar Netlify Forms
 
-### 1. Desplegar en Netlify
+### 1. Configuración del Proyecto
+El proyecto ya está configurado con:
+- ✅ `netlify.toml` - Configuración de Netlify
+- ✅ `next.config.js` - Configuración de Next.js para static export
+- ✅ `public/_redirects` - Manejo de formularios
+- ✅ Formulario con `data-netlify="true"`
+
+### 2. Desplegar en Netlify
 1. Ve a [https://netlify.com/](https://netlify.com/)
 2. Conecta tu repositorio de GitHub
 3. Configura el build:
    - **Build command**: `npm run build`
-   - **Publish directory**: `.next`
+   - **Publish directory**: `out` (no `.next`)
 4. Haz clic en "Deploy site"
 
-### 2. Habilitar Form Detection
+### 3. Habilitar Form Detection
 1. En tu dashboard de Netlify, ve a **Forms**
 2. Haz clic en **"Enable form detection"**
 3. Esto activará la detección automática de formularios
 
-### 3. Configurar Notificaciones (Opcional)
+### 4. Configurar Notificaciones (Opcional)
 1. Ve a **Forms** → **Form submission notifications**
 2. Haz clic en **"Add notification"**
 3. Selecciona **"Email notification"**
 4. Agrega tu email: **Francolucap1@gmail.com**
 5. Guarda la configuración
 
-### 4. Personalizar el Email (Opcional)
+### 5. Personalizar el Email (Opcional)
 En **Forms** → **Settings** puedes configurar:
 - **Asunto por defecto**: `🏭 Nueva Solicitud Industrial`
 - **Mensaje de confirmación**: Personalizar el mensaje que recibe el cliente
@@ -60,17 +67,22 @@ El formulario ya está configurado para enviar emails con asunto:
   name="contacto-industrial" 
   method="POST" 
   data-netlify="true" 
+  data-netlify-honeypot="bot-field"
   onSubmit={handleSubmit}
 >
   <input type="hidden" name="form-name" value="contacto-industrial" />
+  <div className="hidden">
+    <input name="bot-field" />
+  </div>
   <!-- Campos del formulario -->
 </form>
 ```
 
 ### Características implementadas:
 - ✅ **`data-netlify="true"`**: Habilita Netlify Forms
+- ✅ **`data-netlify-honeypot="bot-field"`**: Protección anti-spam
 - ✅ **`name="contacto-industrial"`**: Identifica el formulario
-- ✅ **Hidden input**: Requerido para Netlify Forms
+- ✅ **Hidden inputs**: Requeridos para Netlify Forms
 - ✅ **AJAX submission**: Envío sin recargar la página
 - ✅ **Validación**: Campos requeridos marcados
 
@@ -85,6 +97,7 @@ El formulario ya está configurado para enviar emails con asunto:
 ✅ **Reset automático** del formulario  
 ✅ **Diseño responsive** y moderno  
 ✅ **Dashboard integrado** para ver envíos  
+✅ **Protección anti-spam** con honeypot  
 
 ## 🚀 Prueba del Formulario
 
@@ -103,12 +116,14 @@ El formulario ya está configurado para enviar emails con asunto:
 - **Detección automática**: Netlify detecta el formulario automáticamente
 - **Seguridad**: Netlify maneja la seguridad del envío
 - **Sin servidor**: No necesitas backend
+- **Static export**: El sitio se genera como archivos estáticos
 
 ## 🔒 Seguridad
 
 - **HTTPS**: Todas las comunicaciones son seguras
 - **Verificación**: Netlify verifica que el email sea real
 - **Protección anti-spam**: Filtros automáticos incluidos
+- **Honeypot**: Campo oculto para detectar bots
 - **Sin datos sensibles**: No se almacena información en el código
 
 ## 🆚 Comparación de Soluciones
@@ -121,6 +136,7 @@ El formulario ya está configurado para enviar emails con asunto:
 | Integración | 🟢 Perfecta con Next.js | 🟡 Buena | 🟡 Moderada |
 | Dashboard | ✅ Integrado | ✅ Web | ✅ Web |
 | Spam filters | ✅ Incluidos | ✅ Básicos | ❌ No |
+| Static export | ✅ Compatible | ✅ Compatible | ✅ Compatible |
 
 ## 🎯 Resultado Final
 
@@ -132,9 +148,12 @@ Con Netlify Forms tendrás:
 - ✅ Dashboard integrado
 - ✅ Totalmente gratuito
 - ✅ Integración perfecta con Next.js
+- ✅ Protección anti-spam
+- ✅ Static export optimizado
 
 ## 📚 Referencias
 
 - [Netlify Forms Documentation](https://docs.netlify.com/manage/forms/setup)
 - [Netlify Forms with Next.js](https://docs.netlify.com/manage/forms/setup/#javascript-rendered-forms)
 - [Form Submission Notifications](https://docs.netlify.com/manage/forms/notifications/)
+- [Next.js Static Export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)
