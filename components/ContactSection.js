@@ -57,7 +57,7 @@ export function ContactSection() {
       // Crear el formulario dinámicamente para envío tradicional
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = '/';
+      form.action = '/success.html'; // Redirigir a nuestra página de éxito
       form.style.display = 'none';
 
       // Agregar campos ocultos
@@ -86,31 +86,10 @@ export function ContactSection() {
       document.body.appendChild(form);
       form.submit();
 
-      // Mostrar mensaje de éxito
-      setIsSubmitted(true);
-      
-      // Resetear formulario
-      setFormData({
-        nombre: '',
-        empresa: '',
-        email: '',
-        telefono: '',
-        producto: '',
-        mensaje: ''
-      });
-
     } catch (error) {
       console.error('Error enviando formulario:', error);
       setError('Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.');
-    } finally {
       setIsSubmitting(false);
-      
-      // Ocultar mensaje de éxito después de 5 segundos
-      if (isSubmitted) {
-        setTimeout(() => {
-          setIsSubmitted(false);
-        }, 5000);
-      }
     }
   };
 
