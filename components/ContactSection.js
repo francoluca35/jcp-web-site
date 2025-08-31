@@ -181,11 +181,15 @@ export function ContactSection() {
                   name="contacto-industrial" 
                   method="POST" 
                   data-netlify="true" 
+                  data-netlify-honeypot="bot-field"
                   onSubmit={handleSubmit} 
                   className="space-y-8"
                 >
-                  {/* Hidden input for Netlify Forms */}
+                  {/* Hidden inputs for Netlify Forms */}
                   <input type="hidden" name="form-name" value="contacto-industrial" />
+                  <div className="hidden">
+                    <input name="bot-field" />
+                  </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3 group">
@@ -372,7 +376,7 @@ export function ContactSection() {
               </CardContent>
             </Card>
 
-          
+           
           </div>
         </div>
       </div>
