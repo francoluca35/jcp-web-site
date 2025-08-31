@@ -173,6 +173,7 @@ export function ContactSection() {
                 <form 
                   name="contacto-industrial" 
                   method="POST" 
+                  action="/success.html"
                   data-netlify="true" 
                   data-netlify-honeypot="bot-field"
                   onSubmit={handleSubmit} 

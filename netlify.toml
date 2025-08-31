@@ -9,7 +9,7 @@
 [forms]
   enabled = true
 
-# Handle form submissions
+# Configure form redirects
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/*"
@@ -19,4 +19,10 @@
 [[redirects]]
   from = "/*"
   to = "/index.html"
+  status = 200
+
+# Form success redirect
+[[redirects]]
+  from = "/success"
+  to = "/success.html"
   status = 200
