@@ -1,0 +1,22 @@
+{
+  "repuestos": [
+    {
+      "category": "Hornos",
+      "items": [
+        { "name": "Resistencias eléctricas", "stock": "En stock", "price": "€45-120" },
+        { "name": "Termostatos digitales", "stock": "En stock", "price": "€180-350" },
+        { "name": "Ventiladores de convección", "stock": "2-3 días", "price": "€220-480" },
+        { "name": "Válvulas de gas", "stock": "En stock", "price": "€95-200" }
+      ]
+    },
+    {
+      "category": "Amasadoras",
+      "items": [
+        { "name": "Motores eléctricos", "stock": "En stock", "price": "€350-850" },
+        { "name": "Engranajes y transmisiones", "stock": "En stock", "price": "€120-300" },
+        { "name": "Sensores de seguridad", "stock": "En stock", "price": "€80-150" },
+        { "name": "Brazos amasadores", "stock": "1-2 días", "price": "€200-450" }
+      ]
+    }
+  ]
+}

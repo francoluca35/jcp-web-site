@@ -71,7 +71,17 @@ export function HeroSection() {
                 VER CATÁLOGO
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="text-gray-700 border-2 border-[#ff6b35] hover:bg-[#ff6b35] hover:text-white font-bold px-8 py-4 rounded-lg transition-all duration-300 text-lg">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-gray-700 border-2 border-[#ff6b35] hover:bg-[#ff6b35] hover:text-white font-bold px-8 py-4 rounded-lg transition-all duration-300 text-lg"
+                onClick={() => {
+                  const message = "Hola, necesito un presupuesto de maquinaria industrial para panadería.";
+                  const encodedMessage = encodeURIComponent(message);
+                  const whatsappUrl = `https://wa.me/5491163962947?text=${encodedMessage}`;
+                  window.open(whatsappUrl, '_blank');
+                }}
+              >
                 SOLICITAR PRESUPUESTO
               </Button>
             </div>

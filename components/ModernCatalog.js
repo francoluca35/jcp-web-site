@@ -16,6 +16,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { QuoteModal } from "./QuoteModal";
 
 // Datos por defecto en caso de error
 const defaultCatalogPages = [
@@ -183,6 +184,8 @@ export function ModernCatalog() {
   const [currentPage, setCurrentPage] = useState(0);
   const [catalogPages, setCatalogPages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Cargar productos desde el JSON
   useEffect(() => {
@@ -244,6 +247,16 @@ export function ModernCatalog() {
 
   const prevPage = () => {
     setCurrentPage((prev) => (prev - 1 + catalogPages.length) % catalogPages.length);
+  };
+
+  const handleQuote = (product) => {
+    setSelectedProduct(product);
+    setIsQuoteModalOpen(true);
+  };
+
+  const closeQuoteModal = () => {
+    setIsQuoteModalOpen(false);
+    setSelectedProduct(null);
   };
 
   const currentCatalog = catalogPages[currentPage];
@@ -415,7 +428,11 @@ export function ModernCatalog() {
                           MÁS INFO
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
-                        <Button variant="outline" className="border-2 border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white font-bold">
+                        <Button 
+                          variant="outline" 
+                          className="border-2 border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white font-bold"
+                          onClick={() => handleQuote(product)}
+                        >
                           COTIZAR
                         </Button>
                       </div>
@@ -500,6 +517,15 @@ export function ModernCatalog() {
           </div>
         </div>
       </div>
+
+      {/* Quote Modal */}
+      {selectedProduct && (
+        <QuoteModal
+          isOpen={isQuoteModalOpen}
+          onClose={closeQuoteModal}
+          product={selectedProduct}
+        />
+      )}
     </section>
   );
 }
