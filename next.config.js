@@ -5,19 +5,8 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  // Enable static generation for Netlify
-  experimental: {
-    appDir: true,
-  },
-  // Handle form submissions
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: '/.netlify/functions/:path*',
-      },
-    ]
-  },
+  // Remove rewrites as they don't work with static export
+  // Netlify Forms handles form submissions automatically
 }
 
 module.exports = nextConfig

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Detection</title>
+</head>
+<body>
+    <!-- Netlify Form Detection -->
+    <form name="contacto-industrial" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contacto-industrial" />
+        <div class="hidden">
+            <input name="bot-field" />
+        </div>
+        
+        <label>Nombre: <input name="nombre" type="text" /></label>
+        <label>Email: <input name="email" type="email" /></label>
+        <label>Empresa: <input name="empresa" type="text" /></label>
+        <label>Teléfono: <input name="telefono" type="text" /></label>
+        <label>Producto: <select name="producto">
+            <option value="hornos">Hornos industriales</option>
+            <option value="amasadoras">Amasadoras</option>
+            <option value="linea-completa">Línea completa de producción</option>
+            <option value="repuestos">Repuestos específicos</option>
+            <option value="servicio">Servicio técnico</option>
+            <option value="otros">Otros productos</option>
+        </select></label>
+        <label>Mensaje: <textarea name="mensaje"></textarea></label>
+        
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
