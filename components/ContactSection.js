@@ -134,7 +134,7 @@ export function ContactSection() {
           {/* Success Message */}
           {isSubmitted && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl animate-bounce">
+              <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
                   <CheckCircle className="h-10 w-10 text-white" />
                 </div>
