@@ -54,37 +54,51 @@ export function ContactSection() {
     setError('');
     
     try {
-      // Crear FormData para Netlify Forms
-      const formDataToSend = new FormData();
-      formDataToSend.append('form-name', 'contacto-industrial');
-      formDataToSend.append('nombre', formData.nombre);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('empresa', formData.empresa);
-      formDataToSend.append('telefono', formData.telefono);
-      formDataToSend.append('producto', formData.producto);
-      formDataToSend.append('mensaje', formData.mensaje);
+      // Crear el formulario dinámicamente para envío tradicional
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/';
+      form.style.display = 'none';
 
-      // Enviar usando Netlify Forms
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formDataToSend).toString()
+      // Agregar campos ocultos
+      const formNameInput = document.createElement('input');
+      formNameInput.type = 'hidden';
+      formNameInput.name = 'form-name';
+      formNameInput.value = 'contacto-industrial';
+      form.appendChild(formNameInput);
+
+      // Agregar campo honeypot
+      const botFieldInput = document.createElement('input');
+      botFieldInput.type = 'hidden';
+      botFieldInput.name = 'bot-field';
+      form.appendChild(botFieldInput);
+
+      // Agregar todos los campos del formulario
+      Object.keys(formData).forEach(key => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = formData[key];
+        form.appendChild(input);
       });
 
-      if (response.ok) {
-        setIsSubmitted(true);
-        // Resetear formulario
-        setFormData({
-          nombre: '',
-          empresa: '',
-          email: '',
-          telefono: '',
-          producto: '',
-          mensaje: ''
-        });
-      } else {
-        throw new Error('Error en el envío');
-      }
+      // Agregar el formulario al DOM y enviarlo
+      document.body.appendChild(form);
+      form.submit();
+
+      // Mostrar mensaje de éxito
+      setIsSubmitted(true);
+      
+      // Resetear formulario
+      setFormData({
+        nombre: '',
+        empresa: '',
+        email: '',
+        telefono: '',
+        producto: '',
+        mensaje: ''
+      });
+
     } catch (error) {
       console.error('Error enviando formulario:', error);
       setError('Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.');
@@ -376,7 +390,32 @@ export function ContactSection() {
               </CardContent>
             </Card>
 
-           
+            {/* Enhanced Industrial Advantages */}
+            <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#495057] text-white border-4 border-[#ff6b35] shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-500">
+              <CardHeader className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white rounded-t-lg">
+                <CardTitle className="text-2xl font-black uppercase tracking-wider flex items-center">
+                  <Award className="h-8 w-8 mr-3" />
+                  VENTAJAS INDUSTRIALES
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                <div className="space-y-4">
+                  {[
+                    "🏆 20+ años liderando el sector industrial",
+                    "⚡ Tecnología europea de última generación",
+                    "👨‍💼 Ingenieros especializados certificados",
+                    "💰 Financiación industrial flexible",
+                    "🛡️ Garantía extendida hasta 5 años",
+                    "🔧 Mantenimiento predictivo avanzado"
+                  ].map((advantage, index) => (
+                    <div key={index} className="flex items-center space-x-4 p-4 bg-white/10 rounded-xl border-2 border-[#ff6b35]/30 hover:bg-white/20 transition-all duration-300 hover:scale-105 group">
+                      <div className="w-4 h-4 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full flex-shrink-0 group-hover:scale-125 transition-transform duration-300"></div>
+                      <span className="font-bold text-lg">{advantage}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
