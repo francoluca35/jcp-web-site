@@ -57,7 +57,7 @@ export function ContactSection() {
       // Crear el formulario dinámicamente para envío tradicional
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = '/success.html'; // Redirigir a nuestra página de éxito
+      form.action = '/'; // Volver a la página principal
       form.style.display = 'none';
 
       // Agregar campos ocultos
@@ -86,10 +86,31 @@ export function ContactSection() {
       document.body.appendChild(form);
       form.submit();
 
+      // Mostrar mensaje de éxito
+      setIsSubmitted(true);
+      
+      // Resetear formulario
+      setFormData({
+        nombre: '',
+        empresa: '',
+        email: '',
+        telefono: '',
+        producto: '',
+        mensaje: ''
+      });
+
     } catch (error) {
       console.error('Error enviando formulario:', error);
       setError('Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.');
+    } finally {
       setIsSubmitting(false);
+      
+      // Ocultar mensaje de éxito después de 5 segundos
+      if (isSubmitted) {
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 5000);
+      }
     }
   };
 
@@ -123,12 +144,29 @@ export function ContactSection() {
           
           {/* Success Message */}
           {isSubmitted && (
-            <div className="mt-8 p-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl shadow-2xl animate-bounce">
-              <div className="flex items-center justify-center space-x-3">
-                <CheckCircle className="h-8 w-8" />
-                <span className="text-xl font-bold">¡Solicitud enviada con éxito!</span>
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl animate-bounce">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-2xl font-black text-[#1a1a1a] mb-4">
+                  ¡Solicitud Enviada!
+                </h3>
+                <p className="text-[#495057] text-lg mb-6">
+                  Tu solicitud de cotización industrial ha sido recibida exitosamente. Nuestro equipo técnico especializado se pondrá en contacto contigo en las próximas 24 horas.
+                </p>
+                <div className="bg-gradient-to-r from-[#ff6b35]/10 to-[#ffd23f]/10 p-4 rounded-xl mb-6">
+                  <p className="text-sm text-[#495057] font-medium">
+                    📧 Recibirás confirmación por email
+                  </p>
+                </div>
+                <button 
+                  onClick={() => setIsSubmitted(false)}
+                  className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white font-bold py-3 px-6 rounded-xl hover:scale-105 transition-transform duration-300"
+                >
+                  ¡Perfecto!
+                </button>
               </div>
-              <p className="text-center mt-2">Te contactaremos en las próximas 24 horas.</p>
             </div>
           )}
 
@@ -173,7 +211,6 @@ export function ContactSection() {
                 <form 
                   name="contacto-industrial" 
                   method="POST" 
-                  action="/success.html"
                   data-netlify="true" 
                   data-netlify-honeypot="bot-field"
                   onSubmit={handleSubmit} 
