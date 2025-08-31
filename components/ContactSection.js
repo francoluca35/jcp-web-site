@@ -396,32 +396,7 @@ export function ContactSection() {
               </CardContent>
             </Card>
 
-            {/* Enhanced Industrial Advantages */}
-            <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#495057] text-white border-4 border-[#ff6b35] shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-500">
-              <CardHeader className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white rounded-t-lg">
-                <CardTitle className="text-2xl font-black uppercase tracking-wider flex items-center">
-                  <Award className="h-8 w-8 mr-3" />
-                  VENTAJAS INDUSTRIALES
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <div className="space-y-4">
-                  {[
-                    "🏆 20+ años liderando el sector industrial",
-                    "⚡ Tecnología europea de última generación",
-                    "👨‍💼 Ingenieros especializados certificados",
-                    "💰 Financiación industrial flexible",
-                    "🛡️ Garantía extendida hasta 5 años",
-                    "🔧 Mantenimiento predictivo avanzado"
-                  ].map((advantage, index) => (
-                    <div key={index} className="flex items-center space-x-4 p-4 bg-white/10 rounded-xl border-2 border-[#ff6b35]/30 hover:bg-white/20 transition-all duration-300 hover:scale-105 group">
-                      <div className="w-4 h-4 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full flex-shrink-0 group-hover:scale-125 transition-transform duration-300"></div>
-                      <span className="font-bold text-lg">{advantage}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+         
           </div>
         </div>
       </div>
