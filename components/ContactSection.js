@@ -54,50 +54,39 @@ export function ContactSection() {
     setError('');
     
     try {
-      // Crear el formulario dinámicamente para envío tradicional
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = '/'; // Volver a la página principal
-      form.style.display = 'none';
+      // Crear FormData para envío AJAX
+      const formDataToSend = new FormData();
+      formDataToSend.append('form-name', 'contacto-industrial');
+      formDataToSend.append('nombre', formData.nombre);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('empresa', formData.empresa);
+      formDataToSend.append('telefono', formData.telefono);
+      formDataToSend.append('producto', formData.producto);
+      formDataToSend.append('mensaje', formData.mensaje);
 
-      // Agregar campos ocultos
-      const formNameInput = document.createElement('input');
-      formNameInput.type = 'hidden';
-      formNameInput.name = 'form-name';
-      formNameInput.value = 'contacto-industrial';
-      form.appendChild(formNameInput);
-
-      // Agregar campo honeypot
-      const botFieldInput = document.createElement('input');
-      botFieldInput.type = 'hidden';
-      botFieldInput.name = 'bot-field';
-      form.appendChild(botFieldInput);
-
-      // Agregar todos los campos del formulario
-      Object.keys(formData).forEach(key => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = formData[key];
-        form.appendChild(input);
+      // Enviar usando fetch para evitar redirección
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formDataToSend).toString()
       });
 
-      // Agregar el formulario al DOM y enviarlo
-      document.body.appendChild(form);
-      form.submit();
-
-      // Mostrar mensaje de éxito
-      setIsSubmitted(true);
-      
-      // Resetear formulario
-      setFormData({
-        nombre: '',
-        empresa: '',
-        email: '',
-        telefono: '',
-        producto: '',
-        mensaje: ''
-      });
+      if (response.ok) {
+        // Mostrar mensaje de éxito
+        setIsSubmitted(true);
+        
+        // Resetear formulario
+        setFormData({
+          nombre: '',
+          empresa: '',
+          email: '',
+          telefono: '',
+          producto: '',
+          mensaje: ''
+        });
+      } else {
+        throw new Error('Error en el envío');
+      }
 
     } catch (error) {
       console.error('Error enviando formulario:', error);
