@@ -326,7 +326,7 @@ export function PartsAndServicesSection() {
                 {
                   icon: Truck,
                   title: "LOGÍSTICA EXPRESS",
-                  description: "24h península | 48h nacional | Urgentes <12h",
+                  description: "24h Cercanos | 72h Mas de 15km",
                   color: "from-[#ff6b35] to-[#ffd23f]"
                 },
                 {
@@ -338,7 +338,7 @@ export function PartsAndServicesSection() {
                 {
                   icon: Package,
                   title: "STOCK INDUSTRIAL",
-                  description: "15.000+ referencias | Disponibilidad inmediata",
+                  description: "1500+ referencias | Disponibilidad inmediata",
                   color: "from-[#ff6b35] to-[#ffd23f]"
                 }
               ].map((feature, index) => (
