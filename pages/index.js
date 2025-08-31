@@ -11,9 +11,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>PanIndustrial - Maquinaria Industrial para Panaderías</title>
+        <title>JCP - Maquinaria Industrial para Panaderías</title>
         <meta name="description" content="Líderes en maquinaria industrial para panaderías. Hornos, amasadoras, repuestos y servicio técnico 24/7. Más de 20 años de experiencia." />
-        <meta name="keywords" content="maquinaria panadería, hornos industriales, amasadoras, repuestos panadería, servicio técnico" />
+        <meta name="keywords" content="maquinaria panadería, hornos industriales, amasadoras,sobadoras, repuestos panadería, servicio técnico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

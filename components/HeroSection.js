@@ -63,7 +63,11 @@ export function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold px-8 py-4 rounded-lg shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold px-8 py-4 rounded-lg shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 text-lg"
+                onClick={() => window.location.href = '/catalog'}
+              >
                 VER CATÁLOGO
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
