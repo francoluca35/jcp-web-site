@@ -262,7 +262,7 @@ export function ModernCatalog() {
   const currentCatalog = catalogPages[currentPage];
 
   return (
-    <section id="maquinas" className="py-24 bg-gradient-to-b from-[#f8f9fa] to-white relative overflow-hidden">
+    <section id="maquinas" className="pt-12 pb-24 bg-gradient-to-b from-[#f8f9fa] to-white relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-0 w-96 h-96 bg-[#ff6b35] rounded-full blur-3xl"></div>

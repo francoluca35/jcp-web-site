@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { Header } from "../components/Header"
 import { HeroSection } from "../components/HeroSection"
+import { AboutSection } from "../components/AboutSection"
 import { ModernCatalog } from "../components/ModernCatalog"
 import { PartsAndServicesSection } from "../components/PartsAndServicesSection"
 import { ContactSection } from "../components/ContactSection"
@@ -44,6 +45,7 @@ export default function Home() {
         <Header />
         <main>
           <HeroSection />
+          <AboutSection />
           <ModernCatalog />
           <PartsAndServicesSection />
           <ContactSection />
