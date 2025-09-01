@@ -136,6 +136,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Remove unwanted borders from header */
+  header {
+    border: none !important;
+  }
+  
+  header * {
+    border-color: transparent !important;
+  }
 }
 
 /**

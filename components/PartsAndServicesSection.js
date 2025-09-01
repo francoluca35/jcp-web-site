@@ -21,8 +21,6 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
-
-
 // Componente Modal de Contacto
 function ContactModal({ isOpen, onClose, item, type }) {
   if (!isOpen) return null;
@@ -63,9 +61,9 @@ Cordiales saludos`;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
         <div className="flex justify-between items-center mb-4">
-                     <h3 className="text-lg font-semibold text-gray-900">
-             Solicitar {type === "servicio" ? item.title : item.name}
-           </h3>
+          <h3 className="text-lg font-semibold text-gray-900">
+            Solicitar {type === "servicio" ? item.title : item.name}
+          </h3>
           <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />
           </Button>
@@ -251,31 +249,31 @@ export function PartsAndServicesSection() {
             </TabsList>
           </div>
 
-                     <TabsContent value="repuestos">
-             {loading ? (
-               <div className="flex justify-center items-center py-12">
-                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b35]"></div>
-               </div>
-             ) : (
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                 {repuestos.map((categoria, index) => (
-                <Card key={index} className="bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl">
-                  <CardHeader className="bg-gradient-to-r from-[#1a1a1a] to-[#495057] text-white rounded-t-lg">
-                    <CardTitle className="flex items-center space-x-3">
-                      <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-2">
-                        <Settings className="h-6 w-6 text-white" />
-                      </div>
-                      <div>
-                        <span className="text-xl font-black uppercase">Repuestos para {categoria.category}</span>
-                        <div className="text-sm text-[#adb5bd] font-medium">Originales certificados</div>
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      {categoria.items.map((item, itemIndex) => (
-                        <div key={itemIndex} className="group p-4 bg-white rounded-xl border border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg">
-                                                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+          <TabsContent value="repuestos">
+            {loading ? (
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b35]"></div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {repuestos.map((categoria, index) => (
+                  <Card key={index} className="bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl">
+                    <CardHeader className="bg-gradient-to-r from-[#1a1a1a] to-[#495057] text-white rounded-t-lg">
+                      <CardTitle className="flex items-center space-x-3">
+                        <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-2">
+                          <Settings className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <span className="text-xl font-black uppercase">Repuestos para {categoria.category}</span>
+                          <div className="text-sm text-[#adb5bd] font-medium">Originales certificados</div>
+                        </div>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-4">
+                        {categoria.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="group p-4 bg-white rounded-xl border border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                               <div className="flex-1">
                                 <div className="font-bold text-[#1a1a1a] text-base sm:text-lg group-hover:text-[#ff6b35] transition-colors">{item.name}</div>
                                 <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mt-2">
@@ -315,104 +313,190 @@ export function PartsAndServicesSection() {
                                 </Button>
                               </div>
                             </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-             )}
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
 
             {/* Industrial Features Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12 lg:mt-16">
-              {[
-                {
-                  icon: Truck,
-                  title: "LOGÍSTICA EXPRESS",
-                  description: "24h Cercanos | 72h Mas de 15km",
-                  color: "from-[#ff6b35] to-[#ffd23f]"
-                },
-                {
-                  icon: Shield,
-                  title: "GARANTÍA TOTAL",
-                  description: "Repuestos originales certificados | 2 años garantía",
-                  color: "from-[#ffd23f] to-[#ff6b35]"
-                },
-                {
-                  icon: Package,
-                  title: "STOCK INDUSTRIAL",
-                  description: "1500+ referencias | Disponibilidad inmediata",
-                  color: "from-[#ff6b35] to-[#ffd23f]"
-                }
-              ].map((feature, index) => (
-                <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl group">
-                  <CardContent className="p-6 lg:p-8">
-                    <div className={`mx-auto mb-4 lg:mb-6 p-3 lg:p-4 rounded-2xl bg-gradient-to-r ${feature.color} w-fit group-hover:scale-110 transition-transform duration-300`}>
-                      <feature.icon className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
-                    </div>
-                    <h3 className="font-black text-lg lg:text-xl text-[#1a1a1a] mb-3 lg:mb-4 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">{feature.title}</h3>
-                    <p className="text-[#495057] font-medium leading-relaxed text-sm lg:text-base">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="mt-12 lg:mt-16">
+              {/* Desktop: 3 cards in a row */}
+              <div className="hidden lg:grid grid-cols-3 gap-8">
+                {[
+                  {
+                    icon: Truck,
+                    title: "LOGÍSTICA EXPRESS",
+                    description: "24h Cercanos | 72h Mas de 15km",
+                    color: "from-[#ff6b35] to-[#ffd23f]"
+                  },
+                  {
+                    icon: Shield,
+                    title: "GARANTÍA TOTAL",
+                    description: "Repuestos originales certificados | 2 años garantía",
+                    color: "from-[#ffd23f] to-[#ff6b35]"
+                  },
+                  {
+                    icon: Package,
+                    title: "STOCK INDUSTRIAL",
+                    description: "1500+ referencias | Disponibilidad inmediata",
+                    color: "from-[#ff6b35] to-[#ffd23f]"
+                  }
+                ].map((feature, index) => (
+                  <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl group">
+                    <CardContent className="p-6 lg:p-8">
+                      <div className={`mx-auto mb-4 lg:mb-6 p-3 lg:p-4 rounded-2xl bg-gradient-to-r ${feature.color} w-fit group-hover:scale-110 transition-transform duration-300`}>
+                        <feature.icon className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
+                      </div>
+                      <h3 className="font-black text-lg lg:text-xl text-[#1a1a1a] mb-3 lg:mb-4 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">{feature.title}</h3>
+                      <p className="text-[#495057] font-medium leading-relaxed text-sm lg:text-base">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Tablet: 2 cards top, 1 centered bottom */}
+              <div className="hidden sm:block lg:hidden">
+                {/* Top row - 2 cards side by side */}
+                <div className="grid grid-cols-2 gap-6 mb-6">
+                  {[
+                    {
+                      icon: Truck,
+                      title: "LOGÍSTICA EXPRESS",
+                      description: "24h Cercanos | 72h Mas de 15km",
+                      color: "from-[#ff6b35] to-[#ffd23f]"
+                    },
+                    {
+                      icon: Shield,
+                      title: "GARANTÍA TOTAL",
+                      description: "Repuestos originales certificados | 2 años garantía",
+                      color: "from-[#ffd23f] to-[#ff6b35]"
+                    }
+                  ].map((feature, index) => (
+                    <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl group">
+                      <CardContent className="p-6 lg:p-8">
+                        <div className={`mx-auto mb-4 lg:mb-6 p-3 lg:p-4 rounded-2xl bg-gradient-to-r ${feature.color} w-fit group-hover:scale-110 transition-transform duration-300`}>
+                          <feature.icon className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
+                        </div>
+                        <h3 className="font-black text-lg lg:text-xl text-[#1a1a1a] mb-3 lg:mb-4 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">{feature.title}</h3>
+                        <p className="text-[#495057] font-medium leading-relaxed text-sm lg:text-base">
+                          {feature.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                
+                {/* Bottom row - centered card */}
+                <div className="flex justify-center">
+                  <Card className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl group w-full max-w-xs">
+                    <CardContent className="p-6 lg:p-8">
+                      <div className="mx-auto mb-4 lg:mb-6 p-3 lg:p-4 rounded-2xl bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] w-fit group-hover:scale-110 transition-transform duration-300">
+                        <Package className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
+                      </div>
+                      <h3 className="font-black text-lg lg:text-xl text-[#1a1a1a] mb-3 lg:mb-4 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">STOCK INDUSTRIAL</h3>
+                      <p className="text-[#495057] font-medium leading-relaxed text-sm lg:text-base">
+                        1500+ referencias | Disponibilidad inmediata
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Mobile: 3 cards in column */}
+              <div className="sm:hidden space-y-6">
+                {[
+                  {
+                    icon: Truck,
+                    title: "LOGÍSTICA EXPRESS",
+                    description: "24h Cercanos | 72h Mas de 15km",
+                    color: "from-[#ff6b35] to-[#ffd23f]"
+                  },
+                  {
+                    icon: Shield,
+                    title: "GARANTÍA TOTAL",
+                    description: "Repuestos originales certificados | 2 años garantía",
+                    color: "from-[#ffd23f] to-[#ff6b35]"
+                  },
+                  {
+                    icon: Package,
+                    title: "STOCK INDUSTRIAL",
+                    description: "1500+ referencias | Disponibilidad inmediata",
+                    color: "from-[#ff6b35] to-[#ffd23f]"
+                  }
+                ].map((feature, index) => (
+                  <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl group">
+                    <CardContent className="p-6 lg:p-8">
+                      <div className={`mx-auto mb-4 lg:mb-6 p-3 lg:p-4 rounded-2xl bg-gradient-to-r ${feature.color} w-fit group-hover:scale-110 transition-transform duration-300`}>
+                        <feature.icon className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
+                      </div>
+                      <h3 className="font-black text-lg lg:text-xl text-[#1a1a1a] mb-3 lg:mb-4 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">{feature.title}</h3>
+                      <p className="text-[#495057] font-medium leading-relaxed text-sm lg:text-base">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </TabsContent>
 
-                     <TabsContent value="servicios">
-             {loading ? (
-               <div className="flex justify-center items-center py-12">
-                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b35]"></div>
-               </div>
-             ) : (
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                 {servicios.map((servicio, index) => (
-                <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-500 hover:shadow-2xl group hover:scale-105">
-                  <CardHeader className="pb-4">
-                    <div className={`mx-auto mb-4 sm:mb-6 p-3 sm:p-4 rounded-2xl bg-gradient-to-r ${
-                      index === 0 ? "from-[#ff6b35] to-[#ffd23f]" :
-                      index === 1 ? "from-[#ffd23f] to-[#ff6b35]" :
-                      "from-[#ff6b35] to-[#ffd23f]"
-                    } w-fit group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                      <servicio.icon className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
-                    </div>
-                    <CardTitle className="text-xl sm:text-2xl font-black text-[#1a1a1a] mb-3 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">
-                      {servicio.title}
-                    </CardTitle>
-                    <CardDescription className="text-[#495057] font-medium text-sm sm:text-base leading-relaxed">
-                      {servicio.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                      {servicio.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center space-x-3 bg-[#f8f9fa] rounded-lg p-2 sm:p-3 border border-[#dee2e6]">
-                          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full flex-shrink-0"></div>
-                          <span className="text-[#1a1a1a] font-medium text-left text-sm sm:text-base">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="text-xl sm:text-2xl font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent mb-4 sm:mb-6">
-                      {servicio.price}
-                    </div>
-                     <div className="flex space-x-3">
-                      
-                       <Button 
-                         className="flex-1 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold text-sm sm:text-lg py-2 sm:py-3 border-0 group-hover:scale-105 transition-transform"
-                         onClick={() => handleSolicitar(servicio, "servicio")}
-                       >
-                         <span className="hidden sm:inline">CONTRATAR AHORA</span>
-                         <span className="sm:hidden">CONTRATAR</span>
-                         <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-                       </Button>
-                     </div>
-                   </CardContent>
-                 </Card>
-               ))}
-               </div>
-             )}
+          <TabsContent value="servicios">
+            {loading ? (
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b35]"></div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                {servicios.map((servicio, index) => (
+                  <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-500 hover:shadow-2xl group hover:scale-105">
+                    <CardHeader className="pb-4">
+                      <div className={`mx-auto mb-4 sm:mb-6 p-3 sm:p-4 rounded-2xl bg-gradient-to-r ${
+                        index === 0 ? "from-[#ff6b35] to-[#ffd23f]" :
+                        index === 1 ? "from-[#ffd23f] to-[#ff6b35]" :
+                        "from-[#ff6b35] to-[#ffd23f]"
+                      } w-fit group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                        <servicio.icon className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
+                      </div>
+                      <CardTitle className="text-xl sm:text-2xl font-black text-[#1a1a1a] mb-3 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">
+                        {servicio.title}
+                      </CardTitle>
+                      <CardDescription className="text-[#495057] font-medium text-sm sm:text-base leading-relaxed">
+                        {servicio.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                        {servicio.features.map((feature, featureIndex) => (
+                          <div key={featureIndex} className="flex items-center space-x-3 bg-[#f8f9fa] rounded-lg p-2 sm:p-3 border border-[#dee2e6]">
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full flex-shrink-0"></div>
+                            <span className="text-[#1a1a1a] font-medium text-left text-sm sm:text-base">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="text-xl sm:text-2xl font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent mb-4 sm:mb-6">
+                        {servicio.price}
+                      </div>
+                      <div className="flex space-x-3">
+                        <Button 
+                          className="flex-1 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold text-sm sm:text-lg py-2 sm:py-3 border-0 group-hover:scale-105 transition-transform"
+                          onClick={() => handleSolicitar(servicio, "servicio")}
+                        >
+                          <span className="hidden sm:inline">CONTRATAR AHORA</span>
+                          <span className="sm:hidden">CONTRATAR</span>
+                          <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
 
             {/* Emergency Contact - Industrial Style */}
             <Card className="mt-12 lg:mt-16 bg-gradient-to-r from-[#1a1a1a] via-[#495057] to-[#1a1a1a] text-white border-4 border-[#ff6b35] relative overflow-hidden">
