@@ -231,20 +231,22 @@ export function PartsAndServicesSection() {
 
         <Tabs defaultValue="repuestos" className="w-full">
           <div className="flex justify-center mb-12">
-            <TabsList className="bg-[#374151] rounded-full p-2 flex items-center  border border-[#4b5563] max-w-full ">
+            <TabsList className="bg-[#374151] rounded-full p-2 flex items-center border border-[#4b5563] max-w-full overflow-hidden">
               <TabsTrigger 
                 value="repuestos" 
-                className="flex items-center space-x-3 text-white data-[state=active]:-ml-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 font-bold py-4 px-8 rounded-full transition-all duration-300 hover:bg-[#4b5563] hover:scale-102"
+                className="flex items-center space-x-2 sm:space-x-3 text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-full transition-all duration-300 hover:bg-[#4b5563] hover:scale-102 text-sm sm:text-base"
               >
-                <Package className="h-5 w-5" />
-                <span className="uppercase tracking-wide text-lg font-black">REPUESTOS</span>
+                <Package className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="uppercase tracking-wide font-black hidden sm:inline">REPUESTOS</span>
+                <span className="uppercase tracking-wide font-black sm:hidden">REP.</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="servicios" 
-                className="flex items-center space-x-3 text-white data-[state=active]:-mr-1  data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 font-bold py-4 px-8 rounded-full transition-all duration-300 hover:bg-[#4b5563] hover:scale-102 hover:-mr-2"
+                className="flex items-center space-x-2 sm:space-x-3 text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ff6b35] data-[state=active]:to-[#ffd23f] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-full transition-all duration-300 hover:bg-[#4b5563] hover:scale-102 text-sm sm:text-base"
               >
-                <Wrench className="h-5 w-5" />
-                <span className="uppercase tracking-wide text-lg font-black">SERVICIOS</span>
+                <Wrench className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="uppercase tracking-wide font-black hidden sm:inline">SERVICIOS</span>
+                <span className="uppercase tracking-wide font-black sm:hidden">SERV.</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -273,13 +275,13 @@ export function PartsAndServicesSection() {
                     <div className="space-y-4">
                       {categoria.items.map((item, itemIndex) => (
                         <div key={itemIndex} className="group p-4 bg-white rounded-xl border border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg">
-                                                      <div className="flex items-center justify-between">
+                                                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                               <div className="flex-1">
-                                <div className="font-bold text-[#1a1a1a] text-lg group-hover:text-[#ff6b35] transition-colors">{item.name}</div>
-                                <div className="flex items-center space-x-3 mt-2">
+                                <div className="font-bold text-[#1a1a1a] text-base sm:text-lg group-hover:text-[#ff6b35] transition-colors">{item.name}</div>
+                                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mt-2">
                                   <Badge 
                                     variant={item.stock === "En stock" ? "default" : "secondary"} 
-                                    className={`font-bold ${item.stock === "En stock" 
+                                    className={`font-bold w-fit ${item.stock === "En stock" 
                                       ? "bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white" 
                                       : "bg-[#adb5bd] text-white"
                                     }`}
@@ -291,23 +293,25 @@ export function PartsAndServicesSection() {
                                     )}
                                     {item.stock}
                                   </Badge>
-                                  <span className="text-lg font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">{item.price}</span>
+                                  <span className="text-base sm:text-lg font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">{item.price}</span>
                                 </div>
                               </div>
-                              <div className="flex space-x-2">
+                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                                 <Button 
                                   variant="outline"
-                                  className="border-2 border-[#ff6b35] bg-slate-500 text-[#c8c8c8] hover:bg-[#ff6b35] hover:text-white font-bold text-sm px-3 py-1 transition-all duration-300"
+                                  className="border-2 border-[#ff6b35] bg-slate-500 text-[#c8c8c8] hover:bg-[#ff6b35] hover:text-white font-bold text-xs sm:text-sm px-2 sm:px-3 py-1 transition-all duration-300"
                                   onClick={() => window.location.href = '/catalog'}
                                 >
-                                  Ver catálogo
+                                  <span className="hidden sm:inline">Ver catálogo</span>
+                                  <span className="sm:hidden">Catálogo</span>
                                 </Button>
                                 <Button 
-                                  className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold border-0 group-hover:scale-105 transition-transform text-sm px-3 py-1"
+                                  className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold border-0 group-hover:scale-105 transition-transform text-xs sm:text-sm px-2 sm:px-3 py-1"
                                   onClick={() => handleSolicitar(item, "repuesto")}
                                 >
-                                  SOLICITAR
-                                  <ArrowRight className="ml-2 h-4 w-4" />
+                                  <span className="hidden sm:inline">SOLICITAR</span>
+                                  <span className="sm:hidden">PEDIR</span>
+                                  <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                                 </Button>
                               </div>
                             </div>
@@ -321,7 +325,7 @@ export function PartsAndServicesSection() {
              )}
 
             {/* Industrial Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12 lg:mt-16">
               {[
                 {
                   icon: Truck,
@@ -343,12 +347,12 @@ export function PartsAndServicesSection() {
                 }
               ].map((feature, index) => (
                 <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-2xl group">
-                  <CardContent className="p-8">
-                    <div className={`mx-auto mb-6 p-4 rounded-2xl bg-gradient-to-r ${feature.color} w-fit group-hover:scale-110 transition-transform duration-300`}>
-                      <feature.icon className="h-10 w-10 text-white" />
+                  <CardContent className="p-6 lg:p-8">
+                    <div className={`mx-auto mb-4 lg:mb-6 p-3 lg:p-4 rounded-2xl bg-gradient-to-r ${feature.color} w-fit group-hover:scale-110 transition-transform duration-300`}>
+                      <feature.icon className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
                     </div>
-                    <h3 className="font-black text-xl text-[#1a1a1a] mb-4 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">{feature.title}</h3>
-                    <p className="text-[#495057] font-medium leading-relaxed">
+                    <h3 className="font-black text-lg lg:text-xl text-[#1a1a1a] mb-3 lg:mb-4 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">{feature.title}</h3>
+                    <p className="text-[#495057] font-medium leading-relaxed text-sm lg:text-base">
                       {feature.description}
                     </p>
                   </CardContent>
@@ -363,44 +367,45 @@ export function PartsAndServicesSection() {
                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff6b35]"></div>
                </div>
              ) : (
-               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                  {servicios.map((servicio, index) => (
                 <Card key={index} className="text-center bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-500 hover:shadow-2xl group hover:scale-105">
                   <CardHeader className="pb-4">
-                    <div className={`mx-auto mb-6 p-4 rounded-2xl bg-gradient-to-r ${
+                    <div className={`mx-auto mb-4 sm:mb-6 p-3 sm:p-4 rounded-2xl bg-gradient-to-r ${
                       index === 0 ? "from-[#ff6b35] to-[#ffd23f]" :
                       index === 1 ? "from-[#ffd23f] to-[#ff6b35]" :
                       "from-[#ff6b35] to-[#ffd23f]"
                     } w-fit group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                      <servicio.icon className="h-10 w-10 text-white" />
+                      <servicio.icon className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
                     </div>
-                    <CardTitle className="text-2xl font-black text-[#1a1a1a] mb-3 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">
+                    <CardTitle className="text-xl sm:text-2xl font-black text-[#1a1a1a] mb-3 uppercase tracking-wide group-hover:text-[#ff6b35] transition-colors">
                       {servicio.title}
                     </CardTitle>
-                    <CardDescription className="text-[#495057] font-medium text-base leading-relaxed">
+                    <CardDescription className="text-[#495057] font-medium text-sm sm:text-base leading-relaxed">
                       {servicio.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4 mb-8">
+                    <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                       {servicio.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center space-x-3 bg-[#f8f9fa] rounded-lg p-3 border border-[#dee2e6]">
-                          <div className="w-3 h-3 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full flex-shrink-0"></div>
-                          <span className="text-[#1a1a1a] font-medium text-left">{feature}</span>
+                        <div key={featureIndex} className="flex items-center space-x-3 bg-[#f8f9fa] rounded-lg p-2 sm:p-3 border border-[#dee2e6]">
+                          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full flex-shrink-0"></div>
+                          <span className="text-[#1a1a1a] font-medium text-left text-sm sm:text-base">{feature}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="text-2xl font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent mb-6">
+                    <div className="text-xl sm:text-2xl font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent mb-4 sm:mb-6">
                       {servicio.price}
                     </div>
                      <div className="flex space-x-3">
                       
                        <Button 
-                         className="flex-1 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold text-lg py-3 border-0 group-hover:scale-105 transition-transform"
+                         className="flex-1 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold text-sm sm:text-lg py-2 sm:py-3 border-0 group-hover:scale-105 transition-transform"
                          onClick={() => handleSolicitar(servicio, "servicio")}
                        >
-                         CONTRATAR AHORA
-                         <ArrowRight className="ml-2 h-5 w-5" />
+                         <span className="hidden sm:inline">CONTRATAR AHORA</span>
+                         <span className="sm:hidden">CONTRATAR</span>
+                         <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                        </Button>
                      </div>
                    </CardContent>
@@ -410,39 +415,41 @@ export function PartsAndServicesSection() {
              )}
 
             {/* Emergency Contact - Industrial Style */}
-            <Card className="mt-16 bg-gradient-to-r from-[#1a1a1a] via-[#495057] to-[#1a1a1a] text-white border-4 border-[#ff6b35] relative overflow-hidden">
+            <Card className="mt-12 lg:mt-16 bg-gradient-to-r from-[#1a1a1a] via-[#495057] to-[#1a1a1a] text-white border-4 border-[#ff6b35] relative overflow-hidden">
               {/* Warning stripes background */}
               <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#ffd23f]/10 to-[#ff6b35]/10"></div>
               </div>
               
-              <CardContent className="text-center py-12 relative">
-                <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-6 w-fit mx-auto mb-6 animate-pulse">
-                  <Phone className="h-16 w-16 text-white" />
+              <CardContent className="text-center py-8 lg:py-12 relative">
+                <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-4 lg:p-6 w-fit mx-auto mb-4 lg:mb-6 animate-pulse">
+                  <Phone className="h-12 w-12 lg:h-16 lg:w-16 text-white" />
                 </div>
                 <div className="flex items-center justify-center mb-4">
-                  <AlertTriangle className="h-6 w-6 text-[#ffd23f] mr-2 animate-bounce" />
-                  <h3 className="text-3xl font-black uppercase tracking-wide">ATENCION AL CLIENTE</h3>
-                  <AlertTriangle className="h-6 w-6 text-[#ffd23f] ml-2 animate-bounce" />
+                  <AlertTriangle className="h-4 w-4 lg:h-6 lg:w-6 text-[#ffd23f] mr-2 animate-bounce" />
+                  <h3 className="text-xl lg:text-3xl font-black uppercase tracking-wide">ATENCION AL CLIENTE</h3>
+                  <AlertTriangle className="h-4 w-4 lg:h-6 lg:w-6 text-[#ffd23f] ml-2 animate-bounce" />
                 </div>
-                <p className="text-lg text-[#adb5bd] mb-6 font-medium">
+                <p className="text-sm lg:text-lg text-[#adb5bd] mb-4 lg:mb-6 font-medium">
                   Horario de atencion: Lunes a Viernes: 8:00 - 18:00, Sabados: 9:00 - 14:00
                 </p>
               
-                <div className="text-5xl font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent mb-8">
+                <div className="text-3xl lg:text-5xl font-black bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent mb-6 lg:mb-8">
                   +3500 SOLUCIONES
                 </div>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold text-xl px-8 py-4 border-0 shadow-2xl">
-                    <Phone className="mr-3 h-6 w-6" />
-                    LLAMAR AHORA
+                <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center">
+                  <Button size="lg" className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold text-base lg:text-xl px-6 lg:px-8 py-3 lg:py-4 border-0 shadow-2xl">
+                    <Phone className="mr-2 lg:mr-3 h-4 w-4 lg:h-6 lg:w-6" />
+                    <span className="hidden sm:inline">LLAMAR AHORA</span>
+                    <span className="sm:hidden">LLAMAR</span>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-2 border-[#ffd23f] text-[#ffd23f] hover:bg-[#ffd23f] hover:text-[#1a1a1a] font-bold text-xl px-8 py-4">
-                    <Zap className="mr-3 h-6 w-6" />
-                    CHAT TÉCNICO
+                  <Button size="lg" variant="outline" className="border-2 border-[#ffd23f] text-[#ffd23f] hover:bg-[#ffd23f] hover:text-[#1a1a1a] font-bold text-base lg:text-xl px-6 lg:px-8 py-3 lg:py-4">
+                    <Zap className="mr-2 lg:mr-3 h-4 w-4 lg:h-6 lg:w-6" />
+                    <span className="hidden sm:inline">CHAT TÉCNICO</span>
+                    <span className="sm:hidden">CHAT</span>
                   </Button>
                 </div>
-                <div className="mt-6 text-sm text-[#adb5bd] font-medium">
+                <div className="mt-4 lg:mt-6 text-xs lg:text-sm text-[#adb5bd] font-medium">
                   Tiempo promedio de respuesta: <span className="text-[#ffd23f] font-bold">15 minutos</span>
                 </div>
               </CardContent>
