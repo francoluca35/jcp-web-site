@@ -1,15 +1,12 @@
 [build]
-  command = "npm run build"
   publish = "out"
+  command = "npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
+  NPM_VERSION = "9"
 
-# Enable form detection
-[forms]
-  enabled = true
-
-# Security and performance headers
+# Headers para optimización y seguridad
 [[headers]]
   for = "/*"
   [headers.values]
@@ -17,88 +14,38 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'"
 
-# Compression headers for static assets
-[[headers]]
-  for = "*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip"
-
+# Headers específicos para CSS
 [[headers]]
   for = "*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip"
+    Content-Type = "text/css"
 
+# Headers para JavaScript
 [[headers]]
-  for = "*.png"
+  for = "*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Headers para imágenes
 [[headers]]
-  for = "*.jpg"
+  for = "*.{png,jpg,jpeg,gif,webp,svg,ico}"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-[[headers]]
-  for = "*.jpeg"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "*.webp"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "*.ico"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "*.pdf"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# HTML files - shorter cache
+# Headers para HTML
 [[headers]]
   for = "*.html"
   [headers.values]
-    Cache-Control = "public, max-age=3600"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-# Configure form redirects
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/*"
-  status = 200
-
-# Handle static files
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-# Form success redirect
-[[redirects]]
-  from = "/success"
-  to = "/success.html"
-  status = 200
-
-# Sitemap redirect
+# Redirects
 [[redirects]]
   from = "/sitemap.xml"
   to = "/sitemap.xml"
   status = 200
 
-# Robots.txt redirect
 [[redirects]]
   from = "/robots.txt"
   to = "/robots.txt"
