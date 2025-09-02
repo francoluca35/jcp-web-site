@@ -27,8 +27,10 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Configuración específica para Netlify
-  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+  assetPrefix: '',
   basePath: '',
+  // Configuración para export estático
+  trailingSlash: true,
 }
 
 module.exports = nextConfig

@@ -7,7 +7,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-            colors: {
+      colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         card: 'var(--card)',
@@ -36,12 +36,4 @@ module.exports = {
     },
   },
   plugins: [],
-  corePlugins: {
-    preflight: true,
-    container: false,
-    accessibility: false,
-  },
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
 }
