@@ -37,17 +37,39 @@ export function Header() {
     setIsDropdownOpen(false);
   };
 
-  // Handle navigation click
+  // Handle navigation click - CORREGIDO
   const handleNavClick = (sectionId) => {
     setIsMenuOpen(false);
     
-    // Smooth scroll to section
-    const element = document.getElementById(sectionId);
+    // Mapeo de nombres de sección a IDs reales (maneja acentos y caracteres especiales)
+    const sectionMap = {
+      'inicio': 'inicio',
+      'nosotros': 'nosotros',
+      'maquinas': 'maquinas',
+      'máquinas': 'maquinas', // Con tilde
+      'repuestos': 'repuestos',
+      'contacto': 'contacto'
+    };
+    
+    const actualSectionId = sectionMap[sectionId] || sectionId;
+    console.log(`Navegando a sección: ${sectionId} -> ${actualSectionId}`);
+    
+    // Smooth scroll to section with offset for fixed header
+    const element = document.getElementById(actualSectionId);
     if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
+      const headerHeight = 80; // Altura del header fijo
+      const elementPosition = element.offsetTop - headerHeight;
+      
+      console.log(`Elemento encontrado, posición: ${elementPosition}`);
+      
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
       });
+    } else {
+      console.error(`Sección ${actualSectionId} no encontrada. Elementos disponibles:`, 
+        Array.from(document.querySelectorAll('section[id]')).map(s => s.id)
+      );
     }
   };
 
@@ -66,6 +88,7 @@ export function Header() {
   // Navigation items for landing page
   const landingPageNavItems = [
     { href: '/', label: 'Inicio', isAnchor: true },
+    { href: '#nosotros', label: 'Nosotros', isAnchor: true },
     { href: '#maquinas', label: 'Máquinas', isAnchor: true },
     { href: '#repuestos', label: 'Repuestos', isAnchor: true },
     { href: '#contacto', label: 'Contacto', isAnchor: true }
