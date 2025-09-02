@@ -1,0 +1,27 @@
+
+/* Mobile-first critical CSS */
+@media (max-width: 767px) {
+  .mobile-optimized {
+    contain: layout style paint;
+    will-change: auto;
+  }
+  
+  .mobile-critical {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Reduce animations on mobile for better performance */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  .xs\:hidden { display: none !important; }
+  .xs\:block { display: block !important; }
+  .xs\:flex { display: flex !important; }
+}
+  
