@@ -3,22 +3,10 @@
     "next/core-web-vitals"
   ],
   "rules": {
-    // Reglas básicas de rendimiento
-    "react/jsx-no-bind": ["warn", {
-      "allowArrowFunctions": true,
-      "allowBind": false,
-      "ignoreRefs": true
-    }],
+    "react/jsx-no-bind": "warn",
     "react/jsx-no-useless-fragment": "warn",
     "react/no-array-index-key": "warn",
-    
-    // Reglas de hooks
     "react-hooks/exhaustive-deps": "warn",
-    "react-hooks/rules-of-hooks": "error",
-    
-    // Reglas básicas
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-    "no-var": "warn",
-    "prefer-const": "warn"
+    "no-unused-vars": "warn"
   }
 }
