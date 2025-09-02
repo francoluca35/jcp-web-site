@@ -2,6 +2,7 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
+  distDir: 'out',
   images: {
     unoptimized: true,
     formats: ['image/webp', 'image/avif'],
@@ -25,6 +26,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Configuración específica para Netlify
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+  basePath: '',
 }
 
 module.exports = nextConfig

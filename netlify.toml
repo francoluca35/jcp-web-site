@@ -6,6 +6,17 @@
   NODE_ENV = "production"
   NODE_VERSION = "18"
 
+# Reglas de redirect para Next.js
+[[redirects]]
+  from = "/_next/static/*"
+  to = "/_next/static/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/static/*"
+  to = "/static/:splat"
+  status = 200
+
 # Mobile-first performance headers
 [[headers]]
   for = "/*"
@@ -62,10 +73,23 @@
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "image/avif"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Reglas específicas para CSS de Next.js
+[[headers]]
+  for = "/_next/static/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "/_next/static/chunks/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Reglas para archivos estáticos de Next.js
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
 # Mobile performance redirects
 [[redirects]]
