@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "./ui/button";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
@@ -8,45 +8,48 @@ export function ImageGallery({ images, productName }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
 
-  // Auto-rotate images every 5 seconds
+  // Memoize images array to prevent unnecessary re-renders
+  const memoizedImages = useMemo(() => images || [], [images]);
+
+  // Auto-rotate images every 5 seconds - optimized with useCallback
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (memoizedImages.length <= 1) return;
     
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      setCurrentImageIndex((prev) => (prev + 1) % memoizedImages.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [memoizedImages.length]);
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
+  const nextImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev + 1) % memoizedImages.length);
+  }, [memoizedImages.length]);
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
+  const prevImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev - 1 + memoizedImages.length) % memoizedImages.length);
+  }, [memoizedImages.length]);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setModalImageIndex(currentImageIndex);
     setIsModalOpen(true);
-  };
+  }, [currentImageIndex]);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
-  const nextModalImage = () => {
-    setModalImageIndex((prev) => (prev + 1) % images.length);
-  };
+  const nextModalImage = useCallback(() => {
+    setModalImageIndex((prev) => (prev + 1) % memoizedImages.length);
+  }, [memoizedImages.length]);
 
-  const prevModalImage = () => {
-    setModalImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
+  const prevModalImage = useCallback(() => {
+    setModalImageIndex((prev) => (prev - 1 + memoizedImages.length) % memoizedImages.length);
+  }, [memoizedImages.length]);
 
-  // Handle keyboard navigation
+  // Handle keyboard navigation - optimized with useCallback
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = useCallback((e) => {
       if (!isModalOpen) return;
       
       if (e.key === 'Escape') {
@@ -56,13 +59,13 @@ export function ImageGallery({ images, productName }) {
       } else if (e.key === 'ArrowLeft') {
         prevModalImage();
       }
-    };
+    }, [isModalOpen, closeModal, nextModalImage, prevModalImage]);
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen]);
+  }, [isModalOpen, closeModal, nextModalImage, prevModalImage]);
 
-  if (!images || images.length === 0) {
+  if (!memoizedImages || memoizedImages.length === 0) {
     return (
       <div className="relative aspect-[4/3] bg-gray-200 flex items-center justify-center">
         <p className="text-gray-500">Sin imagen</p>
@@ -75,9 +78,10 @@ export function ImageGallery({ images, productName }) {
       {/* Carrusel de imágenes */}
       <div className="relative aspect-[4/3] overflow-hidden group">
         <ImageWithFallback
-          src={images[currentImageIndex]}
+          src={memoizedImages[currentImageIndex]}
           alt={`${productName} - Imagen ${currentImageIndex + 1}`}
           className="w-full h-full object-cover transition-transform duration-500"
+          loading="lazy"
         />
         
         {/* Overlay con botón de galería */}
@@ -92,9 +96,9 @@ export function ImageGallery({ images, productName }) {
         </div>
 
         {/* Indicadores de imagen */}
-        {images.length > 1 && (
+        {memoizedImages.length > 1 && (
           <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
-            {images.map((_, index) => (
+            {memoizedImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
@@ -109,7 +113,7 @@ export function ImageGallery({ images, productName }) {
         )}
 
         {/* Botones de navegación */}
-        {images.length > 1 && (
+        {memoizedImages.length > 1 && (
           <>
             <Button
               onClick={prevImage}
@@ -145,14 +149,14 @@ export function ImageGallery({ images, productName }) {
             {/* Imagen principal */}
             <div className="relative">
               <ImageWithFallback
-                src={images[modalImageIndex]}
+                src={memoizedImages[modalImageIndex]}
                 alt={`${productName} - Imagen ${modalImageIndex + 1}`}
                 className="w-full h-auto max-h-[80vh] object-contain"
               />
             </div>
 
             {/* Botones de navegación del modal */}
-            {images.length > 1 && (
+            {memoizedImages.length > 1 && (
               <>
                 <Button
                   onClick={prevModalImage}
@@ -173,13 +177,13 @@ export function ImageGallery({ images, productName }) {
 
             {/* Contador de imágenes */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-              {modalImageIndex + 1} / {images.length}
+              {modalImageIndex + 1} / {memoizedImages.length}
             </div>
 
             {/* Miniaturas */}
-            {images.length > 1 && (
+            {memoizedImages.length > 1 && (
               <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                {images.map((image, index) => (
+                {memoizedImages.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setModalImageIndex(index)}

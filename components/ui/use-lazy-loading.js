@@ -1,59 +1,68 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 export function useLazyLoading(options = {}) {
+  const {
+    threshold = 0.1,
+    rootMargin = '50px 0px',
+    fallbackDelay = 100,
+  } = options;
+
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const elementRef = useRef(null);
-  
-  const {
-    threshold = 0.1,
-    rootMargin = '50px',
-    once = true,
-    delay = 0
-  } = options;
+
+  const handleIntersection = useCallback((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        // Desconectar el observer una vez que el elemento es visible
+        if (elementRef.current) {
+          observer.current?.unobserve(elementRef.current);
+        }
+      }
+    });
+  }, []);
+
+  const observer = useRef(null);
 
   useEffect(() => {
-    const element = elementRef.current;
-    if (!element) return;
+    if (!elementRef.current) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          
-          // Aplicar delay si se especifica
-          if (delay > 0) {
-            setTimeout(() => {
-              setIsLoaded(true);
-            }, delay);
-          } else {
-            setIsLoaded(true);
-          }
-          
-          // Desconectar observer si solo queremos que se ejecute una vez
-          if (once) {
-            observer.disconnect();
-          }
-        }
-      },
-      {
-        threshold,
-        rootMargin,
-      }
-    );
+    observer.current = new IntersectionObserver(handleIntersection, {
+      threshold,
+      rootMargin,
+    });
 
-    observer.observe(element);
+    observer.current.observe(elementRef.current);
 
     return () => {
-      observer.disconnect();
+      if (observer.current) {
+        observer.current.disconnect();
+      }
     };
-  }, [threshold, rootMargin, once, delay]);
+  }, [threshold, rootMargin, handleIntersection]);
+
+  // Simular delay para evitar parpadeo
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        setIsLoaded(true);
+      }, fallbackDelay);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, fallbackDelay]);
+
+  const ref = useCallback((node) => {
+    if (node) {
+      elementRef.current = node;
+    }
+  }, []);
 
   return {
-    elementRef,
+    ref,
     isVisible,
     isLoaded,
-    shouldLoad: isVisible || isLoaded
   };
 }
 

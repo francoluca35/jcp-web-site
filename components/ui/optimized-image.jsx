@@ -1,70 +1,92 @@
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import React from 'react';
+import { useLazyLoading } from './use-lazy-loading';
 
 export function OptimizedImage({
   src,
   alt,
-  width,
-  height,
   className = '',
+  style = {},
+  loading = 'lazy',
   priority = false,
-  placeholder = 'blur',
-  blurDataURL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+  sizes = '100vw',
+  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg==',
   ...props
 }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(false);
+  const { ref, isVisible, isLoaded } = useLazyLoading({
+    threshold: priority ? 0 : 0.1,
+    rootMargin: priority ? '0px' : '50px 0px',
+    fallbackDelay: priority ? 0 : 100,
+  });
 
-  // Fallback para imágenes que fallan
-  const handleError = () => {
-    setError(true);
-  };
-
-  // Manejar carga exitosa
-  const handleLoad = () => {
-    setIsLoaded(true);
-  };
-
-  // Si hay error, mostrar placeholder
-  if (error) {
+  // Si es prioritario, cargar inmediatamente
+  if (priority) {
     return (
-      <div 
-        className={`bg-gray-200 flex items-center justify-center ${className}`}
-        style={{ width, height }}
+      <img
+        src={src}
+        alt={alt}
+        className={className}
+        style={style}
+        loading="eager"
+        decoding="sync"
+        {...props}
+      />
+    );
+  }
+
+  // Si no está visible, mostrar placeholder
+  if (!isVisible) {
+    return (
+      <div
+        ref={ref}
+        className={`bg-gray-200 animate-pulse ${className}`}
+        style={style}
+        aria-label={alt}
+      />
+    );
+  }
+
+  // Si está visible pero no cargado, mostrar placeholder con imagen
+  if (!isLoaded) {
+    return (
+      <div
+        ref={ref}
+        className={`relative ${className}`}
+        style={style}
       >
-        <span className="text-gray-500 text-sm">Imagen no disponible</span>
+        <img
+          src={placeholder}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-50"
+          aria-hidden="true"
+        />
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-full object-cover opacity-0 transition-opacity duration-300"
+          loading={loading}
+          decoding="async"
+          onLoad={(e) => {
+            e.target.style.opacity = '1';
+          }}
+          {...props}
+        />
       </div>
     );
   }
 
+  // Imagen completamente cargada
   return (
-    <div className={`relative overflow-hidden ${className}`}>
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        className={`transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-        priority={priority}
-        placeholder={placeholder}
-        blurDataURL={blurDataURL}
-        onLoad={handleLoad}
-        onError={handleError}
-        loading={priority ? 'eager' : 'lazy'}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        {...props}
-      />
-      
-      {/* Placeholder mientras carga */}
-      {!isLoaded && (
-        <div 
-          className="absolute inset-0 bg-gray-200 animate-pulse"
-          style={{ width, height }}
-        />
-      )}
-    </div>
+    <img
+      ref={ref}
+      src={src}
+      alt={alt}
+      className={className}
+      style={style}
+      loading={loading}
+      decoding="async"
+      sizes={sizes}
+      {...props}
+    />
   );
 }
 
