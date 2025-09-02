@@ -6,7 +6,7 @@
   NODE_ENV = "production"
   NODE_VERSION = "18"
 
-# Reglas de redirect para Next.js
+# Reglas de redirect para Next.js estático
 [[redirects]]
   from = "/_next/static/*"
   to = "/_next/static/:splat"
@@ -17,7 +17,13 @@
   to = "/static/:splat"
   status = 200
 
-# Mobile-first performance headers
+# Regla principal para SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers para archivos estáticos
 [[headers]]
   for = "/*"
   [headers.values]
@@ -25,42 +31,34 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    # Mobile performance optimizations
-    Vary = "Accept-Encoding, User-Agent"
-    Accept-Encoding = "gzip, deflate, br"
 
-[[headers]]
-  for = "/Assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    # Mobile image optimization
-    Accept-Ranges = "bytes"
-
-[[headers]]
-  for = "/data/*"
-  [headers.values]
-    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
-
-[[headers]]
-  for = "*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    # Mobile JavaScript optimization
-    Content-Encoding = "gzip"
-
+# Headers específicos para CSS
 [[headers]]
   for = "*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    # Mobile CSS optimization
-    Content-Encoding = "gzip"
+    Content-Type = "text/css"
+
+# Headers para JavaScript
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript"
+
+# Headers para imágenes
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/png"
 
 [[headers]]
-  for = "*.html"
+  for = "*.jpg"
   [headers.values]
-    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/jpeg"
 
-# Mobile-specific optimizations
 [[headers]]
   for = "*.webp"
   [headers.values]
@@ -73,27 +71,14 @@
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "image/avif"
 
-# Reglas específicas para CSS de Next.js
-[[headers]]
-  for = "/_next/static/css/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "text/css"
-
-[[headers]]
-  for = "/_next/static/chunks/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Reglas para archivos estáticos de Next.js
+# Headers para archivos de Next.js
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Mobile performance redirects
-[[redirects]]
-  from = "/mobile/*"
-  to = "/index.html"
-  status = 200
-  conditions = {User_Agent = "Mobile"}
+# Headers para Assets
+[[headers]]
+  for = "/Assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
