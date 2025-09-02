@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Phone, Mail, Menu, X, ChevronDown } from "lucide-react";
 import { useRouter } from "next/router";
+import { OptimizedLogo } from "./ui/optimized-image";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -94,11 +95,7 @@ export function Header() {
                 }}
                 className="flex items-center hover:scale-105 transition-transform duration-200 cursor-pointer"
               >
-                <img 
-                  src="Assets/logo.png" 
-                  alt="JCP Logo" 
-                  className="h-8 lg:h-10 w-auto mr-3"
-                />
+                <OptimizedLogo className="mr-3" />
               </button>
             </div>
 
@@ -250,11 +247,7 @@ export function Header() {
                 }}
                 className="flex items-center hover:scale-105 transition-transform duration-200 cursor-pointer"
               >
-                <img 
-                  src="Assets/logo.png" 
-                  alt="JCP Logo" 
-                  className="h-8 w-auto mr-3"
-                />
+                <OptimizedLogo className="mr-3" />
                 <span className="text-white font-bold text-lg">JCP</span>
               </button>
               <Button 
