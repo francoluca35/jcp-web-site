@@ -11,6 +11,7 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    esmExternals: false,
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
@@ -19,7 +20,7 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   generateEtags: false,
-  reactStrictMode: true,
+  reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: true,
   },

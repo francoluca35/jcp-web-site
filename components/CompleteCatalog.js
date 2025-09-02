@@ -21,6 +21,7 @@ export function CompleteCatalog() {
   const [selectedCondition, setSelectedCondition] = useState("Todos");
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -29,21 +30,42 @@ export function CompleteCatalog() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
         const response = await fetch('/data/productCatalog.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
-        // Combinar todos los productos de todas las categorías
-        const allProductsData = [
-          ...data.maquinarias,
-          ...data.herramientas,
-          ...data.repuestos
-        ];
+        // Verificar que data tenga la estructura esperada
+        if (!data || typeof data !== 'object') {
+          throw new Error('Invalid data structure');
+        }
+        
+        // Combinar todos los productos de todas las categorías de forma segura
+        const allProductsData = [];
+        
+        if (Array.isArray(data.maquinarias)) {
+          allProductsData.push(...data.maquinarias);
+        }
+        if (Array.isArray(data.herramientas)) {
+          allProductsData.push(...data.herramientas);
+        }
+        if (Array.isArray(data.repuestos)) {
+          allProductsData.push(...data.repuestos);
+        }
         
         setAllProducts(allProductsData);
         setLoading(false);
       } catch (error) {
         console.error('Error cargando productos:', error);
+        setError(error.message);
         setLoading(false);
+        // Establecer productos vacíos en caso de error
+        setAllProducts([]);
       }
     };
 
@@ -61,10 +83,12 @@ export function CompleteCatalog() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Filtrar productos
+  // Filtrar productos de forma segura
   const filteredProducts = allProducts.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    if (!product || typeof product !== 'object') return false;
+    
+    const matchesSearch = (product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "Todos" || product.category === selectedCategory;
     const matchesCondition = selectedCondition === "Todos" || product.condition === selectedCondition;
     
@@ -72,12 +96,16 @@ export function CompleteCatalog() {
   });
 
   const handleBack = () => {
-    window.location.href = '/';
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
   };
 
   const handleContact = (product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
+    if (product && typeof product === 'object') {
+      setSelectedProduct(product);
+      setIsModalOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -86,11 +114,35 @@ export function CompleteCatalog() {
   };
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   };
+
+  // Mostrar error si ocurrió
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">
+            <Search className="h-12 w-12 mx-auto" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Error al cargar productos
+          </h3>
+          <p className="text-gray-600 mb-4">
+            {error}
+          </p>
+          <Button onClick={() => window.location.reload()}>
+            Reintentar
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

@@ -48,22 +48,22 @@ export function ImageGallery({ images, productName }) {
   }, [memoizedImages.length]);
 
   // Handle keyboard navigation - optimized with useCallback
-  useEffect(() => {
-    const handleKeyDown = useCallback((e) => {
-      if (!isModalOpen) return;
-      
-      if (e.key === 'Escape') {
-        closeModal();
-      } else if (e.key === 'ArrowRight') {
-        nextModalImage();
-      } else if (e.key === 'ArrowLeft') {
-        prevModalImage();
-      }
-    }, [isModalOpen, closeModal, nextModalImage, prevModalImage]);
+  const handleKeyDown = useCallback((e) => {
+    if (!isModalOpen) return;
+    
+    if (e.key === 'Escape') {
+      closeModal();
+    } else if (e.key === 'ArrowRight') {
+      nextModalImage();
+    } else if (e.key === 'ArrowLeft') {
+      prevModalImage();
+    }
+  }, [isModalOpen, closeModal, nextModalImage, prevModalImage]);
 
+  useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, closeModal, nextModalImage, prevModalImage]);
+  }, [handleKeyDown]);
 
   if (!memoizedImages || memoizedImages.length === 0) {
     return (

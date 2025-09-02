@@ -2,19 +2,37 @@ import { Button } from "./ui/button";
 import { X, MessageCircle, ShoppingCart } from "lucide-react";
 
 export function ContactModal({ isOpen, onClose, product }) {
-  if (!isOpen) return null;
+  if (!isOpen || !product) return null;
+
+  // Verificar que product tenga las propiedades necesarias
+  const productName = product?.name || 'Producto';
+  const productCategory = product?.category || 'producto';
+  const productId = product?.id || 'N/A';
 
   const handleWhatsApp = () => {
-    const message = `Hola, quería saber sobre un presupuesto o el precio de esta ${product.category.toLowerCase()}: ${product.name} (Código: ${product.id})`;
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/5491163962947?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
-    onClose();
+    try {
+      const message = `Hola, quería saber sobre un presupuesto o el precio de esta ${productCategory.toLowerCase()}: ${productName} (Código: ${productId})`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/5491163962947?text=${encodedMessage}`;
+      
+      if (typeof window !== 'undefined') {
+        window.open(whatsappUrl, '_blank');
+      }
+      onClose();
+    } catch (error) {
+      console.error('Error opening WhatsApp:', error);
+      onClose();
+    }
   };
 
   const handleMercadoLibre = () => {
-    if (product.mercadoLibreUrl) {
-      window.open(product.mercadoLibreUrl, '_blank');
+    try {
+      if (product?.mercadoLibreUrl && typeof window !== 'undefined') {
+        window.open(product.mercadoLibreUrl, '_blank');
+        onClose();
+      }
+    } catch (error) {
+      console.error('Error opening MercadoLibre:', error);
       onClose();
     }
   };
@@ -25,7 +43,7 @@ export function ContactModal({ isOpen, onClose, product }) {
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-gray-900">
-            Contactar sobre {product.name}
+            Contactar sobre {productName}
           </h3>
           <Button
             variant="ghost"
@@ -53,7 +71,7 @@ export function ContactModal({ isOpen, onClose, product }) {
           </Button>
 
           {/* MercadoLibre Option */}
-          {product.mercadoLibreUrl && (
+          {product?.mercadoLibreUrl && (
             <Button
               onClick={handleMercadoLibre}
               className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center space-x-2"
