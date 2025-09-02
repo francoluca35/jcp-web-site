@@ -4,6 +4,46 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Mobile-first performance optimizations */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Optimize images for mobile */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* Reduce layout shift on mobile */
+  .mobile-optimized {
+    contain: layout style paint;
+  }
+}
+
+/* Critical CSS for mobile performance */
+@layer components {
+  .mobile-critical {
+    will-change: auto;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
+
 :root {
   --font-size: 14px;
   --background: #f8f9fa;
