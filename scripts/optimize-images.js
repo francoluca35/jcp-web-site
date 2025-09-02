@@ -1,112 +1,136 @@
+const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
-// Script mejorado para optimización de imágenes
-const optimizeImages = () => {
-  const publicDir = path.join(__dirname, '../public');
-  const assetsDir = path.join(publicDir, 'Assets');
+// Configuración de optimización
+const QUALITY = 80;
+const WEBP_QUALITY = 85;
+const AVIF_QUALITY = 70;
 
-  console.log('🔍 Analizando imágenes para optimización...');
-  console.log('📁 Directorio de assets:', assetsDir);
-
-  if (!fs.existsSync(assetsDir)) {
-    console.log('❌ Directorio Assets no encontrado');
-    return;
-  }
-
-  const files = fs.readdirSync(assetsDir);
-  const imageFiles = files.filter(file =>
-    /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(file)
-  );
-
-  console.log(`📸 Encontradas ${imageFiles.length} imágenes:`);
-
-  let totalSize = 0;
-  let optimizationOpportunities = [];
-
-  imageFiles.forEach(file => {
-    const filePath = path.join(assetsDir, file);
-    const stats = fs.statSync(filePath);
-    const sizeInKB = (stats.size / 1024).toFixed(2);
-    const sizeInMB = (stats.size / (1024 * 1024)).toFixed(2);
-    
-    totalSize += stats.size;
-
-    console.log(`📁 ${file}: ${sizeInKB} KB`);
-
-    // Identificar oportunidades de optimización
-    if (stats.size > 100 * 1024) { // > 100KB
-      optimizationOpportunities.push({
-        file,
-        currentSize: stats.size,
-        currentSizeKB: sizeInKB,
-        recommendations: []
-      });
-
-      if (stats.size > 500 * 1024) { // > 500KB
-        optimizationOpportunities[optimizationOpportunities.length - 1].recommendations.push(
-          '⚠️  CRÍTICO: Imagen muy pesada - optimizar urgentemente'
-        );
-      } else {
-        optimizationOpportunities[optimizationOpportunities.length - 1].recommendations.push(
-          '⚠️  Considerar optimización'
-        );
-      }
-
-      // Recomendaciones específicas por tipo de archivo
-      if (/\.(png|jpg|jpeg)$/i.test(file)) {
-        optimizationOpportunities[optimizationOpportunities.length - 1].recommendations.push(
-          '💡 Convertir a WebP para mejor compresión'
-        );
-      }
-
-      if (stats.size > 200 * 1024) { // > 200KB
-        optimizationOpportunities[optimizationOpportunities.length - 1].recommendations.push(
-          '💡 Implementar lazy loading'
-        );
-      }
-    }
-  });
-
-  console.log('\n📊 RESUMEN DE OPTIMIZACIÓN:');
-  console.log(`📈 Tamaño total actual: ${(totalSize / (1024 * 1024)).toFixed(2)} MB`);
-  
-  if (optimizationOpportunities.length > 0) {
-    console.log('\n🎯 OPORTUNIDADES DE OPTIMIZACIÓN:');
-    optimizationOpportunities.forEach(opp => {
-      console.log(`\n📁 ${opp.file} (${opp.currentSizeKB} KB):`);
-      opp.recommendations.forEach(rec => console.log(`   ${rec}`));
-    });
-  } else {
-    console.log('✅ Todas las imágenes están optimizadas');
-  }
-
-  console.log('\n🚀 RECOMENDACIONES GENERALES:');
-  console.log('1. Convertir PNG/JPG a WebP (mejor compresión)');
-  console.log('2. Implementar lazy loading para imágenes grandes');
-  console.log('3. Usar diferentes tamaños para diferentes dispositivos');
-  console.log('4. Comprimir imágenes con herramientas como TinyPNG o ImageOptim');
-  console.log('5. Considerar usar AVIF para navegadores modernos');
-
-  console.log('\n💡 HERRAMIENTAS RECOMENDADAS:');
-  console.log('- TinyPNG (online): https://tinypng.com/');
-  console.log('- ImageOptim (Mac): https://imageoptim.com/');
-  console.log('- Squoosh (Google): https://squoosh.app/');
-  console.log('- Sharp (Node.js): npm install sharp');
-
-  if (optimizationOpportunities.length > 0) {
-    console.log('\n⚠️  ACCIÓN REQUERIDA:');
-    console.log('Hay imágenes que necesitan optimización antes del deploy');
-    console.log('Esto mejorará significativamente la performance del sitio');
-  }
-
-  console.log('\n✅ Análisis de optimización completado');
+// Tamaños de imagen para diferentes dispositivos
+const SIZES = {
+  mobile: 640,
+  tablet: 1024,
+  desktop: 1920,
+  large: 2560
 };
 
-// Ejecutar el script
-try {
-  optimizeImages();
-} catch (error) {
-  console.error('❌ Error durante la optimización:', error.message);
-  process.exit(1);
+// Formatos de salida
+const FORMATS = ['webp', 'avif', 'jpeg'];
+
+async function optimizeImage(inputPath, outputDir, filename) {
+  try {
+    const image = sharp(inputPath);
+    const metadata = await image.metadata();
+    
+    // Crear directorio de salida si no existe
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    // Optimizar para diferentes tamaños
+    for (const [device, size] of Object.entries(SIZES)) {
+      const resizedImage = image.resize(size, null, {
+        withoutEnlargement: true,
+        fit: 'inside'
+      });
+
+      // Generar diferentes formatos
+      for (const format of FORMATS) {
+        let outputPath;
+        let optimizedImage;
+
+        switch (format) {
+          case 'webp':
+            outputPath = path.join(outputDir, `${filename}-${device}.webp`);
+            optimizedImage = resizedImage.webp({ quality: WEBP_QUALITY });
+            break;
+          case 'avif':
+            outputPath = path.join(outputDir, `${filename}-${device}.avif`);
+            optimizedImage = resizedImage.avif({ quality: AVIF_QUALITY });
+            break;
+          case 'jpeg':
+            outputPath = path.join(outputDir, `${filename}-${device}.jpg`);
+            optimizedImage = resizedImage.jpeg({ 
+              quality: QUALITY,
+              progressive: true,
+              mozjpeg: true
+            });
+            break;
+        }
+
+        if (optimizedImage) {
+          await optimizedImage.toFile(outputPath);
+          console.log(`✅ Generated: ${outputPath}`);
+        }
+      }
+    }
+
+    // Generar imagen original optimizada
+    const originalOptimized = image.jpeg({ 
+      quality: QUALITY,
+      progressive: true,
+      mozjpeg: true
+    });
+    await originalOptimized.toFile(path.join(outputDir, `${filename}-original.jpg`));
+
+    console.log(`✅ Optimized: ${filename}`);
+  } catch (error) {
+    console.error(`❌ Error optimizing ${filename}:`, error.message);
+  }
 }
+
+async function processDirectory(inputDir, outputDir) {
+  try {
+    const files = fs.readdirSync(inputDir);
+    
+    for (const file of files) {
+      const inputPath = path.join(inputDir, file);
+      const stat = fs.statSync(inputPath);
+      
+      if (stat.isDirectory()) {
+        // Procesar subdirectorios recursivamente
+        const subOutputDir = path.join(outputDir, file);
+        await processDirectory(inputPath, subOutputDir);
+      } else if (isImageFile(file)) {
+        // Procesar imagen
+        const filename = path.parse(file).name;
+        await optimizeImage(inputPath, outputDir, filename);
+      }
+    }
+  } catch (error) {
+    console.error(`❌ Error processing directory ${inputDir}:`, error.message);
+  }
+}
+
+function isImageFile(filename) {
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'];
+  const ext = path.extname(filename).toLowerCase();
+  return imageExtensions.includes(ext);
+}
+
+// Función principal
+async function main() {
+  const inputDir = path.join(__dirname, '../public/Assets');
+  const outputDir = path.join(__dirname, '../out/Assets');
+
+  console.log('🚀 Starting image optimization...');
+  console.log(`📁 Input directory: ${inputDir}`);
+  console.log(`📁 Output directory: ${outputDir}`);
+
+  if (!fs.existsSync(inputDir)) {
+    console.error(`❌ Input directory does not exist: ${inputDir}`);
+    process.exit(1);
+  }
+
+  await processDirectory(inputDir, outputDir);
+  
+  console.log('🎉 Image optimization completed!');
+}
+
+// Ejecutar si se llama directamente
+if (require.main === module) {
+  main().catch(console.error);
+}
+
+module.exports = { optimizeImage, processDirectory };

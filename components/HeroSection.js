@@ -4,7 +4,7 @@ import { CheckCircle, Award, Truck, ArrowRight, Zap, Settings } from "lucide-rea
 
 export function HeroSection() {
   return (
-    <section id="inicio" className=" -mt-2 relative bg-gradient-to-br from-[#1a1a1a] via-[#495057] to-[#1a1a1a] py-24 overflow-hidden">
+    <section id="inicio" className=" -mt-2 relative bg-gradient-to-br from-[#1a1a1a] via-[#495057] to-[#1a1a1a] py-16 lg:py-20 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b35]/10 to-[#ffd23f]/10"></div>
@@ -94,6 +94,8 @@ export function HeroSection() {
                 src="https://images.unsplash.com/photo-1703607888337-aae6d77b3d83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmR1c3RyaWFsJTIwYmFrZXJ5JTIwbWFjaGluZXJ5fGVufDF8fHx8MTc1NjQ5NDEyOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
                 alt="Maquinaria industrial de panadería"
                 className="w-full h-full object-cover"
+                loading="eager"
+                priority="high"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-transparent to-transparent"></div>
             </div>

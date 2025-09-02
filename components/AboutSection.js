@@ -19,7 +19,7 @@ import {
 
 export function AboutSection() {
   return (
-    <section id="nosotros" className="pt-24 pb-12 bg-gradient-to-b from-white to-[#f8f9fa] relative overflow-hidden">
+    <section id="nosotros" className="pt-16 lg:pt-20 pb-12 bg-gradient-to-b from-white to-[#f8f9fa] relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#ff6b35] rounded-full blur-3xl"></div>
