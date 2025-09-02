@@ -1,0 +1,27 @@
+{
+  "name": "JCP Maquinarias",
+  "short_name": "JCP",
+  "description": "Líderes en maquinaria industrial para panaderías",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#ff6b35",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "industrial"],
+  "lang": "es",
+  "dir": "ltr"
+}

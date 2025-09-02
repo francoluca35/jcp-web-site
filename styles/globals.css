@@ -135,6 +135,12 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Optimize font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent layout shift */
+    font-display: swap;
   }
 
   /* Remove unwanted borders from header */
@@ -144,6 +150,45 @@
   
   header * {
     border-color: transparent !important;
+  }
+
+  /* Optimize images */
+  img {
+    max-width: 100%;
+    height: auto;
+    /* Prevent layout shift */
+    aspect-ratio: attr(width) / attr(height);
+  }
+
+  /* Optimize animations */
+  * {
+    /* Use hardware acceleration for animations */
+    will-change: auto;
+  }
+
+  /* Optimize scrolling */
+  html {
+    scroll-behavior: smooth;
+    /* Optimize for mobile */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Optimize focus styles for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Optimize button interactions */
+  button {
+    /* Prevent double-tap zoom on mobile */
+    touch-action: manipulation;
+  }
+
+  /* Optimize form elements */
+  input, textarea, select {
+    /* Prevent zoom on mobile */
+    font-size: 16px;
   }
 }
 
@@ -204,4 +249,34 @@
 
 html {
   font-size: var(--font-size);
+}
+
+/* Performance optimizations */
+@layer utilities {
+  /* Optimize for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Optimize for high contrast */
+  @media (prefers-contrast: high) {
+    :root {
+      --border: #000000;
+      --muted: #666666;
+    }
+  }
+
+  /* Optimize for dark mode */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+    }
+  }
 }
