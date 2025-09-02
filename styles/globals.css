@@ -128,155 +128,213 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* Optimizaciones de Performance */
 @layer base {
+  /* Optimización de fuentes */
   * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    /* Optimize font rendering */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    /* Prevent layout shift */
     font-display: swap;
   }
 
-  /* Remove unwanted borders from header */
-  header {
-    border: none !important;
-  }
-  
-  header * {
-    border-color: transparent !important;
-  }
-
-  /* Optimize images */
+  /* Optimización de imágenes */
   img {
     max-width: 100%;
     height: auto;
-    /* Prevent layout shift */
-    aspect-ratio: attr(width) / attr(height);
-  }
-
-  /* Optimize animations */
-  * {
-    /* Use hardware acceleration for animations */
     will-change: auto;
   }
 
-  /* Optimize scrolling */
-  html {
-    scroll-behavior: smooth;
-    /* Optimize for mobile */
-    -webkit-overflow-scrolling: touch;
+  /* Optimización de animaciones */
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 
-  /* Optimize focus styles for accessibility */
-  :focus-visible {
-    outline: 2px solid var(--ring);
+  /* Optimización de scroll */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    overflow-x: hidden;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Optimización de focus para accesibilidad */
+  *:focus {
+    outline: 2px solid #ff6b35;
     outline-offset: 2px;
   }
 
-  /* Optimize button interactions */
-  button {
-    /* Prevent double-tap zoom on mobile */
-    touch-action: manipulation;
-  }
-
-  /* Optimize form elements */
+  /* Optimización de inputs móviles */
   input, textarea, select {
-    /* Prevent zoom on mobile */
-    font-size: 16px;
+    font-size: 16px; /* Previene zoom en iOS */
+  }
+
+  /* Optimización de botones */
+  button {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Optimización de enlaces */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Optimización de listas */
+  ul, ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Optimización de headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  /* Optimización de párrafos */
+  p {
+    margin: 0;
+    line-height: 1.6;
   }
 }
 
-/**
- * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
- */
-@layer base {
-  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
-    h1 {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
+@layer components {
+  /* Componentes optimizados */
+  .performance-optimized {
+    contain: layout style paint;
+    will-change: auto;
+  }
 
-    h2 {
-      font-size: var(--text-xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
+  .lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
 
-    h3 {
-      font-size: var(--text-lg);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
+  .lazy-load.loaded {
+    opacity: 1;
+  }
 
-    h4 {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
+  .image-placeholder {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+  }
 
-    p {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-normal);
-      line-height: 1.5;
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
     }
-
-    label {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    button {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    input {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-normal);
-      line-height: 1.5;
+    100% {
+      background-position: -200% 0;
     }
   }
 }
 
-html {
-  font-size: var(--font-size);
-}
-
-/* Performance optimizations */
 @layer utilities {
-  /* Optimize for reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+  /* Utilidades de performance */
+  .contain-layout {
+    contain: layout;
   }
 
-  /* Optimize for high contrast */
-  @media (prefers-contrast: high) {
-    :root {
-      --border: #000000;
-      --muted: #666666;
-    }
+  .contain-style {
+    contain: style;
   }
 
-  /* Optimize for dark mode */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-    }
+  .contain-paint {
+    contain: paint;
   }
+
+  .will-change-auto {
+    will-change: auto;
+  }
+
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .transform-gpu {
+    transform: translateZ(0);
+  }
+}
+
+/* Media queries para preferencias del usuario */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* Optimizaciones específicas para Core Web Vitals */
+.optimize-lcp {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+.optimize-fid {
+  pointer-events: auto;
+}
+
+.optimize-cls {
+  aspect-ratio: attr(width) / attr(height);
+}
+
+/* Optimizaciones de scroll */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.scroll-auto {
+  scroll-behavior: auto;
+}
+
+/* Optimizaciones de imágenes */
+.image-optimized {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Optimizaciones de fuentes */
+.font-display-swap {
+  font-display: swap;
+}
+
+.font-display-fallback {
+  font-display: fallback;
+}
+
+.font-display-optional {
+  font-display: optional;
 }
