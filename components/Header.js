@@ -79,7 +79,6 @@ export function Header() {
   // Navigation items for specific pages
   const specificPageNavItems = [
     { href: '/', label: 'Inicio' },
-    { href: '/servicio-tecnico', label: 'Servicio Técnico' },
     { href: '/blog', label: 'Blog' },
     { href: '/catalog', label: 'Catálogo' },
     { href: '/maquinaria', label: 'Maquinaria' }
@@ -176,12 +175,6 @@ export function Header() {
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#ff6b35] hover:text-white transition-colors"
                         >
                           Catálogo Maquinaria
-                        </a>
-                        <a 
-                          href="/servicio-tecnico" 
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#ff6b35] hover:text-white transition-colors"
-                        >
-                          Servicio Técnico
                         </a>
                         <a 
                           href="/catalog" 
@@ -335,13 +328,6 @@ export function Header() {
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Catálogo Maquinaria
-                        </a>
-                        <a 
-                          href="/servicio-tecnico" 
-                          className="block text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Servicio Técnico
                         </a>
                         <a 
                           href="/catalog" 

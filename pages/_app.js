@@ -1,63 +1,89 @@
 import '../styles/globals.css'
 import Head from 'next/head'
+import WebVitals from '../components/WebVitals'
+import { 
+  generatePerformanceMetaTags, 
+  generatePreloadLinks, 
+  generatePreconnectLinks, 
+  generateDnsPrefetchLinks 
+} from '../performance-config'
+import { seoConfig } from '../seo-config'
 
 export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
+        {/* Meta tags básicos */}
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         
-        {/* Preload critical resources */}
-        <link rel="preload" href="/Assets/logo.png" as="image" type="image/png" />
-        <link rel="preload" href="/Assets/logo.webp" as="image" type="image/webp" />
+        {/* Meta tags de rendimiento */}
+        {generatePerformanceMetaTags().map((meta, index) => (
+          <meta key={index} {...meta} />
+        ))}
         
-        {/* Preconnect to external domains */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preload de recursos críticos */}
+        {generatePreloadLinks().map((link, index) => (
+          <link key={index} {...link} />
+        ))}
+        
+        {/* Preconnect a dominios externos */}
+        {generatePreconnectLinks().map((link, index) => (
+          <link key={index} {...link} />
+        ))}
         
         {/* DNS Prefetch */}
-        <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        {generateDnsPrefetchLinks().map((link, index) => (
+          <link key={index} {...link} />
+        ))}
         
-        {/* Security Headers */}
-        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-        <meta httpEquiv="X-Frame-Options" content="DENY" />
-        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
-        
-        {/* Performance */}
-        <meta name="theme-color" content="#1a1a1a" />
-        <meta name="color-scheme" content="light dark" />
-        
-        {/* Resource Hints */}
+        {/* Resource Hints adicionales */}
         <link rel="preload" href="/data/modernProducts.json" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/data/productCatalog.json" as="fetch" crossOrigin="anonymous" />
         
-        {/* Structured Data */}
+        {/* Structured Data - Organization */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "JCP Maquinarias",
-              "url": "https://maquinariasjcp.netlify.app",
-              "logo": "https://maquinariasjcp.netlify.app/Assets/logo.png",
-              "description": "Líderes en maquinaria industrial para panaderías. Hornos, amasadoras, repuestos y servicio técnico 24/7.",
-              "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "AR"
-              },
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+54-11-6396-2947",
-                "contactType": "customer service"
-              }
-            })
+            __html: JSON.stringify(seoConfig.schema.organization)
           }}
         />
+        
+        {/* Structured Data - WebSite */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(seoConfig.schema.website)
+          }}
+        />
+        
+        {/* Google Analytics */}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${seoConfig.analytics.googleAnalytics.id}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${seoConfig.analytics.googleAnalytics.id}', {
+                    send_page_view: true,
+                    anonymize_ip: true,
+                    cookie_flags: 'SameSite=None;Secure'
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
       </Head>
+      
+      {/* Componente para monitorear Web Vitals */}
+      <WebVitals />
+      
       <Component {...pageProps} />
     </>
   )

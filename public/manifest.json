@@ -1,13 +1,44 @@
 {
-  "name": "JCP Maquinarias",
-  "short_name": "JCP",
-  "description": "Líderes en maquinaria industrial para panaderías",
+  "name": "JCP Maquinarias - Amasadoras Industriales Argentina",
+  "short_name": "JCP Maquinarias",
+  "description": "Líderes en maquinaria industrial para panaderías. Amasadoras, hornos rotativos, sobadoras y repuestos originales en Argentina.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a1a",
   "theme_color": "#ff6b35",
   "orientation": "portrait-primary",
+  "scope": "/",
   "icons": [
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/Assets/logo.png",
       "sizes": "192x192",
@@ -16,12 +47,79 @@
     },
     {
       "src": "/Assets/logo.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Assets/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "categories": ["business", "industrial"],
-  "lang": "es",
-  "dir": "ltr"
+  "categories": ["business", "industrial", "manufacturing"],
+  "lang": "es-AR",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "screenshots": [
+    {
+      "src": "/Assets/logo.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "JCP Maquinarias - Catálogo de Maquinaria Industrial"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Catálogo",
+      "short_name": "Catálogo",
+      "description": "Ver catálogo completo de maquinaria",
+      "url": "/catalog",
+      "icons": [
+        {
+          "src": "/Assets/logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Amasadoras",
+      "short_name": "Amasadoras",
+      "description": "Ver amasadoras industriales",
+      "url": "/amasadoras-industriales",
+      "icons": [
+        {
+          "src": "/Assets/logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Hornos",
+      "short_name": "Hornos",
+      "description": "Ver hornos industriales",
+      "url": "/hornos-industriales",
+      "icons": [
+        {
+          "src": "/Assets/logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Repuestos",
+      "short_name": "Repuestos",
+      "description": "Ver repuestos disponibles",
+      "url": "/repuestos",
+      "icons": [
+        {
+          "src": "/Assets/logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
 }

@@ -290,7 +290,6 @@ export function ContactSection() {
                         <SelectItem value="amasadoras">⚙️ Amasadoras</SelectItem>
                         <SelectItem value="linea-completa">🏭 Línea completa de producción</SelectItem>
                         <SelectItem value="repuestos">🔧 Repuestos específicos</SelectItem>
-                        <SelectItem value="servicio">🛠️ Servicio técnico</SelectItem>
                         <SelectItem value="otros">📦 Otros productos</SelectItem>
                       </SelectContent>
                     </Select>
