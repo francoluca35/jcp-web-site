@@ -74,17 +74,17 @@ export function Footer() {
               </ul>
             </div>
 
-            {/* Services */}
+            {/* Products */}
             <div>
-              <h4 className="font-black text-xl text-white mb-6 uppercase tracking-wide border-b border-[#ffd23f] pb-2">Servicios</h4>
+              <h4 className="font-black text-xl text-white mb-6 uppercase tracking-wide border-b border-[#ffd23f] pb-2">Productos</h4>
               <ul className="space-y-3">
                 {[
-                  "Instalación Llave en Mano",
-                  "Mantenimiento Predictivo",
-                  "Reparaciones Urgentes",
-                  "Formación Técnica",
-                  "Consultoría Industrial",
-                  "Financiación Flexible"
+                  "Amasadoras Industriales",
+                  "Hornos Rotativos",
+                  "Sobadoras Martino",
+                  "Repuestos Originales",
+                  "Líneas Completas",
+                  "Equipos Personalizados"
                 ].map((item, index) => (
                   <li key={index}>
                     <a href="#" className="flex items-center space-x-2 text-[#adb5bd] hover:text-[#ffd23f] transition-colors duration-300 group">
@@ -98,30 +98,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Industrial Newsletter */}
-        <div className="border-t border-[#ff6b35]/30 py-12 mt-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h4 className="font-black text-2xl text-white mb-4 uppercase tracking-wide">
-                BOLETÍN INDUSTRIAL
-              </h4>
-              <p className="text-[#adb5bd] font-medium text-lg leading-relaxed">
-                Recibe actualizaciones técnicas, lanzamientos de productos y ofertas 
-                exclusivas para profesionales del sector.
-              </p>
-            </div>
-            <div className="flex space-x-3">
-              <input
-                type="email"
-                placeholder="tu.email@empresa.com"
-                className="flex-1 px-6 py-4 rounded-xl bg-white/10 border border-[#ff6b35]/30 text-white placeholder-[#adb5bd] focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent backdrop-blur-sm font-medium"
-              />
-              <Button className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white px-8 py-4 font-bold border-0 shadow-lg hover:scale-105 transition-all duration-300">
-                SUSCRIBIRSE
-              </Button>
-            </div>
-          </div>
-        </div>
 
         {/* Industrial Bottom Footer */}
         <div className="border-t border-[#ff6b35]/30 py-8">

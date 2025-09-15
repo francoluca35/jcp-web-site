@@ -7,16 +7,29 @@
       "image": "https://images.unsplash.com/photo-1703607888337-aae6d77b3d83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmR1c3RyaWFsJTIwbWl4ZXIlMjBiYWtlcnl8ZW58MXx8fHwxNzU2NDk0MTI5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       "specs": {
         "capacidad": "25 kg harina / 40 kg masa",
-        "potencia": "Motor trifásico 4HP",
+        "potencia": "Motor trifásico 4HP (3kW)",
+        "voltaje": "380V/220V",
+        "velocidades": "3 velocidades + reversa",
         "tiempo": "6-8 minutos",
-        "garantia": "2 años"
+        "material": "Acero inoxidable 304",
+        "dimensiones": "120cm x 80cm x 140cm",
+        "peso": "180 kg",
+        "garantia": "2 años",
+        "certificacion": "CE, ISO 9001"
       },
-      "features": ["Espiral de acero forjado", "Rulemanes blindados", "Zona cilíndrica optimizada", "Ideal para espacios reducidos"],
+      "features": ["Espiral de acero forjado", "Rulemanes blindados", "Zona cilíndrica optimizada", "Sistema de inclinación automática", "Batea extraíble", "Control de velocidad variable"],
       "price": "Consultar",
       "rating": 4.8,
       "isNew": true,
       "catalogFile": "/Document/catalogo_maquinaria.pdf",
-      "description": "El modelo más pequeño de la serie. Ideal para el pastelero, repostero, pizzería, supermercado y espacio reducido. Su capacidad de 25 kg. de harina equivale a 40 kg. de masa (según tipo de preparado de masa), en tan solo de 6 a 8 minutos."
+      "description": "El modelo más pequeño de la serie. Ideal para el pastelero, repostero, pizzería, supermercado y espacio reducido. Su capacidad de 25 kg. de harina equivale a 40 kg. de masa (según tipo de preparado de masa), en tan solo de 6 a 8 minutos.",
+      "idealFor": "Panaderías pequeñas, pizzerías, supermercados, pastelerías",
+      "applications": ["Pan de molde", "Pizza", "Facturas", "Pan dulce", "Masa para empanadas"],
+      "maintenance": {
+        "limpieza": "Diaria con desengrasante neutro",
+        "lubricacion": "Mensual en rulemanes",
+        "revision": "Trimestral por técnico especializado"
+      }
     },
     {
       "id": 2,
@@ -48,14 +61,26 @@
         "potencia": "17.800 kcal/h",
         "consumoGas": "1 kg/h",
         "tension": "220V/380V/110V",
-        "potenciaElectrica": "0.87 HP/0.65 kW"
+        "potenciaElectrica": "0.87 HP/0.65 kW",
+        "temperaturaMax": "350°C",
+        "tiempoCalentamiento": "15-20 minutos",
+        "material": "Acero inoxidable 304",
+        "garantia": "2 años",
+        "certificacion": "CE, ISO 9001"
       },
-      "features": ["Consumo gas 1 kg/h", "Tensión 220V/380V/110V", "Cámara fermentadora opcional", "Sistema de vapor", "Potencia instalada 0.9 kW", "Consumo eléctrico 12.5 kW/h"],
+      "features": ["Consumo gas 1 kg/h", "Tensión 220V/380V/110V", "Cámara fermentadora opcional", "Sistema de vapor", "Potencia instalada 0.9 kW", "Consumo eléctrico 12.5 kW/h", "Control PID digital", "Timer programable", "Sistema de limpieza automática"],
       "price": "Consultar",
       "rating": 4.9,
       "isNew": true,
       "catalogFile": "/Document/catalogo_maquinaria.pdf",
-      "description": "Horno rotativo de alta eficiencia con capacidad de cocción de 50 kg/h. Incluye 9 bandejas de 45x70 cm y sistema de control avanzado.",
+      "description": "Horno rotativo de alta eficiencia con capacidad de cocción de 50 kg/h. Incluye 9 bandejas de 45x70 cm y sistema de control avanzado con tecnología PID para máxima precisión.",
+      "idealFor": "Panaderías medianas, producción continua, franquicias",
+      "applications": ["Pan de molde", "Facturas", "Pan dulce", "Galletas", "Productos congelados"],
+      "maintenance": {
+        "limpieza": "Diaria con desengrasante neutro",
+        "lubricacion": "Mensual en sistema de rotación",
+        "revision": "Bimestral por técnico especializado"
+      },
       "dimensions": {
         "alto": "122cm",
         "ancho": "100cm",

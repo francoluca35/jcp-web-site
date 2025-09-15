@@ -37,9 +37,10 @@ export function AboutSection() {
             NUESTRA
             <span className="block bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">HISTORIA</span>
           </h2>
-          <p className="text-xl text-[#495057] max-w-3xl mx-auto">
-            Más de dos décadas transformando la industria panadera con tecnología de vanguardia 
-            y un compromiso inquebrantable con la excelencia y la innovación.
+          <p className="text-xl text-[#495057] max-w-4xl mx-auto leading-relaxed">
+            Desde 2004, JCP Maquinarias ha sido pionera en la industria argentina de equipamiento panadero. 
+            Con más de 20 años de experiencia, hemos equipado más de 500 panaderías con tecnología de vanguardia, 
+            estableciendo estándares de calidad y excelencia que nos posicionan como líderes del sector.
           </p>
         </div>
 
@@ -58,7 +59,8 @@ export function AboutSection() {
               <p className="text-lg text-[#adb5bd] leading-relaxed">
                 Ser el socio estratégico de confianza para panaderías y pastelerías, 
                 proporcionando soluciones tecnológicas innovadoras que impulsen su crecimiento 
-                y rentabilidad en un mercado cada vez más competitivo.
+                y rentabilidad en un mercado cada vez más competitivo. Nos comprometemos a 
+                ofrecer asesoramiento especializado y repuestos originales de excelencia.
               </p>
             </div>
 
@@ -73,7 +75,8 @@ export function AboutSection() {
               <p className="text-lg text-[#495057] leading-relaxed">
                 Liderar la revolución tecnológica en la industria panadera, siendo reconocidos 
                 como la empresa más innovadora y confiable en maquinaria industrial para panaderías 
-                en toda Latinoamérica.
+                en toda Latinoamérica. Nuestra visión es expandir nuestra presencia internacional 
+                manteniendo los más altos estándares de calidad y excelencia.
               </p>
             </div>
 
@@ -82,7 +85,7 @@ export function AboutSection() {
                {[
                  { icon: Shield, title: "CALIDAD", desc: "Estándares internacionales", color: "from-[#ff6b35] to-[#ffd23f]" },
                  { icon: Clock, title: "PUNTUALIDAD", desc: "Entregas a tiempo", color: "from-[#ffd23f] to-[#ff6b35]" },
-                 { icon: Users, title: "SERVICIO", desc: "Atención personalizada", color: "from-[#ff6b35] to-[#ffd23f]" },
+                 { icon: Users, title: "ATENCIÓN", desc: "Asesoramiento personalizado", color: "from-[#ff6b35] to-[#ffd23f]" },
                  { icon: Star, title: "INNOVACIÓN", desc: "Tecnología de vanguardia", color: "from-[#ffd23f] to-[#ff6b35]" }
                ].map((value, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-xl">
@@ -144,7 +147,108 @@ export function AboutSection() {
           </div>
         </div>
 
-        
+        {/* Certificaciones y Logros */}
+        <div className="bg-gradient-to-r from-[#1a1a1a] to-[#495057] rounded-3xl p-8 lg:p-12 mb-16 text-white">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl lg:text-4xl font-black mb-4">
+              CERTIFICACIONES Y <span className="text-[#ffd23f]">LOGROS</span>
+            </h3>
+            <p className="text-lg text-[#adb5bd] max-w-3xl mx-auto">
+              Nuestro compromiso con la excelencia se refleja en las certificaciones internacionales 
+              y reconocimientos que avalan nuestra calidad y confiabilidad.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                title: "ISO 9001:2015",
+                description: "Sistema de Gestión de Calidad",
+                icon: Award,
+                color: "from-[#ff6b35] to-[#ffd23f]"
+              },
+              {
+                title: "Certificación CE",
+                description: "Cumplimiento Normativas Europeas",
+                icon: Shield,
+                color: "from-[#ffd23f] to-[#ff6b35]"
+              },
+              {
+                title: "20+ Años",
+                description: "Experiencia en el Mercado",
+                icon: Clock,
+                color: "from-[#ff6b35] to-[#ffd23f]"
+              },
+              {
+                title: "500+ Clientes",
+                description: "Satisfechos en Argentina",
+                icon: Users,
+                color: "from-[#ffd23f] to-[#ff6b35]"
+              }
+            ].map((achievement, index) => (
+              <div key={index} className="text-center">
+                <div className={`bg-gradient-to-r ${achievement.color} rounded-full p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center`}>
+                  <achievement.icon className="h-10 w-10 text-white" />
+                </div>
+                <h4 className="text-xl font-bold mb-2">{achievement.title}</h4>
+                <p className="text-sm text-[#adb5bd]">{achievement.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Testimonios de Clientes */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl lg:text-4xl font-black text-[#1a1a1a] mb-4">
+              LO QUE DICEN <span className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">NUESTROS CLIENTES</span>
+            </h3>
+            <p className="text-lg text-[#495057] max-w-3xl mx-auto">
+              La confianza de nuestros clientes es nuestro mayor logro. 
+              Conoce las experiencias de quienes han confiado en nosotros.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Carlos Mendoza",
+                business: "Panadería El Buen Pan",
+                location: "Buenos Aires",
+                testimonial: "Excelente atención y maquinaria de primera calidad. JCP nos ayudó a modernizar completamente nuestra panadería.",
+                rating: 5
+              },
+              {
+                name: "María González",
+                business: "Pastelería Dulce Aroma",
+                location: "Córdoba",
+                testimonial: "Llevamos 5 años trabajando con JCP y nunca nos han fallado. Su asesoramiento técnico es invaluable.",
+                rating: 5
+              },
+              {
+                name: "Roberto Silva",
+                business: "Pizzería La Nonna",
+                location: "Rosario",
+                testimonial: "La amasadora que nos vendieron superó todas nuestras expectativas. Calidad y atención excepcionales.",
+                rating: 5
+              }
+            ].map((testimonial, index) => (
+              <Card key={index} className="p-6 bg-white shadow-lg border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300">
+                <div className="flex items-center mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <p className="text-[#495057] mb-4 italic">"{testimonial.testimonial}"</p>
+                <div className="border-t pt-4">
+                  <h4 className="font-bold text-[#1a1a1a]">{testimonial.name}</h4>
+                  <p className="text-sm text-[#ff6b35] font-semibold">{testimonial.business}</p>
+                  <p className="text-xs text-[#495057]">{testimonial.location}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
 
       </div>
     </section>

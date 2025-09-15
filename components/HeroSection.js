@@ -27,7 +27,7 @@ export function HeroSection() {
             
             <p className="text-xl text-[#adb5bd] mb-10 leading-relaxed max-w-xl">
               Más de 20 años equipando panaderías con la tecnología más avanzada. 
-              Soluciones completas, servicio técnico especializado y garantía total.
+              Soluciones completas, repuestos originales y garantía total.
             </p>
 
             {/* Industrial Features */}
