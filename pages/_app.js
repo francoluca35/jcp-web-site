@@ -22,9 +22,8 @@ export default function App({ Component, pageProps }) {
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         
-        {/* Security Headers */}
+        {/* Security Headers - Solo los que funcionan en meta tags */}
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-        <meta httpEquiv="X-Frame-Options" content="DENY" />
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
         
         {/* Performance */}

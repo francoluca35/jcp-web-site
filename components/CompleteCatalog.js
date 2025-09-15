@@ -136,7 +136,10 @@ export function CompleteCatalog() {
           <p className="text-gray-600 mb-4">
             {error}
           </p>
-          <Button onClick={() => window.location.reload()}>
+          <Button 
+            onClick={() => window.location.reload()}
+            aria-label="Reintentar cargar catálogo"
+          >
             Reintentar
           </Button>
         </div>

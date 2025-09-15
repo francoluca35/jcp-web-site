@@ -109,7 +109,7 @@ export function OptimizedLogo({ className = '', priority = true }) {
         src="/Assets/logo_optimized.png"
         alt="JCP Logo"
         width={180}
-        height={180}
+        height={53}
         className={className}
         priority={priority}
         placeholder="blur"
