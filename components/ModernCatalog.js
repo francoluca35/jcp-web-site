@@ -326,7 +326,7 @@ export function ModernCatalog() {
               </div>
 
               <CardContent className="p-4">
-                <h4 className="text-lg font-black text-[#1a1a1a] mb-2">{product.name}</h4>
+                <h3 className="text-lg font-black text-[#1a1a1a] mb-2">{product.name}</h3>
                 
                 {/* Specs Grid - Mostrar 2 o todas según expansión */}
                 <div className="grid grid-cols-2 gap-2 mb-4">

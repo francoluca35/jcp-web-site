@@ -1,5 +1,6 @@
-import { Settings, Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
+import { Settings, Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 import { Button } from "./ui/button";
+import { TikTokIcon } from "./ui/TikTokIcon";
 
 export function Footer() {
   return (
@@ -54,7 +55,7 @@ export function Footer() {
 
             {/* Products */}
             <div>
-              <h4 className="font-black text-xl text-white mb-6 uppercase tracking-wide border-b border-[#ff6b35] pb-2">Equipamiento</h4>
+              <h3 className="font-black text-xl text-white mb-6 uppercase tracking-wide border-b border-[#ff6b35] pb-2">Equipamiento</h3>
               <ul className="space-y-3">
                 {[
                   "Hornos Industriales",
@@ -76,7 +77,7 @@ export function Footer() {
 
             {/* Products */}
             <div>
-              <h4 className="font-black text-xl text-white mb-6 uppercase tracking-wide border-b border-[#ffd23f] pb-2">Productos</h4>
+              <h3 className="font-black text-xl text-white mb-6 uppercase tracking-wide border-b border-[#ffd23f] pb-2">Productos</h3>
               <ul className="space-y-3">
                 {[
                   "Amasadoras Industriales",
@@ -114,14 +115,15 @@ export function Footer() {
               <span className="text-[#adb5bd] font-medium uppercase tracking-wide text-sm">Síguenos:</span>
               <div className="flex space-x-3">
                 {[
-                  { icon: Facebook, color: "hover:bg-blue-600" },
-                  { icon: Instagram, color: "hover:bg-pink-600" },
-                  { icon: Linkedin, color: "hover:bg-blue-700" }
+                  { icon: Facebook, color: "hover:bg-blue-600", label: "Síguenos en Facebook" },
+                  { icon: Instagram, color: "hover:bg-pink-600", label: "Síguenos en Instagram" },
+                  { icon: TikTokIcon, color: "hover:bg-black", label: "Síguenos en TikTok" }
                 ].map((social, index) => (
                   <Button 
                     key={index}
                     variant="ghost" 
                     size="sm" 
+                    aria-label={social.label}
                     className={`p-3 text-[#adb5bd] hover:text-white border border-[#495057] hover:border-transparent rounded-full transition-all duration-300 hover:scale-110 ${social.color}`}
                   >
                     <social.icon className="h-5 w-5" />

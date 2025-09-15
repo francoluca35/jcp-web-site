@@ -92,7 +92,7 @@ export function AboutSection() {
                   <div className={`bg-gradient-to-r ${value.color} rounded-full p-3 w-fit mb-4`}>
                     <value.icon className="h-5 w-5 text-white" />
                   </div>
-                  <h4 className="text-lg font-black text-[#1a1a1a] mb-2">{value.title}</h4>
+                  <h3 className="text-lg font-black text-[#1a1a1a] mb-2">{value.title}</h3>
                   <p className="text-sm text-[#495057] font-medium">{value.desc}</p>
                 </div>
               ))}
@@ -190,7 +190,7 @@ export function AboutSection() {
                 <div className={`bg-gradient-to-r ${achievement.color} rounded-full p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center`}>
                   <achievement.icon className="h-10 w-10 text-white" />
                 </div>
-                <h4 className="text-xl font-bold mb-2">{achievement.title}</h4>
+                <h3 className="text-xl font-bold mb-2">{achievement.title}</h3>
                 <p className="text-sm text-[#adb5bd]">{achievement.description}</p>
               </div>
             ))}
@@ -241,7 +241,7 @@ export function AboutSection() {
                 </div>
                 <p className="text-[#495057] mb-4 italic">"{testimonial.testimonial}"</p>
                 <div className="border-t pt-4">
-                  <h4 className="font-bold text-[#1a1a1a]">{testimonial.name}</h4>
+                  <h3 className="font-bold text-[#1a1a1a]">{testimonial.name}</h3>
                   <p className="text-sm text-[#ff6b35] font-semibold">{testimonial.business}</p>
                   <p className="text-xs text-[#495057]">{testimonial.location}</p>
                 </div>

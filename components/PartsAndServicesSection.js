@@ -46,7 +46,13 @@ Cordiales saludos`;
           <h3 className="text-lg font-semibold text-gray-900">
             Solicitar {item.name}
           </h3>
-          <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onClose} 
+            aria-label="Cerrar modal"
+            className="text-gray-400 hover:text-gray-600"
+          >
             <X className="h-5 w-5" />
           </Button>
         </div>

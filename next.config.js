@@ -110,17 +110,47 @@ const nextConfig = {
       };
     }
     
-    // Optimización de chunks
+    // Optimización avanzada de chunks para reducir JavaScript sin usar
     config.optimization.splitChunks = {
       chunks: 'all',
+      minSize: 20000,
+      maxSize: 244000,
       cacheGroups: {
+        // Separar vendor libraries
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
+          priority: 10,
+          enforce: true,
+        },
+        // Separar componentes UI
+        ui: {
+          test: /[\\/]components[\\/]ui[\\/]/,
+          name: 'ui-components',
+          chunks: 'all',
+          priority: 5,
+        },
+        // Separar componentes de página
+        pages: {
+          test: /[\\/]components[\\/](?!ui)[\\/]/,
+          name: 'page-components',
+          chunks: 'all',
+          priority: 3,
+        },
+        // Chunk común
+        common: {
+          name: 'common',
+          minChunks: 2,
+          chunks: 'all',
+          priority: 1,
+          reuseExistingChunk: true,
         },
       },
     };
+    
+    // Tree shaking más agresivo (compatible con Next.js)
+    config.optimization.sideEffects = false;
     
     return config;
   },
