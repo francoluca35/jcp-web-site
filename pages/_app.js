@@ -1,13 +1,5 @@
 import '../styles/globals.css'
 import Head from 'next/head'
-import WebVitals from '../components/WebVitals'
-import { 
-  generatePerformanceMetaTags, 
-  generatePreloadLinks, 
-  generatePreconnectLinks, 
-  generateDnsPrefetchLinks 
-} from '../performance-config'
-import { seoConfig } from '../seo-config'
 
 export default function App({ Component, pageProps }) {
   return (
@@ -15,28 +7,31 @@ export default function App({ Component, pageProps }) {
       <Head>
         {/* Meta tags básicos */}
         <meta charSet="utf-8" />
-        
-        {/* Meta tags de rendimiento */}
-        {generatePerformanceMetaTags().map((meta, index) => (
-          <meta key={index} {...meta} />
-        ))}
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         
         {/* Preload de recursos críticos */}
-        {generatePreloadLinks().map((link, index) => (
-          <link key={index} {...link} />
-        ))}
+        <link rel="preload" href="/Assets/logo.png" as="image" type="image/png" />
+        <link rel="preload" href="/Assets/logo.webp" as="image" type="image/webp" />
         
         {/* Preconnect a dominios externos */}
-        {generatePreconnectLinks().map((link, index) => (
-          <link key={index} {...link} />
-        ))}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* DNS Prefetch */}
-        {generateDnsPrefetchLinks().map((link, index) => (
-          <link key={index} {...link} />
-        ))}
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         
-        {/* Resource Hints adicionales */}
+        {/* Security Headers */}
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        
+        {/* Performance */}
+        <meta name="theme-color" content="#1a1a1a" />
+        <meta name="color-scheme" content="light dark" />
+        
+        {/* Resource Hints */}
         <link rel="preload" href="/data/modernProducts.json" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/data/productCatalog.json" as="fetch" crossOrigin="anonymous" />
         
@@ -44,7 +39,23 @@ export default function App({ Component, pageProps }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(seoConfig.schema.organization)
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "JCP Maquinarias",
+              "url": "https://maquinariasjcp.netlify.app",
+              "logo": "https://maquinariasjcp.netlify.app/Assets/logo.png",
+              "description": "Líderes en maquinaria industrial para panaderías. Hornos, amasadoras, repuestos y servicio técnico 24/7.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "AR"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+54-11-6396-2947",
+                "contactType": "customer service"
+              }
+            })
           }}
         />
         
@@ -52,37 +63,25 @@ export default function App({ Component, pageProps }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(seoConfig.schema.website)
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "JCP Maquinarias",
+              "url": "https://maquinariasjcp.netlify.app",
+              "description": "Catálogo completo de maquinaria industrial para panaderías en Argentina",
+              "publisher": {
+                "@type": "Organization",
+                "name": "JCP Maquinarias"
+              },
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://maquinariasjcp.netlify.app/catalog?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
           }}
         />
-        
-        {/* Google Analytics */}
-        {process.env.NODE_ENV === 'production' && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${seoConfig.analytics.googleAnalytics.id}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${seoConfig.analytics.googleAnalytics.id}', {
-                    send_page_view: true,
-                    anonymize_ip: true,
-                    cookie_flags: 'SameSite=None;Secure'
-                  });
-                `,
-              }}
-            />
-          </>
-        )}
       </Head>
-      
-      {/* Componente para monitorear Web Vitals */}
-      <WebVitals />
       
       <Component {...pageProps} />
     </>

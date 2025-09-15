@@ -3,6 +3,9 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   distDir: 'out',
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
+  },
   
   // Optimización de imágenes
   images: {
