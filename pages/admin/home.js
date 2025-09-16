@@ -84,6 +84,10 @@ export default function Admin() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCondition, setFilterCondition] = useState('all');
   const [filterSubcategory, setFilterSubcategory] = useState('all');
+  
+  // Estados para manejo de imágenes
+  const [mainImageIndex, setMainImageIndex] = useState(0);
+  const [imageErrors, setImageErrors] = useState({});
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -102,11 +106,40 @@ export default function Admin() {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
+    
+    // Validar número de imágenes
+    const totalImages = productForm.images.length + files.length;
+    if (totalImages > 5) {
+      setImageErrors({ 
+        ...imageErrors, 
+        maxImages: 'Máximo 5 imágenes permitidas' 
+      });
+      return;
+    }
+    
+    // Validar tipos de archivo
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const invalidFiles = files.filter(file => !validTypes.includes(file.type));
+    
+    if (invalidFiles.length > 0) {
+      setImageErrors({ 
+        ...imageErrors, 
+        invalidType: 'Solo se permiten archivos JPG, PNG y WebP' 
+      });
+      return;
+    }
+    
+    // Limpiar errores si todo está bien
+    setImageErrors({});
+    
     const imageUrls = files.map(file => URL.createObjectURL(file));
     setProductForm(prev => ({
       ...prev,
       images: [...prev.images, ...imageUrls]
     }));
+    
+    // Resetear el input para permitir subir el mismo archivo otra vez
+    e.target.value = '';
   };
 
   const removeImage = (index) => {
@@ -114,14 +147,43 @@ export default function Admin() {
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
+    
+    // Ajustar el índice de imagen principal si es necesario
+    if (mainImageIndex >= index && mainImageIndex > 0) {
+      setMainImageIndex(mainImageIndex - 1);
+    } else if (mainImageIndex >= productForm.images.length - 1) {
+      setMainImageIndex(0);
+    }
+    
+    // Limpiar errores
+    setImageErrors({});
   };
 
   const handleSubmitProduct = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Validar imágenes
+    if (productForm.images.length === 0) {
+      setImageErrors({ minImages: 'Debe subir al menos 1 imagen' });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (productForm.images.length > 5) {
+      setImageErrors({ maxImages: 'Máximo 5 imágenes permitidas' });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const result = await createProduct(productForm);
+      // Agregar información de imagen principal al producto
+      const productData = {
+        ...productForm,
+        mainImageIndex: mainImageIndex
+      };
+
+      const result = await createProduct(productData);
       
       if (result.success) {
         // Reset form
@@ -135,6 +197,8 @@ export default function Admin() {
           condition: '',
           images: []
         });
+        setMainImageIndex(0);
+        setImageErrors({});
         alert('Producto creado exitosamente!');
       } else {
         alert(`Error: ${result.error}`);
@@ -183,6 +247,8 @@ export default function Admin() {
       condition: product.condition,
       images: product.images || []
     });
+    setMainImageIndex(product.mainImageIndex || 0);
+    setImageErrors({});
     setShowEditModal(true);
   };
 
@@ -190,12 +256,31 @@ export default function Admin() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Validar imágenes
+    if (productForm.images.length === 0) {
+      setImageErrors({ minImages: 'Debe subir al menos 1 imagen' });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (productForm.images.length > 5) {
+      setImageErrors({ maxImages: 'Máximo 5 imágenes permitidas' });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
+      // Agregar información de imagen principal al producto
+      const productData = {
+        ...productForm,
+        mainImageIndex: mainImageIndex
+      };
+
       const result = await updateProduct(
         editingProduct.id,
         editingProduct.condition,
         editingProduct.subcategory,
-        productForm
+        productData
       );
       
       if (result.success) {
@@ -211,6 +296,8 @@ export default function Admin() {
           condition: '',
           images: []
         });
+        setMainImageIndex(0);
+        setImageErrors({});
         alert('Producto actualizado exitosamente!');
       } else {
         alert(`Error: ${result.error}`);
@@ -464,35 +551,76 @@ export default function Admin() {
                   {/* Imágenes */}
                   <div>
                     <label className="block text-white font-medium mb-2">
-                      Imágenes
+                      Imágenes <span className="text-red-400">*</span>
+                      <span className="text-sm text-[#adb5bd] ml-2">
+                        (Mínimo 1, máximo 5 imágenes)
+                      </span>
                     </label>
                     <input
                       type="file"
                       multiple
-                      accept="image/*"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
                       onChange={handleImageUpload}
                       className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
                     />
                     
+                    {/* Mostrar errores de imágenes */}
+                    {Object.keys(imageErrors).length > 0 && (
+                      <div className="mt-2 space-y-1">
+                        {Object.values(imageErrors).map((error, index) => (
+                          <p key={index} className="text-red-400 text-sm">{error}</p>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {/* Contador de imágenes */}
+                    <div className="mt-2 text-sm text-[#adb5bd]">
+                      {productForm.images.length}/5 imágenes
+                    </div>
+                    
                     {/* Preview de imágenes */}
                     {productForm.images.length > 0 && (
-                      <div className="mt-4 grid grid-cols-2 gap-4">
-                        {productForm.images.map((image, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={image}
-                              alt={`Preview ${index + 1}`}
-                              className="w-full h-32 object-cover rounded-lg"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeImage(index)}
-                              className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
-                            >
-                              <X className="h-4 w-4" />
-                            </button>
-                  </div>
-                ))}
+                      <div className="mt-4">
+                        <p className="text-white font-medium mb-3">
+                          Selecciona la imagen principal (aparecerá en el catálogo):
+                        </p>
+                        <div className="grid grid-cols-2 gap-4">
+                          {productForm.images.map((image, index) => (
+                            <div key={index} className="relative">
+                              <img
+                                src={image}
+                                alt={`Preview ${index + 1}`}
+                                className={`w-full h-32 object-cover rounded-lg cursor-pointer transition-all ${
+                                  mainImageIndex === index 
+                                    ? 'ring-4 ring-[#ff6b35] ring-opacity-50' 
+                                    : 'hover:ring-2 hover:ring-[#ff6b35] hover:ring-opacity-30'
+                                }`}
+                                onClick={() => setMainImageIndex(index)}
+                              />
+                              
+                              {/* Indicador de imagen principal */}
+                              {mainImageIndex === index && (
+                                <div className="absolute top-2 left-2 bg-[#ff6b35] text-white px-2 py-1 rounded-full text-xs font-medium">
+                                  Principal
+                                </div>
+                              )}
+                              
+                              {/* Botón eliminar */}
+                              <button
+                                type="button"
+                                onClick={() => removeImage(index)}
+                                className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
+                              >
+                                <X className="h-4 w-4" />
+                              </button>
+                              
+                              {/* Número de imagen */}
+                              <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
+                                {index + 1}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -638,7 +766,7 @@ export default function Admin() {
                           <div className="flex-shrink-0">
                             {product.images && product.images.length > 0 ? (
                               <img
-                                src={product.images[0]}
+                                src={product.images[product.mainImageIndex || 0]}
                                 alt={product.title}
                                 className="w-20 h-20 object-cover rounded-lg"
                                 onError={(e) => {
@@ -951,35 +1079,76 @@ export default function Admin() {
                 {/* Imágenes */}
                 <div>
                   <label className="block text-white font-medium mb-2">
-                    Imágenes
+                    Imágenes <span className="text-red-400">*</span>
+                    <span className="text-sm text-[#adb5bd] ml-2">
+                      (Mínimo 1, máximo 5 imágenes)
+                    </span>
                   </label>
                   <input
                     type="file"
                     multiple
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
                     onChange={handleImageUpload}
                     className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
                   />
                   
+                  {/* Mostrar errores de imágenes */}
+                  {Object.keys(imageErrors).length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {Object.values(imageErrors).map((error, index) => (
+                        <p key={index} className="text-red-400 text-sm">{error}</p>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Contador de imágenes */}
+                  <div className="mt-2 text-sm text-[#adb5bd]">
+                    {productForm.images.length}/5 imágenes
+                  </div>
+                  
                   {/* Preview de imágenes */}
                   {productForm.images.length > 0 && (
-                    <div className="mt-4 grid grid-cols-2 gap-4">
-                      {productForm.images.map((image, index) => (
-                        <div key={index} className="relative">
-                          <img
-                            src={image}
-                            alt={`Preview ${index + 1}`}
-                            className="w-full h-32 object-cover rounded-lg"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeImage(index)}
-                            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                      ))}
+                    <div className="mt-4">
+                      <p className="text-white font-medium mb-3">
+                        Selecciona la imagen principal (aparecerá en el catálogo):
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        {productForm.images.map((image, index) => (
+                          <div key={index} className="relative">
+                            <img
+                              src={image}
+                              alt={`Preview ${index + 1}`}
+                              className={`w-full h-32 object-cover rounded-lg cursor-pointer transition-all ${
+                                mainImageIndex === index 
+                                  ? 'ring-4 ring-[#ff6b35] ring-opacity-50' 
+                                  : 'hover:ring-2 hover:ring-[#ff6b35] hover:ring-opacity-30'
+                              }`}
+                              onClick={() => setMainImageIndex(index)}
+                            />
+                            
+                            {/* Indicador de imagen principal */}
+                            {mainImageIndex === index && (
+                              <div className="absolute top-2 left-2 bg-[#ff6b35] text-white px-2 py-1 rounded-full text-xs font-medium">
+                                Principal
+                              </div>
+                            )}
+                            
+                            {/* Botón eliminar */}
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                              className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                            
+                            {/* Número de imagen */}
+                            <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
+                              {index + 1}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
