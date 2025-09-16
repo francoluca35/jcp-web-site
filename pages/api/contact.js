@@ -79,7 +79,7 @@ export default async function handler(req, res) {
       // Configurar transporter de Gmail
       let transporter;
       try {
-        transporter = nodemailer.createTransporter({
+        transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
             user: gmailUser,
