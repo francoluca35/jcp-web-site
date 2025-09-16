@@ -104,7 +104,8 @@ export default async function handler(req, res) {
 
       // Configurar el email
       const mailOptions = {
-        from: gmailUser,
+        from: `"${nombre}" <${email}>`, // Email del formulario como remitente
+        replyTo: email, // Para que las respuestas vayan al email del formulario
         to: destinationEmail,
         subject: `🏭 Nueva Solicitud Industrial - ${nombre}`,
         html: `
