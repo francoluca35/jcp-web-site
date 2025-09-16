@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export', // Comentado para permitir API routes
   trailingSlash: true,
-  distDir: 'out',
+  // distDir: 'out', // Comentado para permitir API routes
   generateBuildId: async () => {
     return 'build-' + Date.now()
   },

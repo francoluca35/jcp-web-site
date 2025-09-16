@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
-import { Phone, Mail, Menu, X, ChevronDown } from "lucide-react";
+// import { Button } from "./ui/button.jsx";
+import { Phone, Mail, Menu, X, ChevronDown, LogIn } from "lucide-react";
 import { useRouter } from "next/router";
 import { OptimizedLogo } from "./ui/optimized-image";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
 
   // Handle scroll effect
   useEffect(() => {
+    setIsMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -52,7 +54,6 @@ export function Header() {
     };
     
     const actualSectionId = sectionMap[sectionId] || sectionId;
-    console.log(`Navegando a sección: ${sectionId} -> ${actualSectionId}`);
     
     // Smooth scroll to section with offset for fixed header
     const element = document.getElementById(actualSectionId);
@@ -60,7 +61,6 @@ export function Header() {
       const headerHeight = 80; // Altura del header fijo
       const elementPosition = element.offsetTop - headerHeight;
       
-      console.log(`Elemento encontrado, posición: ${elementPosition}`);
       
       window.scrollTo({
         top: elementPosition,
@@ -197,17 +197,22 @@ export function Header() {
 
             {/* Desktop Contact Info & CTA */}
             <div className="hidden lg:flex items-center space-x-6">
-              <div className="flex items-center space-x-2 text-sm text-[#adb5bd]">
-                <Phone className="h-4 w-4 text-[#ffd23f]" />
-                <span className="font-medium">+54 11 6396 2947</span>
-              </div>
-              <Button 
+             
+              <button 
                 className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-semibold px-6 py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 border-0"
                 onClick={() => window.location.href = '/catalog'}
                 aria-label="Ver catálogo completo de productos"
               >
                 Ver Catalogo
-              </Button>
+              </button>
+              {/* Login Icon */}
+              <button 
+                className="text-white hover:text-[#ff6b35] hover:bg-[#ff6b35]/10 p-2 rounded-lg transition-all duration-200"
+                onClick={() => router.push('/admin/login')}
+                aria-label="Iniciar sesión"
+              >
+                <LogIn className="h-5 w-5" />
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -216,15 +221,14 @@ export function Header() {
               onMouseEnter={handleMenuHover}
               onMouseLeave={handleMenuLeave}
             >
-              <Button 
-                variant="ghost" 
+              <button 
                 className="text-white hover:bg-[#ff6b35]/20 p-2 rounded-lg transition-all duration-200"
                 aria-label="Abrir menú de navegación"
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
               >
                 <Menu className="h-6 w-6" />
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -266,13 +270,12 @@ export function Header() {
                 <OptimizedLogo className="mr-3" />
                 <span className="text-white font-bold text-lg">JCP</span>
               </button>
-              <Button 
-                variant="ghost" 
+              <button 
                 className="text-white hover:bg-[#ff6b35]/20 p-2 rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <X className="h-5 w-5" />
-              </Button>
+              </button>
             </div>
 
             {/* Mobile Navigation */}
@@ -313,7 +316,7 @@ export function Header() {
                     <div className="space-y-2">
                       <button 
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="block w-full text-left text-white hover:text-[#ff6b35] transition-all duration-300 font-medium uppercase tracking-wide text-lg border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-3 transform hover:translate-x-2 flex items-center justify-between"
+                        className="w-full text-left text-white hover:text-[#ff6b35] transition-all duration-300 font-medium uppercase tracking-wide text-lg border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-3 transform hover:translate-x-2 flex items-center justify-between"
                         aria-label="Ver más opciones"
                       >
                         <span>Ver Más</span>
@@ -324,21 +327,21 @@ export function Header() {
                       <div className={`space-y-2 ml-4 transition-all duration-200 ${isDropdownOpen ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0 overflow-hidden'}`}>
                         <a 
                           href="/maquinaria" 
-                          className="block text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
+                          className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Catálogo Maquinaria
                         </a>
                         <a 
                           href="/catalog" 
-                          className="block text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
+                          className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Catálogo Completo
                         </a>
                         <a 
                           href="/blog" 
-                          className="block text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
+                          className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Blog Técnico
@@ -352,11 +355,8 @@ export function Header() {
 
             {/* Mobile Contact Info & CTA */}
             <div className="p-6 border-t border-[#ff6b35]/10 space-y-4">
-              <div className="flex items-center space-x-3 text-[#adb5bd]">
-                <Phone className="h-5 w-5 text-[#ffd23f]" />
-                <span className="font-medium">+54 11 6396 2947</span>
-              </div>
-              <Button 
+              
+              <button 
                 className="w-full bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-semibold py-3 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 border-0"
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -364,7 +364,18 @@ export function Header() {
                 }}
               >
                 Ver Catalogo
-              </Button>
+              </button>
+              {/* Mobile Login Button */}
+              <button 
+                className="w-full text-white hover:text-[#ff6b35] hover:bg-[#ff6b35]/10 font-medium py-3 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push('/admin/login');
+                }}
+              >
+                <LogIn className="h-5 w-5" />
+                <span>Iniciar Sesión</span>
+              </button>
             </div>
           </div>
         </div>

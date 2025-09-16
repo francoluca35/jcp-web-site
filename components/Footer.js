@@ -1,5 +1,5 @@
 import { Settings, Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "./ui/button.jsx";
 import { TikTokIcon } from "./ui/TikTokIcon";
 
 export function Footer() {
