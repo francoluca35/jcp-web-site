@@ -1,20 +1,17 @@
-import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { 
   Users, 
   Award, 
   Clock, 
-  MapPin, 
   CheckCircle, 
-  ArrowRight,
   Zap,
   Shield,
-  TrendingUp,
-  Star,
   Building,
-  Target
+  Target,
+  StarHalf,
+  Star,
+ 
 } from "lucide-react";
 
 export function AboutSection() {
@@ -86,7 +83,7 @@ export function AboutSection() {
                  { icon: Shield, title: "CALIDAD", desc: "Estándares internacionales", color: "from-[#ff6b35] to-[#ffd23f]" },
                  { icon: Clock, title: "PUNTUALIDAD", desc: "Entregas a tiempo", color: "from-[#ffd23f] to-[#ff6b35]" },
                  { icon: Users, title: "ATENCIÓN", desc: "Asesoramiento personalizado", color: "from-[#ff6b35] to-[#ffd23f]" },
-                 { icon: Star, title: "INNOVACIÓN", desc: "Tecnología de vanguardia", color: "from-[#ffd23f] to-[#ff6b35]" }
+                 { icon:  Star, title: "INNOVACIÓN", desc: "Tecnología de vanguardia", color: "from-[#ffd23f] to-[#ff6b35]" }
                ].map((value, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-xl">
                   <div className={`bg-gradient-to-r ${value.color} rounded-full p-3 w-fit mb-4`}>
@@ -123,7 +120,7 @@ export function AboutSection() {
 
               {/* Floating Badge */}
               <div className="absolute top-4 right-4 bg-[#ff6b35] rounded-full p-3 shadow-lg">
-                <Star className="h-6 w-6 text-white" />
+               
               </div>
             </div>
 
@@ -193,59 +190,6 @@ export function AboutSection() {
                 <h3 className="text-xl font-bold mb-2">{achievement.title}</h3>
                 <p className="text-sm text-[#adb5bd]">{achievement.description}</p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Testimonios de Clientes */}
-        <div className="mb-16">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl lg:text-4xl font-black text-[#1a1a1a] mb-4">
-              LO QUE DICEN <span className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">NUESTROS CLIENTES</span>
-            </h3>
-            <p className="text-lg text-[#495057] max-w-3xl mx-auto">
-              La confianza de nuestros clientes es nuestro mayor logro. 
-              Conoce las experiencias de quienes han confiado en nosotros.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Carlos Mendoza",
-                business: "Panadería El Buen Pan",
-                location: "Buenos Aires",
-                testimonial: "Excelente atención y maquinaria de primera calidad. JCP nos ayudó a modernizar completamente nuestra panadería.",
-                rating: 5
-              },
-              {
-                name: "María González",
-                business: "Pastelería Dulce Aroma",
-                location: "Córdoba",
-                testimonial: "Llevamos 5 años trabajando con JCP y nunca nos han fallado. Su asesoramiento técnico es invaluable.",
-                rating: 5
-              },
-              {
-                name: "Roberto Silva",
-                business: "Pizzería La Nonna",
-                location: "Rosario",
-                testimonial: "La amasadora que nos vendieron superó todas nuestras expectativas. Calidad y atención excepcionales.",
-                rating: 5
-              }
-            ].map((testimonial, index) => (
-              <Card key={index} className="p-6 bg-white shadow-lg border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-[#495057] mb-4 italic">"{testimonial.testimonial}"</p>
-                <div className="border-t pt-4">
-                  <h3 className="font-bold text-[#1a1a1a]">{testimonial.name}</h3>
-                  <p className="text-sm text-[#ff6b35] font-semibold">{testimonial.business}</p>
-                  <p className="text-xs text-[#495057]">{testimonial.location}</p>
-                </div>
-              </Card>
             ))}
           </div>
         </div>
