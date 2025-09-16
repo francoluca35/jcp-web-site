@@ -220,17 +220,17 @@ export default function Admin() {
                 <Package className="h-4 w-4" />
                 <span>Productos</span>
               </button>
-              <button
+                <button
                 onClick={() => setActiveTab('categories')}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   activeTab === 'categories'
-                    ? 'bg-[#ff6b35] text-white'
+                      ? 'bg-[#ff6b35] text-white'
                     : 'text-[#adb5bd] hover:text-white'
-                }`}
-              >
+                  }`}
+                >
                 <Settings className="h-4 w-4" />
                 <span>Categorías</span>
-              </button>
+                </button>
             </div>
           </div>
 
@@ -291,10 +291,10 @@ export default function Admin() {
                       className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
                       placeholder="• Capacidad: 50L&#10;• Potencia: 3KW&#10;• Material: Acero inoxidable&#10;• Dimensiones: 60x50x80cm"
                     />
-                  </div>
+          </div>
 
                   {/* Precio */}
-                  <div>
+                      <div>
                     <label className="block text-white font-medium mb-2">
                       Precio
                     </label>
@@ -307,7 +307,7 @@ export default function Admin() {
                       className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
                       placeholder="Ej: $2,500"
                     />
-                  </div>
+                      </div>
 
                   {/* Condición (Nuevo/Usado) */}
                   <div>
@@ -325,7 +325,7 @@ export default function Admin() {
                       <option value="nuevo">Nuevo</option>
                       <option value="usado">Usado</option>
                     </select>
-                  </div>
+                      </div>
 
                   {/* Subcategoría */}
                   {productForm.condition && (
@@ -378,8 +378,8 @@ export default function Admin() {
                             >
                               <X className="h-4 w-4" />
                             </button>
-                          </div>
-                        ))}
+                  </div>
+                ))}
                       </div>
                     )}
                   </div>
@@ -429,16 +429,16 @@ export default function Admin() {
                               <span className="text-[#adb5bd]">{product.subcategory}</span>
                             </div>
                           </div>
-                          <div className="flex space-x-2">
+                            <div className="flex space-x-2">
                             <button className="text-blue-400 hover:text-blue-300">
-                              <Edit className="h-4 w-4" />
-                            </button>
+                                <Edit className="h-4 w-4" />
+                              </button>
                             <button className="text-red-400 hover:text-red-300">
                               <Trash2 className="h-4 w-4" />
                             </button>
                           </div>
                         </div>
-                      </div>
+                            </div>
                     ))
                   )}
                 </div>
@@ -468,20 +468,20 @@ export default function Admin() {
                       <option value="nuevo">Nuevo</option>
                       <option value="usado">Usado</option>
                     </select>
-                  </div>
+              </div>
 
                   <div>
                     <label className="block text-white font-medium mb-2">
                       Nombre de la Subcategoría
                     </label>
-                    <input
-                      type="text"
+                  <input
+                    type="text"
                       value={newSubcategory.name}
                       onChange={(e) => setNewSubcategory(prev => ({ ...prev, name: e.target.value }))}
                       className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
                       placeholder="Ej: Hornos de Convección"
-                    />
-                  </div>
+                  />
+                </div>
 
                   <button
                     onClick={handleAddSubcategory}
@@ -489,7 +489,7 @@ export default function Admin() {
                   >
                     <Plus className="h-4 w-4" />
                     <span>Agregar Subcategoría</span>
-                  </button>
+                </button>
                 </div>
               </div>
 
@@ -509,7 +509,7 @@ export default function Admin() {
                       title="Recargar categorías"
                     >
                       <Settings className="h-4 w-4" />
-                    </button>
+                              </button>
                   </div>
                 </div>
 
@@ -531,7 +531,7 @@ export default function Admin() {
                               className="text-red-400 hover:text-red-300"
                             >
                               <Trash2 className="h-4 w-4" />
-                            </button>
+                              </button>
                           </div>
                         ))
                       )}
@@ -554,9 +554,9 @@ export default function Admin() {
                               onClick={() => handleRemoveSubcategory('usado', index)}
                               className="text-red-400 hover:text-red-300"
                             >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
                         ))
                       )}
                     </div>
