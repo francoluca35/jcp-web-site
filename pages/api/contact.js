@@ -32,10 +32,13 @@ export default async function handler(req, res) {
       const destinationEmail = process.env.DESTINATION_EMAIL || 'Francolucap1@gmail.com';
 
       console.log('🔍 Verificando configuración:', {
-        GMAIL_USER: gmailUser ? '✅ Configurado' : '❌ Faltante',
-        GMAIL_APP_PASSWORD: gmailPassword ? '✅ Configurado' : '❌ Faltante',
+        GMAIL_USER: gmailUser ? `✅ Configurado (${gmailUser})` : '❌ Faltante',
+        GMAIL_APP_PASSWORD: gmailPassword ? `✅ Configurado (${gmailPassword.substring(0, 4)}...)` : '❌ Faltante',
         DESTINATION_EMAIL: destinationEmail
       });
+
+      // Log detallado de todas las variables de entorno
+      console.log('🔍 Todas las variables de entorno:', Object.keys(process.env).filter(key => key.includes('GMAIL') || key.includes('DESTINATION')));
 
       // Si no están configuradas las variables, solo loguear
       if (!gmailUser || !gmailPassword) {
@@ -129,10 +132,24 @@ export default async function handler(req, res) {
 
       // Enviar el email
       try {
-        await transporter.sendMail(mailOptions);
-        console.log('✅ Email enviado exitosamente a', destinationEmail);
+        console.log('📤 Intentando enviar email...');
+        console.log('📤 Configuración del email:', {
+          from: gmailUser,
+          to: destinationEmail,
+          subject: `🏭 Nueva Solicitud Industrial - ${nombre}`
+        });
+        
+        const result = await transporter.sendMail(mailOptions);
+        console.log('✅ Email enviado exitosamente!');
+        console.log('✅ Resultado:', result);
+        console.log('✅ Email enviado a:', destinationEmail);
       } catch (error) {
-        console.error('❌ Error enviando email:', error.message);
+        console.error('❌ Error enviando email:', error);
+        console.error('❌ Error completo:', {
+          message: error.message,
+          code: error.code,
+          response: error.response
+        });
         res.status(200).json({ 
           success: true, 
           message: 'Formulario recibido (error enviando email)' 
