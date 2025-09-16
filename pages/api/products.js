@@ -149,7 +149,9 @@ async function handleCreateProduct(req, res) {
       updatedAt: new Date().toISOString()
     };
     
-    console.log('Guardando producto en Firestore:', productData);
+    console.log('💾 Guardando producto en Firestore:', productData);
+    console.log('📄 PDF URL recibido:', pdfUrl);
+    console.log('📄 PDF URL que se guardará:', productData.pdfUrl);
     
     // Guardar en Firestore
     const categoriesRef = collection(db, 'productos');

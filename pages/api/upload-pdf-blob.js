@@ -1,5 +1,14 @@
 import { put } from '@vercel/blob';
 
+// Configurar límite de tamaño para esta API específica
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '25mb',
+    },
+  },
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ 
@@ -12,14 +21,26 @@ export default async function handler(req, res) {
     console.log('Recibiendo request de upload PDF a Vercel Blob');
     
     // Verificar que la variable de entorno esté configurada
-    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+    let blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+    
+    // Si no está configurado, usar token temporal (SOLO PARA DESARROLLO)
+    if (!blobToken && process.env.NODE_ENV === 'development') {
+      console.log('⚠️ BLOB_READ_WRITE_TOKEN no configurado, usando token temporal');
+      // REEMPLAZA ESTA LÍNEA CON TU TOKEN REAL DE VERCEL BLOB
+      // Ve a Vercel Dashboard → Settings → Environment Variables → BLOB_READ_WRITE_TOKEN
+      blobToken = 'vercel_blob_rw_cdaciholxftq4uxp_HFd7H9SRCYsr8GIVL1zaosegaLxrhf';
+    }
+    
     console.log('Verificando BLOB_READ_WRITE_TOKEN:', blobToken ? 'Configurado' : 'No configurado');
     
     if (!blobToken) {
       console.log('Error: BLOB_READ_WRITE_TOKEN no está configurado');
+      console.log('Variables de entorno disponibles:', Object.keys(process.env).filter(key => key.includes('BLOB')));
       return res.status(500).json({ 
         success: false, 
-        error: 'BLOB_READ_WRITE_TOKEN no está configurado. Verifica las variables de entorno en Vercel.' 
+        error: 'BLOB_READ_WRITE_TOKEN no está configurado. Verifica las variables de entorno en Vercel.',
+        environment: process.env.NODE_ENV,
+        availableEnvVars: Object.keys(process.env).filter(key => key.includes('BLOB'))
       });
     }
     
@@ -40,6 +61,18 @@ export default async function handler(req, res) {
     const buffer = Buffer.from(base64Data, 'base64');
     console.log('Buffer creado, tamaño:', buffer.length);
     
+    // Verificar tamaño del archivo (máximo 25MB para Vercel)
+    const maxSize = 25 * 1024 * 1024; // 25MB
+    if (buffer.length > maxSize) {
+      console.log('Error: Archivo demasiado grande:', buffer.length, 'bytes');
+      return res.status(413).json({
+        success: false,
+        error: 'El archivo es demasiado grande. Máximo 25MB permitido.',
+        fileSize: buffer.length,
+        maxSize: maxSize
+      });
+    }
+    
     // Crear nombre único para el archivo
     const timestamp = Date.now();
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
@@ -50,7 +83,8 @@ export default async function handler(req, res) {
     console.log('Subiendo a Vercel Blob...');
     const blob = await put(blobFileName, buffer, {
       access: 'public',
-      contentType: 'application/pdf'
+      contentType: 'application/pdf',
+      token: blobToken
     });
     
     console.log('PDF subido exitosamente a Vercel Blob:', {

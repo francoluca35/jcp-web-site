@@ -284,8 +284,9 @@ export default function Admin() {
         mainImageIndex: mainImageIndex
       };
 
-      console.log('Estado del formulario antes de enviar:', productForm);
-      console.log('Enviando producto a la base de datos:', productData);
+      console.log('📋 Estado del formulario antes de enviar:', productForm);
+      console.log('📤 Enviando producto a la base de datos:', productData);
+      console.log('🔍 PDF URL que se está enviando:', productData.pdfUrl);
       const result = await createProduct(productData);
       
       if (result.success) {

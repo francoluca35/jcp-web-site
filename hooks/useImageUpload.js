@@ -78,6 +78,8 @@ export function useImageUpload() {
 
   const uploadPDF = async (file) => {
     try {
+      console.log('📤 Iniciando subida de PDF a Vercel Blob...');
+
       // Convertir archivo a base64 en el cliente
       const base64 = await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -98,7 +100,17 @@ export function useImageUpload() {
         }),
       });
 
-      const result = await response.json();
+      // Verificar si la respuesta es JSON válido
+      let result;
+      try {
+        result = await response.json();
+      } catch (jsonError) {
+        console.error('Error parseando JSON:', jsonError);
+        const textResponse = await response.text();
+        console.error('Respuesta del servidor:', textResponse);
+        throw new Error(`Error del servidor: ${response.status} - ${textResponse}`);
+      }
+      
       console.log('Resultado de subida de PDF:', result);
 
       if (result.success) {

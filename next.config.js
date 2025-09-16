@@ -7,6 +7,14 @@ const nextConfig = {
     return 'build-' + Date.now()
   },
   
+  // Configuración de límites para API routes
+  api: {
+    bodyParser: {
+      sizeLimit: '25mb',
+    },
+    responseLimit: '25mb',
+  },
+  
   
   // Optimización de imágenes
   images: {
