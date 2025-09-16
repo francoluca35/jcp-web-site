@@ -72,18 +72,8 @@ export function ContactSection() {
       });
 
       if (response.ok) {
-        // Mostrar mensaje de éxito
-        setIsSubmitted(true);
-        
-        // Resetear formulario
-        setFormData({
-          nombre: '',
-          empresa: '',
-          email: '',
-          telefono: '',
-          producto: '',
-          mensaje: ''
-        });
+        // Redirigir a página de éxito
+        window.location.href = '/success';
       } else {
         throw new Error('Error en el envío');
       }
