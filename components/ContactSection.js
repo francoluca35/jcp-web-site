@@ -72,8 +72,19 @@ export function ContactSection() {
       });
 
       if (response.ok) {
-        // Redirigir a página de éxito
-        window.location.href = '/success';
+        // Obtener la respuesta JSON
+        const result = await response.json();
+        console.log('📧 Respuesta del servidor:', result);
+        
+        // Mostrar los logs en la consola
+        if (result.logs) {
+          console.log('🔍 Logs detallados:');
+          result.logs.forEach(log => console.log(log));
+        }
+        
+        // Mostrar mensaje de éxito sin redirección
+        setIsSubmitted(true);
+        console.log('✅ Formulario enviado exitosamente');
       } else {
         throw new Error('Error en el envío');
       }
