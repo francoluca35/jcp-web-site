@@ -57,11 +57,11 @@ export function useProducts() {
   };
 
   // Actualizar producto
-  const updateProduct = async (id, updateData) => {
+  const updateProduct = async (id, condition, subcategory, updateData) => {
     try {
       setError(null);
       
-      const response = await fetch(`/api/products?id=${id}`, {
+      const response = await fetch(`/api/products?id=${id}&condition=${condition}&subcategory=${subcategory}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -88,11 +88,11 @@ export function useProducts() {
   };
 
   // Eliminar producto
-  const deleteProduct = async (id) => {
+  const deleteProduct = async (id, condition, subcategory) => {
     try {
       setError(null);
       
-      const response = await fetch(`/api/products?id=${id}`, {
+      const response = await fetch(`/api/products?id=${id}&condition=${condition}&subcategory=${subcategory}`, {
         method: 'DELETE',
       });
       
