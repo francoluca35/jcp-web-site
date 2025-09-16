@@ -34,14 +34,23 @@ export default async function handler(req, res) {
       const gmailPassword = process.env.GMAIL_APP_PASSWORD;
       const destinationEmail = process.env.DESTINATION_EMAIL || 'Francolucap1@gmail.com';
 
-      console.log('🔍 Verificando configuración:', {
+      const configStatus = {
         GMAIL_USER: gmailUser ? `✅ Configurado (${gmailUser})` : '❌ Faltante',
         GMAIL_APP_PASSWORD: gmailPassword ? `✅ Configurado (${gmailPassword.substring(0, 4)}...)` : '❌ Faltante',
         DESTINATION_EMAIL: destinationEmail
-      });
+      };
+
+      console.log('🔍 Verificando configuración:', configStatus);
 
       // Log detallado de todas las variables de entorno
-      console.log('🔍 Todas las variables de entorno:', Object.keys(process.env).filter(key => key.includes('GMAIL') || key.includes('DESTINATION')));
+      const envVars = Object.keys(process.env).filter(key => key.includes('GMAIL') || key.includes('DESTINATION'));
+      console.log('🔍 Todas las variables de entorno:', envVars);
+
+      // Crear array de logs para mostrar en la respuesta
+      const logs = [];
+      logs.push(`🚀 FUNCIÓN EJECUTÁNDOSE - ${new Date().toISOString()}`);
+      logs.push(`🔍 Verificando configuración: ${JSON.stringify(configStatus)}`);
+      logs.push(`🔍 Variables de entorno encontradas: ${envVars.join(', ')}`);
 
       // Si no están configuradas las variables, solo loguear
       if (!gmailUser || !gmailPassword) {
@@ -56,9 +65,13 @@ export default async function handler(req, res) {
           timestamp: new Date().toISOString()
         });
         
+        logs.push('⚠️ Variables de Gmail no configuradas - solo logging');
+        logs.push('📧 Datos del formulario recibidos correctamente');
+        
         res.status(200).json({ 
           success: true, 
-          message: 'Formulario recibido (configurar Gmail para envío de emails)' 
+          message: 'Formulario recibido (configurar Gmail para envío de emails)',
+          logs: logs
         });
         return;
       }
@@ -77,11 +90,14 @@ export default async function handler(req, res) {
         // Verificar la conexión
         await transporter.verify();
         console.log('✅ Conexión con Gmail verificada');
+        logs.push('✅ Conexión con Gmail verificada');
       } catch (error) {
         console.error('❌ Error configurando Gmail:', error.message);
+        logs.push(`❌ Error configurando Gmail: ${error.message}`);
         res.status(200).json({ 
           success: true, 
-          message: 'Formulario recibido (error en configuración de Gmail)' 
+          message: 'Formulario recibido (error en configuración de Gmail)',
+          logs: logs
         });
         return;
       }
@@ -142,10 +158,24 @@ export default async function handler(req, res) {
           subject: `🏭 Nueva Solicitud Industrial - ${nombre}`
         });
         
+        logs.push('📤 Intentando enviar email...');
+        logs.push(`📤 Enviando a: ${destinationEmail}`);
+        
         const result = await transporter.sendMail(mailOptions);
         console.log('✅ Email enviado exitosamente!');
         console.log('✅ Resultado:', result);
         console.log('✅ Email enviado a:', destinationEmail);
+        
+        logs.push('✅ Email enviado exitosamente!');
+        logs.push(`✅ Email enviado a: ${destinationEmail}`);
+        logs.push(`✅ Resultado: ${JSON.stringify(result)}`);
+        
+        res.status(200).json({ 
+          success: true, 
+          message: 'Formulario enviado exitosamente',
+          logs: logs
+        });
+        return;
       } catch (error) {
         console.error('❌ Error enviando email:', error);
         console.error('❌ Error completo:', {
@@ -153,9 +183,14 @@ export default async function handler(req, res) {
           code: error.code,
           response: error.response
         });
+        
+        logs.push(`❌ Error enviando email: ${error.message}`);
+        logs.push(`❌ Código de error: ${error.code}`);
+        
         res.status(200).json({ 
           success: true, 
-          message: 'Formulario recibido (error enviando email)' 
+          message: 'Formulario recibido (error enviando email)',
+          logs: logs
         });
         return;
       }
