@@ -65,10 +65,10 @@ export function ContactSection() {
       formDataToSend.append('mensaje', formData.mensaje);
 
       // Enviar usando fetch para evitar redirección
-      const response = await fetch('/', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formDataToSend).toString()
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
 
       if (response.ok) {
