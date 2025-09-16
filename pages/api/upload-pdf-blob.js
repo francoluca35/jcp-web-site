@@ -10,6 +10,19 @@ export default async function handler(req, res) {
 
   try {
     console.log('Recibiendo request de upload PDF a Vercel Blob');
+    
+    // Verificar que la variable de entorno esté configurada
+    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+    console.log('Verificando BLOB_READ_WRITE_TOKEN:', blobToken ? 'Configurado' : 'No configurado');
+    
+    if (!blobToken) {
+      console.log('Error: BLOB_READ_WRITE_TOKEN no está configurado');
+      return res.status(500).json({ 
+        success: false, 
+        error: 'BLOB_READ_WRITE_TOKEN no está configurado. Verifica las variables de entorno en Vercel.' 
+      });
+    }
+    
     const { pdf, fileName } = req.body;
     console.log('Datos recibidos:', { fileName, pdfLength: pdf ? pdf.length : 0 });
 
@@ -53,9 +66,15 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Error en upload-pdf-blob API:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      stack: error.stack
+    });
     return res.status(500).json({
       success: false,
-      error: 'Error interno del servidor'
+      error: 'Error interno del servidor',
+      details: error.message
     });
   }
 }

@@ -48,7 +48,10 @@ export function CompleteCatalog() {
         // Transformar los productos de la BD al formato esperado por el catálogo
         const transformedProducts = result.data.map(product => {
           const catalogFile = product.pdfUrl || '/Document/catalogo_maquinaria.pdf';
-          console.log(`Producto: ${product.title}, PDF URL: ${catalogFile}`);
+          console.log(`🔍 Producto: ${product.title}`);
+          console.log(`📄 PDF URL: ${catalogFile}`);
+          console.log(`🌐 URL completa: ${catalogFile.startsWith('http') ? catalogFile : window.location.origin + catalogFile}`);
+          console.log(`✅ Tiene PDF específico: ${!!product.pdfUrl}`);
           return {
             id: product.id,
             name: product.title,
@@ -357,39 +360,33 @@ export function CompleteCatalog() {
                         className={`flex-1 text-sm ${
                           product.catalogFile && 
                           product.catalogFile !== '/Document/catalogo_maquinaria.pdf' &&
-                          product.catalogFile.startsWith('/pdfs/')
+                          (product.catalogFile.startsWith('/pdfs/') || product.catalogFile.startsWith('http'))
                             ? 'border-green-500 text-green-500 hover:bg-green-500 hover:text-white'
                             : 'border-gray-500 text-gray-500'
                         }`}
                         size="sm"
                         onClick={() => {
+                          console.log('🖱️ Click en botón PDF para:', product.name);
+                          console.log('📄 catalogFile:', product.catalogFile);
+                          
                           // Verificar si el producto tiene un PDF específico
                           if (product.catalogFile && 
                               product.catalogFile !== '/Document/catalogo_maquinaria.pdf' &&
-                              product.catalogFile.startsWith('/pdfs/')) {
-                            // PDF específico del producto (desde la carpeta pdfs)
-                            const link = document.createElement('a');
-                            link.href = product.catalogFile;
-                            link.download = `${product.name.replace(/[^a-zA-Z0-9]/g, '_')}_ficha_tecnica.pdf`;
-                            link.target = '_blank';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
+                              (product.catalogFile.startsWith('/pdfs/') || product.catalogFile.startsWith('http'))) {
+                            // PDF específico del producto - abrir en nueva pestaña
+                            console.log('🚀 Abriendo PDF específico:', product.catalogFile);
+                            window.open(product.catalogFile, '_blank');
                           } else {
-                            // PDF general del catálogo
-                            const link = document.createElement('a');
-                            link.href = '/Document/catalogo_maquinaria.pdf';
-                            link.download = 'catalogo_maquinaria.pdf';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
+                            // PDF general del catálogo - abrir en nueva pestaña
+                            console.log('📚 Abriendo catálogo general');
+                            window.open('/Document/catalogo_maquinaria.pdf', '_blank');
                           }
                         }}
                       >
                         <Eye className="h-4 w-4 mr-1" />
                         {product.catalogFile && 
                          product.catalogFile !== '/Document/catalogo_maquinaria.pdf' &&
-                         product.catalogFile.startsWith('/pdfs/')
+                         (product.catalogFile.startsWith('/pdfs/') || product.catalogFile.startsWith('http'))
                           ? 'F. Técnica' 
                           : 'Catálogo'}
                       </Button>
