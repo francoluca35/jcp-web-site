@@ -94,13 +94,6 @@ export function ContactSection() {
       setError('Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.');
     } finally {
       setIsSubmitting(false);
-      
-      // Ocultar mensaje de éxito después de 5 segundos
-      if (isSubmitted) {
-        setTimeout(() => {
-          setIsSubmitted(false);
-        }, 5000);
-      }
     }
   };
 
@@ -151,7 +144,10 @@ export function ContactSection() {
                   </p>
                 </div>
                 <button 
-                  onClick={() => setIsSubmitted(false)}
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    window.location.href = '/';
+                  }}
                   className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white font-bold py-3 px-6 rounded-xl hover:scale-105 transition-transform duration-300"
                 >
                   ¡Perfecto!
