@@ -1,9 +1,19 @@
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
+  NEXT_PUBLIC_FIREBASE_API_KEY = "AIzaSyAZkP4EynfssAMT4-mdOoTWXifgWz7zxC4"
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = "jcpapp-18205.firebaseapp.com"
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID = "jcpapp-18205"
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = "jcpapp-18205.firebasestorage.app"
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "230450676718"
+  NEXT_PUBLIC_FIREBASE_APP_ID = "1:230450676718:web:ecb1e7ae68e3dad41cc4ff"
+  NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID = "G-5CZ91ZSRNW"
+  NEXT_PUBLIC_DATABASE_URL = "https://jcpapp-18205-default-rtdb.firebaseio.com/"
+  NEXT_PUBLIC_ADMIN_EMAIL = "admin@jcp.com"
+  NEXT_PUBLIC_ADMIN_PASSWORD = "admin123"
 
 # Headers de seguridad y rendimiento
 [[headers]]
