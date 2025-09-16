@@ -13,7 +13,9 @@ import {
   Edit,
   Trash2,
   LogOut,
-  Settings
+  Settings,
+  Search,
+  Filter
 } from 'lucide-react';
 
 export default function Admin() {
@@ -74,6 +76,14 @@ export default function Admin() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [deletingProduct, setDeletingProduct] = useState(null);
+  
+  // Estados para búsqueda y filtros
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCondition, setFilterCondition] = useState('all');
+  const [filterSubcategory, setFilterSubcategory] = useState('all');
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -158,6 +168,109 @@ export default function Admin() {
     } else {
       alert(`Error: ${result.error}`);
     }
+  };
+
+  // Funciones para editar productos
+  const handleEditProduct = (product) => {
+    setEditingProduct(product);
+    setProductForm({
+      title: product.title,
+      description: product.description,
+      characteristics: product.characteristics,
+      price: product.price,
+      category: product.category || '',
+      subcategory: product.subcategory,
+      condition: product.condition,
+      images: product.images || []
+    });
+    setShowEditModal(true);
+  };
+
+  const handleUpdateProduct = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const result = await updateProduct(
+        editingProduct.id,
+        editingProduct.condition,
+        editingProduct.subcategory,
+        productForm
+      );
+      
+      if (result.success) {
+        setShowEditModal(false);
+        setEditingProduct(null);
+        setProductForm({
+          title: '',
+          description: '',
+          characteristics: '',
+          price: '',
+          category: '',
+          subcategory: '',
+          condition: '',
+          images: []
+        });
+        alert('Producto actualizado exitosamente!');
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error updating product:', error);
+      alert('Error al actualizar el producto');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Funciones para eliminar productos
+  const handleDeleteProduct = async (product) => {
+    if (window.confirm(`¿Estás seguro de que quieres eliminar "${product.title}"?`)) {
+      setDeletingProduct(product.id);
+      
+      try {
+        const result = await deleteProduct(product.id, product.condition, product.subcategory);
+        
+        if (result.success) {
+          alert('Producto eliminado exitosamente!');
+        } else {
+          alert(`Error: ${result.error}`);
+        }
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        alert('Error al eliminar el producto');
+      } finally {
+        setDeletingProduct(null);
+      }
+    }
+  };
+
+  // Función para filtrar productos
+  const filteredProducts = products.filter(product => {
+    // Filtro por término de búsqueda
+    const matchesSearch = searchTerm === '' || 
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.characteristics.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // Filtro por condición
+    const matchesCondition = filterCondition === 'all' || product.condition === filterCondition;
+    
+    // Filtro por subcategoría
+    const matchesSubcategory = filterSubcategory === 'all' || product.subcategory === filterSubcategory;
+    
+    return matchesSearch && matchesCondition && matchesSubcategory;
+  });
+
+  // Obtener subcategorías únicas para el filtro
+  const getUniqueSubcategories = () => {
+    const subcategories = new Set();
+    products.forEach(product => {
+      if (filterCondition === 'all' || product.condition === filterCondition) {
+        subcategories.add(product.subcategory);
+      }
+    });
+    return Array.from(subcategories).sort();
   };
 
   if (loading) {
@@ -407,38 +520,182 @@ export default function Admin() {
 
               {/* Products List */}
               <div className="bg-[#2d2d2d] border border-[#ff6b35]/20 rounded-xl p-6">
-                <h2 className="text-xl font-bold text-white mb-6">
-                  Productos Creados ({products.length})
-                </h2>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-white">
+                    Productos Creados ({filteredProducts.length} de {products.length})
+                  </h2>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="text-[#ff6b35] hover:text-[#ffd23f] transition-colors"
+                    title="Recargar productos"
+                  >
+                    <Settings className="h-4 w-4" />
+                  </button>
+                </div>
 
-                <div className="space-y-4">
+                {/* Buscador y Filtros */}
+                <div className="mb-6 space-y-4">
+                  {/* Barra de búsqueda */}
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#adb5bd]" />
+                    <input
+                      type="text"
+                      placeholder="Buscar productos por título, descripción o características..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Filtros */}
+                  <div className="flex flex-wrap gap-4">
+                    {/* Filtro por condición */}
+                    <div className="flex items-center space-x-2">
+                      <Filter className="h-4 w-4 text-[#ff6b35]" />
+                      <select
+                        value={filterCondition}
+                        onChange={(e) => {
+                          setFilterCondition(e.target.value);
+                          setFilterSubcategory('all'); // Reset subcategory filter
+                        }}
+                        className="px-3 py-2 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                      >
+                        <option value="all">Todas las condiciones</option>
+                        <option value="nuevo">Nuevo</option>
+                        <option value="usado">Usado</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro por subcategoría */}
+                    <div className="flex items-center space-x-2">
+                      <Package className="h-4 w-4 text-[#ff6b35]" />
+                      <select
+                        value={filterSubcategory}
+                        onChange={(e) => setFilterSubcategory(e.target.value)}
+                        className="px-3 py-2 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                      >
+                        <option value="all">Todas las subcategorías</option>
+                        {getUniqueSubcategories().map((sub) => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Botón para limpiar filtros */}
+                    {(searchTerm || filterCondition !== 'all' || filterSubcategory !== 'all') && (
+                      <button
+                        onClick={() => {
+                          setSearchTerm('');
+                          setFilterCondition('all');
+                          setFilterSubcategory('all');
+                        }}
+                        className="px-4 py-2 bg-[#6c757d] hover:bg-[#5a6268] text-white rounded-lg transition-colors text-sm"
+                      >
+                        Limpiar filtros
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Indicadores de filtros activos */}
+                  {(searchTerm || filterCondition !== 'all' || filterSubcategory !== 'all') && (
+                    <div className="flex flex-wrap gap-2">
+                      {searchTerm && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ff6b35]/20 text-[#ff6b35] border border-[#ff6b35]/30">
+                          <Search className="h-3 w-3 mr-1" />
+                          "{searchTerm}"
+                        </span>
+                      )}
+                      {filterCondition !== 'all' && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ff6b35]/20 text-[#ff6b35] border border-[#ff6b35]/30">
+                          <Filter className="h-3 w-3 mr-1" />
+                          {filterCondition === 'nuevo' ? 'Nuevo' : 'Usado'}
+                        </span>
+                      )}
+                      {filterSubcategory !== 'all' && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#ff6b35]/20 text-[#ff6b35] border border-[#ff6b35]/30">
+                          <Package className="h-3 w-3 mr-1" />
+                          {filterSubcategory}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-4 max-h-96 overflow-y-auto">
                   {products.length === 0 ? (
                     <p className="text-[#adb5bd] text-center py-8">
                       No hay productos creados aún
                     </p>
+                  ) : filteredProducts.length === 0 ? (
+                    <p className="text-[#adb5bd] text-center py-8">
+                      No se encontraron productos con los filtros aplicados
+                    </p>
                   ) : (
-                    products.map((product) => (
+                    filteredProducts.map((product) => (
                       <div key={product.id} className="bg-[#1a1a1a] border border-[#ff6b35]/10 rounded-lg p-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3 className="text-white font-semibold mb-2">{product.title}</h3>
-                            <p className="text-[#adb5bd] text-sm mb-2">{product.description}</p>
+                        <div className="flex gap-4">
+                          {/* Imagen del producto */}
+                          <div className="flex-shrink-0">
+                            {product.images && product.images.length > 0 ? (
+                              <img
+                                src={product.images[0]}
+                                alt={product.title}
+                                className="w-20 h-20 object-cover rounded-lg"
+                                onError={(e) => {
+                                  e.target.src = '/Assets/logo.png';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-20 h-20 bg-[#2d2d2d] rounded-lg flex items-center justify-center">
+                                <Package className="h-8 w-8 text-[#adb5bd]" />
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Información del producto */}
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-white font-semibold mb-1 truncate">{product.title}</h3>
+                            <p className="text-[#adb5bd] text-sm mb-2 line-clamp-2">{product.description}</p>
                             <div className="flex items-center space-x-4 text-sm">
                               <span className="text-[#ff6b35] font-semibold">{product.price}</span>
-                              <span className="text-[#adb5bd] capitalize">{product.condition}</span>
-                              <span className="text-[#adb5bd]">{product.subcategory}</span>
+                              <span className="text-[#adb5bd] capitalize bg-[#2d2d2d] px-2 py-1 rounded">
+                                {product.condition}
+                              </span>
+                              <span className="text-[#adb5bd] bg-[#2d2d2d] px-2 py-1 rounded">
+                                {product.subcategory}
+                              </span>
                             </div>
+                            {product.characteristics && (
+                              <p className="text-[#adb5bd] text-xs mt-2 line-clamp-2">
+                                {product.characteristics}
+                              </p>
+                            )}
                           </div>
-                            <div className="flex space-x-2">
-                            <button className="text-blue-400 hover:text-blue-300">
-                                <Edit className="h-4 w-4" />
-                              </button>
-                            <button className="text-red-400 hover:text-red-300">
-                              <Trash2 className="h-4 w-4" />
+                          
+                          {/* Botones de acción */}
+                          <div className="flex flex-col space-y-2">
+                            <button 
+                              onClick={() => handleEditProduct(product)}
+                              className="text-blue-400 hover:text-blue-300 p-2 hover:bg-[#2d2d2d] rounded transition-colors"
+                              title="Editar producto"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteProduct(product)}
+                              disabled={deletingProduct === product.id}
+                              className="text-red-400 hover:text-red-300 p-2 hover:bg-[#2d2d2d] rounded transition-colors disabled:opacity-50"
+                              title="Eliminar producto"
+                            >
+                              {deletingProduct === product.id ? (
+                                <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></div>
+                              ) : (
+                                <Trash2 className="h-4 w-4" />
+                              )}
                             </button>
                           </div>
                         </div>
-                            </div>
+                      </div>
                     ))
                   )}
                 </div>
@@ -566,6 +823,201 @@ export default function Admin() {
             </div>
           )}
         </div>
+
+        {/* Modal de Edición */}
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-[#2d2d2d] border border-[#ff6b35]/20 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-white flex items-center">
+                  <Edit className="h-5 w-5 mr-2" />
+                  Editar Producto
+                </h2>
+                <button
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditingProduct(null);
+                  }}
+                  className="text-[#adb5bd] hover:text-white transition-colors"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              <form onSubmit={handleUpdateProduct} className="space-y-6">
+                {/* Título */}
+                <div>
+                  <label className="block text-white font-medium mb-2">
+                    Título del Producto
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={productForm.title}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
+                    placeholder="Ej: Horno Industrial 50L"
+                  />
+                </div>
+
+                {/* Descripción */}
+                <div>
+                  <label className="block text-white font-medium mb-2">
+                    Descripción
+                  </label>
+                  <textarea
+                    name="description"
+                    value={productForm.description}
+                    onChange={handleInputChange}
+                    required
+                    rows={3}
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
+                    placeholder="Descripción detallada del producto..."
+                  />
+                </div>
+
+                {/* Características */}
+                <div>
+                  <label className="block text-white font-medium mb-2">
+                    Características
+                  </label>
+                  <textarea
+                    name="characteristics"
+                    value={productForm.characteristics}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
+                    placeholder="• Capacidad: 50L&#10;• Potencia: 3KW&#10;• Material: Acero inoxidable&#10;• Dimensiones: 60x50x80cm"
+                  />
+                </div>
+
+                {/* Precio */}
+                <div>
+                  <label className="block text-white font-medium mb-2">
+                    Precio
+                  </label>
+                  <input
+                    type="text"
+                    name="price"
+                    value={productForm.price}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
+                    placeholder="Ej: $2,500"
+                  />
+                </div>
+
+                {/* Condición (Nuevo/Usado) */}
+                <div>
+                  <label className="block text-white font-medium mb-2">
+                    Condición
+                  </label>
+                  <select
+                    name="condition"
+                    value={productForm.condition}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                  >
+                    <option value="">Seleccionar condición</option>
+                    <option value="nuevo">Nuevo</option>
+                    <option value="usado">Usado</option>
+                  </select>
+                </div>
+
+                {/* Subcategoría */}
+                {productForm.condition && (
+                  <div>
+                    <label className="block text-white font-medium mb-2">
+                      Subcategoría
+                    </label>
+                    <select
+                      name="subcategory"
+                      value={productForm.subcategory}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                    >
+                      <option value="">Seleccionar subcategoría</option>
+                      {categories[productForm.condition]?.map((sub, index) => (
+                        <option key={index} value={sub}>{sub}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Imágenes */}
+                <div>
+                  <label className="block text-white font-medium mb-2">
+                    Imágenes
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                  />
+                  
+                  {/* Preview de imágenes */}
+                  {productForm.images.length > 0 && (
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                      {productForm.images.map((image, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={image}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-32 object-cover rounded-lg"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(index)}
+                            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Botones */}
+                <div className="flex space-x-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowEditModal(false);
+                      setEditingProduct(null);
+                    }}
+                    className="flex-1 bg-[#6c757d] hover:bg-[#5a6268] text-white font-semibold py-3 rounded-lg transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-semibold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Actualizando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4" />
+                        <span>Actualizar Producto</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );

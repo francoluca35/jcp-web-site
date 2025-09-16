@@ -193,27 +193,65 @@ async function handleCreateProduct(req, res) {
 // PUT - Actualizar producto
 async function handleUpdateProduct(req, res) {
   try {
-    const { id } = req.query;
+    const { id, condition, subcategory } = req.query;
     const updateData = req.body;
     
-    if (!id) {
+    if (!id || !condition || !subcategory) {
       return res.status(400).json({ 
         success: false, 
-        error: 'ID del producto es requerido' 
+        error: 'ID, condición y subcategoría del producto son requeridos' 
       });
     }
 
+    // Obtener datos existentes
+    const productsRef = collection(db, 'productos');
+    const snapshot = await getDocs(productsRef);
     
-    const docRef = doc(db, 'productos', id);
-    await setDoc(docRef, {
+    let docId = 'categories';
+    let existingData = {};
+    
+    if (!snapshot.empty) {
+      const firstDoc = snapshot.docs[0];
+      docId = firstDoc.id;
+      existingData = firstDoc.data();
+    }
+    
+    // Encontrar y actualizar el producto específico
+    const products = existingData[condition]?.[subcategory] || [];
+    const productIndex = products.findIndex(p => p.id === id);
+    
+    if (productIndex === -1) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Producto no encontrado' 
+      });
+    }
+    
+    // Actualizar el producto
+    const updatedProduct = {
+      ...products[productIndex],
       ...updateData,
       updatedAt: new Date().toISOString()
-    }, { merge: true });
+    };
+    
+    products[productIndex] = updatedProduct;
+    
+    // Actualizar en Firestore
+    const updatedData = {
+      ...existingData,
+      [condition]: {
+        ...existingData[condition],
+        [subcategory]: products
+      }
+    };
+    
+    const docRef = doc(db, 'productos', docId);
+    await setDoc(docRef, updatedData, { merge: true });
 
     res.status(200).json({ 
       success: true, 
       message: 'Producto actualizado exitosamente',
-      data: { id, ...updateData }
+      data: updatedProduct
     });
   } catch (error) {
     console.error('❌ API Error actualizando producto:', error);
@@ -228,18 +266,53 @@ async function handleUpdateProduct(req, res) {
 // DELETE - Eliminar producto
 async function handleDeleteProduct(req, res) {
   try {
-    const { id } = req.query;
+    const { id, condition, subcategory } = req.query;
     
-    if (!id) {
+    if (!id || !condition || !subcategory) {
       return res.status(400).json({ 
         success: false, 
-        error: 'ID del producto es requerido' 
+        error: 'ID, condición y subcategoría del producto son requeridos' 
       });
     }
 
+    // Obtener datos existentes
+    const productsRef = collection(db, 'productos');
+    const snapshot = await getDocs(productsRef);
     
-    const docRef = doc(db, 'productos', id);
-    await deleteDoc(docRef);
+    let docId = 'categories';
+    let existingData = {};
+    
+    if (!snapshot.empty) {
+      const firstDoc = snapshot.docs[0];
+      docId = firstDoc.id;
+      existingData = firstDoc.data();
+    }
+    
+    // Encontrar y eliminar el producto específico
+    const products = existingData[condition]?.[subcategory] || [];
+    const productIndex = products.findIndex(p => p.id === id);
+    
+    if (productIndex === -1) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Producto no encontrado' 
+      });
+    }
+    
+    // Eliminar el producto del array
+    products.splice(productIndex, 1);
+    
+    // Actualizar en Firestore
+    const updatedData = {
+      ...existingData,
+      [condition]: {
+        ...existingData[condition],
+        [subcategory]: products
+      }
+    };
+    
+    const docRef = doc(db, 'productos', docId);
+    await setDoc(docRef, updatedData, { merge: true });
 
     res.status(200).json({ 
       success: true, 
