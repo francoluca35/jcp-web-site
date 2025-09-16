@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../hooks/useAuth';
 import { useCategories } from '../../hooks/useCategories';
 import { useProducts } from '../../hooks/useProducts';
+import { useImageUpload } from '../../hooks/useImageUpload';
 import SEOHead from '../../components/SEOHead';
 import { 
   Package, 
@@ -55,6 +56,9 @@ export default function Admin() {
     createProduct = () => Promise.resolve({ success: false, error: 'Hook error' });
     deleteProduct = () => Promise.resolve({ success: false, error: 'Hook error' });
   }
+
+  // Hook para subida de imágenes y PDFs
+  const { uploadMultipleImages, uploadPDF, uploading: imageUploading } = useImageUpload();
   
   const router = useRouter();
 
@@ -67,7 +71,10 @@ export default function Admin() {
     category: '',
     subcategory: '',
     condition: '', // nuevo o usado
-    images: []
+    images: [],
+    imagePreviews: [], // Para mostrar previews locales
+    pdfFile: null, // PDF de ficha técnica
+    pdfUrl: '' // URL del PDF en Cloudinary
   });
 
   const [newSubcategory, setNewSubcategory] = useState({
@@ -104,7 +111,7 @@ export default function Admin() {
     }));
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
     
     // Validar número de imágenes
@@ -132,11 +139,35 @@ export default function Admin() {
     // Limpiar errores si todo está bien
     setImageErrors({});
     
-    const imageUrls = files.map(file => URL.createObjectURL(file));
-    setProductForm(prev => ({
-      ...prev,
-      images: [...prev.images, ...imageUrls]
-    }));
+    try {
+      // Subir imágenes a Cloudinary
+      const result = await uploadMultipleImages(files);
+      
+      if (result.success) {
+        // Crear URLs de preview locales para mostrar inmediatamente
+        const previewUrls = files.map(file => URL.createObjectURL(file));
+        
+        // Agregar las URLs de Cloudinary al formulario
+        const cloudinaryUrls = result.images.map(img => img.url);
+        
+        setProductForm(prev => ({
+          ...prev,
+          images: [...prev.images, ...cloudinaryUrls],
+          imagePreviews: [...(prev.imagePreviews || []), ...previewUrls]
+        }));
+      } else {
+        setImageErrors({ 
+          ...imageErrors, 
+          uploadError: result.error || 'Error subiendo imágenes' 
+        });
+      }
+    } catch (error) {
+      console.error('Error subiendo imágenes:', error);
+      setImageErrors({ 
+        ...imageErrors, 
+        uploadError: 'Error subiendo imágenes' 
+      });
+    }
     
     // Resetear el input para permitir subir el mismo archivo otra vez
     e.target.value = '';
@@ -145,7 +176,8 @@ export default function Admin() {
   const removeImage = (index) => {
     setProductForm(prev => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index)
+      images: prev.images.filter((_, i) => i !== index),
+      imagePreviews: prev.imagePreviews ? prev.imagePreviews.filter((_, i) => i !== index) : []
     }));
     
     // Ajustar el índice de imagen principal si es necesario
@@ -156,6 +188,75 @@ export default function Admin() {
     }
     
     // Limpiar errores
+    setImageErrors({});
+  };
+
+  const handlePDFUpload = async (e) => {
+    const file = e.target.files[0];
+    
+    if (!file) return;
+    
+    // Validar que sea un PDF
+    if (file.type !== 'application/pdf') {
+      setImageErrors({ 
+        ...imageErrors, 
+        pdfError: 'Solo se permiten archivos PDF' 
+      });
+      return;
+    }
+    
+    // Validar tamaño (máximo 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      setImageErrors({ 
+        ...imageErrors, 
+        pdfError: 'El PDF no puede ser mayor a 10MB' 
+      });
+      return;
+    }
+    
+    // Limpiar errores
+    setImageErrors({});
+    
+    try {
+      console.log('Iniciando subida de PDF:', file.name, file.size);
+      // Subir PDF a Cloudinary
+      const result = await uploadPDF(file);
+      
+      if (result.success) {
+        console.log('PDF subido exitosamente:', result.url);
+        setProductForm(prev => {
+          const newForm = {
+            ...prev,
+            pdfFile: file,
+            pdfUrl: result.url
+          };
+          console.log('Estado del formulario actualizado:', newForm);
+          return newForm;
+        });
+      } else {
+        setImageErrors({ 
+          ...imageErrors, 
+          pdfError: result.error || 'Error subiendo PDF' 
+        });
+      }
+    } catch (error) {
+      console.error('Error subiendo PDF:', error);
+      setImageErrors({ 
+        ...imageErrors, 
+        pdfError: 'Error subiendo PDF' 
+      });
+    }
+    
+    // Resetear el input
+    e.target.value = '';
+  };
+
+  const removePDF = () => {
+    setProductForm(prev => ({
+      ...prev,
+      pdfFile: null,
+      pdfUrl: ''
+    }));
     setImageErrors({});
   };
 
@@ -183,6 +284,8 @@ export default function Admin() {
         mainImageIndex: mainImageIndex
       };
 
+      console.log('Estado del formulario antes de enviar:', productForm);
+      console.log('Enviando producto a la base de datos:', productData);
       const result = await createProduct(productData);
       
       if (result.success) {
@@ -195,7 +298,10 @@ export default function Admin() {
           category: '',
           subcategory: '',
           condition: '',
-          images: []
+          images: [],
+          imagePreviews: [],
+          pdfFile: null,
+          pdfUrl: ''
         });
         setMainImageIndex(0);
         setImageErrors({});
@@ -245,7 +351,10 @@ export default function Admin() {
       category: product.category || '',
       subcategory: product.subcategory,
       condition: product.condition,
-      images: product.images || []
+      images: product.images || [],
+      imagePreviews: [], // No hay previews para productos existentes
+      pdfFile: null,
+      pdfUrl: product.pdfUrl || ''
     });
     setMainImageIndex(product.mainImageIndex || 0);
     setImageErrors({});
@@ -294,7 +403,10 @@ export default function Admin() {
           category: '',
           subcategory: '',
           condition: '',
-          images: []
+          images: [],
+          imagePreviews: [],
+          pdfFile: null,
+          pdfUrl: ''
         });
         setMainImageIndex(0);
         setImageErrors({});
@@ -561,8 +673,17 @@ export default function Admin() {
                       multiple
                       accept="image/jpeg,image/jpg,image/png,image/webp"
                       onChange={handleImageUpload}
-                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                      disabled={imageUploading}
+                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none disabled:opacity-50"
                     />
+                    
+                    {/* Indicador de carga */}
+                    {imageUploading && (
+                      <div className="mt-2 flex items-center text-[#ff6b35]">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#ff6b35] mr-2"></div>
+                        <span className="text-sm">Subiendo imágenes...</span>
+                      </div>
+                    )}
                     
                     {/* Mostrar errores de imágenes */}
                     {Object.keys(imageErrors).length > 0 && (
@@ -588,7 +709,7 @@ export default function Admin() {
                           {productForm.images.map((image, index) => (
                             <div key={index} className="relative">
                               <img
-                                src={image}
+                                src={productForm.imagePreviews && productForm.imagePreviews[index] ? productForm.imagePreviews[index] : image}
                                 alt={`Preview ${index + 1}`}
                                 className={`w-full h-32 object-cover rounded-lg cursor-pointer transition-all ${
                                   mainImageIndex === index 
@@ -622,6 +743,54 @@ export default function Admin() {
                           ))}
                         </div>
                       </div>
+                    )}
+                  </div>
+
+                  {/* PDF de Ficha Técnica */}
+                  <div className="mt-6">
+                    <label className="block text-white font-medium mb-2">
+                      Ficha Técnica (PDF)
+                      <span className="text-sm text-[#adb5bd] ml-2">
+                        (Opcional - máximo 10MB)
+                      </span>
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={handlePDFUpload}
+                      disabled={imageUploading}
+                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none disabled:opacity-50"
+                    />
+                    
+                    {/* Mostrar PDF actual */}
+                    {productForm.pdfUrl && (
+                      <div className="mt-3 p-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center mr-3">
+                              <span className="text-white text-xs font-bold">PDF</span>
+                            </div>
+                            <div>
+                              <p className="text-white text-sm font-medium">
+                                {productForm.pdfFile ? productForm.pdfFile.name : 'Ficha Técnica'}
+                              </p>
+                              <p className="text-[#adb5bd] text-xs">PDF guardado en Vercel Blob</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={removePDF}
+                            className="text-red-400 hover:text-red-300"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Mostrar errores de PDF */}
+                    {imageErrors.pdfError && (
+                      <p className="mt-2 text-red-400 text-sm">{imageErrors.pdfError}</p>
                     )}
                   </div>
 
@@ -1089,8 +1258,17 @@ export default function Admin() {
                     multiple
                     accept="image/jpeg,image/jpg,image/png,image/webp"
                     onChange={handleImageUpload}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                    disabled={imageUploading}
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none disabled:opacity-50"
                   />
+                  
+                  {/* Indicador de carga */}
+                  {imageUploading && (
+                    <div className="mt-2 flex items-center text-[#ff6b35]">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#ff6b35] mr-2"></div>
+                      <span className="text-sm">Subiendo imágenes...</span>
+                    </div>
+                  )}
                   
                   {/* Mostrar errores de imágenes */}
                   {Object.keys(imageErrors).length > 0 && (
@@ -1116,7 +1294,7 @@ export default function Admin() {
                         {productForm.images.map((image, index) => (
                           <div key={index} className="relative">
                             <img
-                              src={image}
+                              src={productForm.imagePreviews && productForm.imagePreviews[index] ? productForm.imagePreviews[index] : image}
                               alt={`Preview ${index + 1}`}
                               className={`w-full h-32 object-cover rounded-lg cursor-pointer transition-all ${
                                 mainImageIndex === index 
@@ -1150,6 +1328,54 @@ export default function Admin() {
                         ))}
                       </div>
                     </div>
+                  )}
+                </div>
+
+                {/* PDF de Ficha Técnica */}
+                <div className="mt-6">
+                  <label className="block text-white font-medium mb-2">
+                    Ficha Técnica (PDF)
+                    <span className="text-sm text-[#adb5bd] ml-2">
+                      (Opcional - máximo 10MB)
+                    </span>
+                  </label>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handlePDFUpload}
+                    disabled={imageUploading}
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none disabled:opacity-50"
+                  />
+                  
+                  {/* Mostrar PDF actual */}
+                  {productForm.pdfUrl && (
+                    <div className="mt-3 p-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center mr-3">
+                            <span className="text-white text-xs font-bold">PDF</span>
+                          </div>
+                            <div>
+                              <p className="text-white text-sm font-medium">
+                                {productForm.pdfFile ? productForm.pdfFile.name : 'Ficha Técnica'}
+                              </p>
+                              <p className="text-[#adb5bd] text-xs">PDF guardado en Vercel Blob</p>
+                            </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={removePDF}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Mostrar errores de PDF */}
+                  {imageErrors.pdfError && (
+                    <p className="mt-2 text-red-400 text-sm">{imageErrors.pdfError}</p>
                   )}
                 </div>
 

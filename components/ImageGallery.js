@@ -3,13 +3,19 @@ import { Button } from "./ui/button";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
-export function ImageGallery({ images, productName }) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(mainImageIndex);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [modalImageIndex, setModalImageIndex] = useState(mainImageIndex);
 
   // Memoize images array to prevent unnecessary re-renders
   const memoizedImages = useMemo(() => images || [], [images]);
+
+  // Update current image index when mainImageIndex changes
+  useEffect(() => {
+    setCurrentImageIndex(mainImageIndex);
+    setModalImageIndex(mainImageIndex);
+  }, [mainImageIndex]);
 
   // Auto-rotate images every 5 seconds - optimized with useCallback
   useEffect(() => {

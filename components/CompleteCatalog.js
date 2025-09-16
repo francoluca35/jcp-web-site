@@ -26,39 +26,48 @@ export function CompleteCatalog() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Cargar productos desde el JSON
+  // Cargar productos desde la base de datos
   useEffect(() => {
     const loadProducts = async () => {
       try {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('/data/productCatalog.json');
+        // Cargar productos desde la API
+        const response = await fetch('/api/products');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
+        const result = await response.json();
         
-        // Verificar que data tenga la estructura esperada
-        if (!data || typeof data !== 'object') {
-          throw new Error('Invalid data structure');
+        if (!result.success) {
+          throw new Error(result.error || 'Error al cargar productos');
         }
         
-        // Combinar todos los productos de todas las categorías de forma segura
-        const allProductsData = [];
+        // Transformar los productos de la BD al formato esperado por el catálogo
+        const transformedProducts = result.data.map(product => {
+          const catalogFile = product.pdfUrl || '/Document/catalogo_maquinaria.pdf';
+          console.log(`Producto: ${product.title}, PDF URL: ${catalogFile}`);
+          return {
+            id: product.id,
+            name: product.title,
+            description: product.description,
+            price: product.price,
+            condition: product.condition === 'nuevo' ? 'Nuevo' : 'Usado',
+            category: product.subcategory || 'Maquinarias', // Usar subcategoría como categoría
+            images: product.images || [],
+            mainImageIndex: product.mainImageIndex || 0,
+            characteristics: product.characteristics,
+            // Campos adicionales para compatibilidad
+            image: product.images && product.images.length > 0 
+              ? product.images[product.mainImageIndex || 0] 
+              : '/Assets/logo.png',
+            catalogFile: catalogFile // PDF del producto o por defecto
+          };
+        });
         
-        if (Array.isArray(data.maquinarias)) {
-          allProductsData.push(...data.maquinarias);
-        }
-        if (Array.isArray(data.herramientas)) {
-          allProductsData.push(...data.herramientas);
-        }
-        if (Array.isArray(data.repuestos)) {
-          allProductsData.push(...data.repuestos);
-        }
-        
-        setAllProducts(allProductsData);
+        setAllProducts(transformedProducts);
         setLoading(false);
       } catch (error) {
         console.error('Error cargando productos:', error);
@@ -88,7 +97,8 @@ export function CompleteCatalog() {
     if (!product || typeof product !== 'object') return false;
     
     const matchesSearch = (product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                         (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase()));
+                         (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (product.characteristics && product.characteristics.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "Todos" || product.category === selectedCategory;
     const matchesCondition = selectedCondition === "Todos" || product.condition === selectedCondition;
     
@@ -243,7 +253,7 @@ export function CompleteCatalog() {
                   Categoría
                 </label>
                 <div className="space-y-2">
-                  {["Todos", "Maquinarias", "Herramientas", "Repuestos"].map((category) => (
+                  {["Todos", ...new Set(allProducts.map(p => p.category).filter(Boolean))].map((category) => (
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
@@ -298,8 +308,9 @@ export function CompleteCatalog() {
                                      {/* Galería de imágenes del producto */}
                    <div className="relative">
                      <ImageGallery 
-                       images={product.images || [product.image]} 
+                       images={product.images && product.images.length > 0 ? product.images : [product.image]} 
                        productName={product.name}
+                       mainImageIndex={product.mainImageIndex || 0}
                      />
                      
                      {/* Badge de condición */}
@@ -343,19 +354,44 @@ export function CompleteCatalog() {
                     <div className="flex space-x-2">
                       <Button 
                         variant="outline" 
-                        className="flex-1 text-sm"
+                        className={`flex-1 text-sm ${
+                          product.catalogFile && 
+                          product.catalogFile !== '/Document/catalogo_maquinaria.pdf' &&
+                          product.catalogFile.startsWith('/pdfs/')
+                            ? 'border-green-500 text-green-500 hover:bg-green-500 hover:text-white'
+                            : 'border-gray-500 text-gray-500'
+                        }`}
                         size="sm"
                         onClick={() => {
-                          const link = document.createElement('a');
-                          link.href = product.catalogFile;
-                          link.download = 'catalogo_maquinaria.pdf';
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
+                          // Verificar si el producto tiene un PDF específico
+                          if (product.catalogFile && 
+                              product.catalogFile !== '/Document/catalogo_maquinaria.pdf' &&
+                              product.catalogFile.startsWith('/pdfs/')) {
+                            // PDF específico del producto (desde la carpeta pdfs)
+                            const link = document.createElement('a');
+                            link.href = product.catalogFile;
+                            link.download = `${product.name.replace(/[^a-zA-Z0-9]/g, '_')}_ficha_tecnica.pdf`;
+                            link.target = '_blank';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          } else {
+                            // PDF general del catálogo
+                            const link = document.createElement('a');
+                            link.href = '/Document/catalogo_maquinaria.pdf';
+                            link.download = 'catalogo_maquinaria.pdf';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }
                         }}
                       >
-               <Eye className="h-4 w-4  " />
-                        F. Técnica
+                        <Eye className="h-4 w-4 mr-1" />
+                        {product.catalogFile && 
+                         product.catalogFile !== '/Document/catalogo_maquinaria.pdf' &&
+                         product.catalogFile.startsWith('/pdfs/')
+                          ? 'F. Técnica' 
+                          : 'Catálogo'}
                       </Button>
                                              <Button 
                          className="flex-1 text-sm bg-gray-900 hover:bg-orange-600"

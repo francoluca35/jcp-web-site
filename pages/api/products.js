@@ -119,7 +119,9 @@ async function handleCreateProduct(req, res) {
       price, 
       condition, 
       subcategory, 
-      images 
+      images,
+      pdfUrl,
+      mainImageIndex
     } = req.body;
     
     // Validar campos requeridos
@@ -140,10 +142,14 @@ async function handleCreateProduct(req, res) {
       condition,
       subcategory,
       images: images || [],
+      pdfUrl: pdfUrl || '',
+      mainImageIndex: mainImageIndex || 0,
       status: 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
+    
+    console.log('Guardando producto en Firestore:', productData);
     
     // Guardar en Firestore
     const categoriesRef = collection(db, 'productos');
