@@ -10,6 +10,7 @@ export function OptimizedImage({
   priority = false,
   sizes = '100vw',
   placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg==',
+  blurDataURL,
   ...props
 }) {
   const { ref, isVisible, isLoaded } = useLazyLoading({
@@ -17,6 +18,16 @@ export function OptimizedImage({
     rootMargin: priority ? '0px' : '50px 0px',
     fallbackDelay: priority ? 0 : 100,
   });
+
+  // Filtrar props válidas para elementos img
+  const validImgProps = Object.keys(props).reduce((acc, key) => {
+    // Solo incluir props que son válidas para elementos img
+    const validProps = ['width', 'height', 'onLoad', 'onError', 'onClick', 'onMouseEnter', 'onMouseLeave'];
+    if (validProps.includes(key)) {
+      acc[key] = props[key];
+    }
+    return acc;
+  }, {});
 
   // Si es prioritario, cargar inmediatamente
   if (priority) {
@@ -28,7 +39,7 @@ export function OptimizedImage({
         style={style}
         loading="eager"
         decoding="sync"
-        {...props}
+        {...validImgProps}
       />
     );
   }
@@ -68,7 +79,7 @@ export function OptimizedImage({
           onLoad={(e) => {
             e.target.style.opacity = '1';
           }}
-          {...props}
+          {...validImgProps}
         />
       </div>
     );
@@ -85,7 +96,7 @@ export function OptimizedImage({
       loading={loading}
       decoding="async"
       sizes={sizes}
-      {...props}
+      {...validImgProps}
     />
   );
 }
