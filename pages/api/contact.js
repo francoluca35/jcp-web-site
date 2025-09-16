@@ -26,10 +26,21 @@ export default async function handler(req, res) {
         timestamp: new Date().toISOString()
       });
 
-      // Verificar que las variables de entorno estén configuradas
-      if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-        console.log('⚠️ Variables de entorno no configuradas - solo logging');
-        console.log('📧 Datos del formulario (sin envío de email):', {
+      // Verificar variables de entorno
+      const gmailUser = process.env.GMAIL_USER;
+      const gmailPassword = process.env.GMAIL_APP_PASSWORD;
+      const destinationEmail = process.env.DESTINATION_EMAIL || 'Francolucap1@gmail.com';
+
+      console.log('🔍 Verificando configuración:', {
+        GMAIL_USER: gmailUser ? '✅ Configurado' : '❌ Faltante',
+        GMAIL_APP_PASSWORD: gmailPassword ? '✅ Configurado' : '❌ Faltante',
+        DESTINATION_EMAIL: destinationEmail
+      });
+
+      // Si no están configuradas las variables, solo loguear
+      if (!gmailUser || !gmailPassword) {
+        console.log('⚠️ Variables de Gmail no configuradas - solo logging');
+        console.log('📧 Datos del formulario:', {
           nombre,
           email,
           empresa,
@@ -46,19 +57,33 @@ export default async function handler(req, res) {
         return;
       }
 
-      // Configurar el transporter de Gmail
-      const transporter = nodemailer.createTransporter({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD
-        }
-      });
+      // Configurar transporter de Gmail
+      let transporter;
+      try {
+        transporter = nodemailer.createTransporter({
+          service: 'gmail',
+          auth: {
+            user: gmailUser,
+            pass: gmailPassword
+          }
+        });
+
+        // Verificar la conexión
+        await transporter.verify();
+        console.log('✅ Conexión con Gmail verificada');
+      } catch (error) {
+        console.error('❌ Error configurando Gmail:', error.message);
+        res.status(200).json({ 
+          success: true, 
+          message: 'Formulario recibido (error en configuración de Gmail)' 
+        });
+        return;
+      }
 
       // Configurar el email
       const mailOptions = {
-        from: process.env.GMAIL_USER,
-        to: process.env.DESTINATION_EMAIL || 'Francolucap1@gmail.com',
+        from: gmailUser,
+        to: destinationEmail,
         subject: `🏭 Nueva Solicitud Industrial - ${nombre}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
@@ -103,14 +128,17 @@ export default async function handler(req, res) {
       };
 
       // Enviar el email
-      await transporter.sendMail(mailOptions);
-      console.log('✅ Email enviado exitosamente a Francolucap1@gmail.com');
-      
-      res.status(200).json({ 
-        success: true, 
-        message: 'Formulario enviado exitosamente' 
-      });
-      return;
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log('✅ Email enviado exitosamente a', destinationEmail);
+      } catch (error) {
+        console.error('❌ Error enviando email:', error.message);
+        res.status(200).json({ 
+          success: true, 
+          message: 'Formulario recibido (error enviando email)' 
+        });
+        return;
+      }
 
     } catch (error) {
       console.error('❌ Error procesando formulario:', error);
