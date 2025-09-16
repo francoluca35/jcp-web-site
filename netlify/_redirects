@@ -1,0 +1,8 @@
+# API Routes
+/api/* /.netlify/functions/:splat 200
+
+# Admin routes
+/admin/* /admin/index.html 200
+
+# SPA fallback
+/* /index.html 200

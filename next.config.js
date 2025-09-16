@@ -7,6 +7,11 @@ const nextConfig = {
     return 'build-' + Date.now()
   },
   
+  // Configuración para Netlify
+  experimental: {
+    runtime: 'nodejs',
+  },
+  
   // Optimización de imágenes
   images: {
     unoptimized: true,
