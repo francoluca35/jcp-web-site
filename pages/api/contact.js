@@ -26,6 +26,9 @@ export default async function handler(req, res) {
         timestamp: new Date().toISOString()
       });
 
+      // Log de prueba para verificar que el código se ejecuta
+      console.log('🚀 FUNCIÓN EJECUTÁNDOSE - TIMESTAMP:', new Date().toISOString());
+
       // Verificar variables de entorno
       const gmailUser = process.env.GMAIL_USER;
       const gmailPassword = process.env.GMAIL_APP_PASSWORD;
