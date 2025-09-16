@@ -26,12 +26,37 @@ export default async function handler(req, res) {
         timestamp: new Date().toISOString()
       });
 
+      // Verificar que las variables de entorno estén configuradas
+      if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+        console.error('❌ Variables de entorno no configuradas:', {
+          GMAIL_USER: process.env.GMAIL_USER ? '✅ Configurado' : '❌ Faltante',
+          GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? '✅ Configurado' : '❌ Faltante'
+        });
+        
+        // Por ahora, solo loguear y devolver éxito (para testing)
+        console.log('📧 Datos del formulario (sin envío de email):', {
+          nombre,
+          email,
+          empresa,
+          telefono,
+          producto,
+          mensaje,
+          timestamp: new Date().toISOString()
+        });
+        
+        res.status(200).json({ 
+          success: true, 
+          message: 'Formulario recibido (email no configurado aún)' 
+        });
+        return;
+      }
+
       // Configurar el transporter de Gmail
       const transporter = nodemailer.createTransporter({
         service: 'gmail',
         auth: {
-          user: process.env.GMAIL_USER, // Tu email de Gmail
-          pass: process.env.GMAIL_APP_PASSWORD // Contraseña de aplicación de Gmail
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD
         }
       });
 
