@@ -136,7 +136,7 @@ export default function Blog() {
               "publisher": {
                 "@type": "Organization",
                 "name": "JCP Maquinarias",
-                "logo": "https://maquinariasjcp.netlify.app/Assets/logo.png"
+                "logo": "https://maquinariasjcp.netlify.app/Assets/logojcp.png"
               },
               "blogPost": blogPosts.map(post => ({
                 "@type": "BlogPosting",

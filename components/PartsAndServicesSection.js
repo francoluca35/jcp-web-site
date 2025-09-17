@@ -23,7 +23,7 @@ function ContactModal({ isOpen, onClose, item }) {
   const handleWhatsApp = () => {
     const message = `Hola, queria saber sobre el repuesto "${item.name}", que valor tiene y medios de pago.`;
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/5491163962947?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/5411563962947?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
     onClose();
   };
@@ -34,7 +34,7 @@ function ContactModal({ isOpen, onClose, item }) {
 
 Cordiales saludos`;
     
-    const mailtoUrl = `mailto:info@jcp.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    const mailtoUrl = `mailto:jcpmaquinasparapanaderias@outlook.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
     window.open(mailtoUrl, '_blank');
     onClose();
   };
@@ -113,19 +113,19 @@ export function PartsAndServicesSection() {
           {
             category: "Hornos",
             items: [
-              { name: "Resistencias eléctricas", stock: "En stock", price: "€45-120" },
-              { name: "Termostatos digitales", stock: "En stock", price: "€180-350" },
-              { name: "Ventiladores de convección", stock: "2-3 días", price: "€220-480" },
-              { name: "Válvulas de gas", stock: "En stock", price: "€95-200" }
+              { name: "Resistencias eléctricas", stock: "En stock", price: "$54.000-144.000" },
+              { name: "Termostatos digitales", stock: "En stock", price: "$216.000-420.000" },
+              { name: "Ventiladores de convección", stock: "2-3 días", price: "$264.000-576.000" },
+              { name: "Válvulas de gas", stock: "En stock", price: "$114.000-240.000" }
             ]
           },
           {
             category: "Amasadoras",
             items: [
-              { name: "Motores eléctricos", stock: "En stock", price: "€350-850" },
-              { name: "Engranajes y transmisiones", stock: "En stock", price: "€120-300" },
-              { name: "Sensores de seguridad", stock: "En stock", price: "€80-150" },
-              { name: "Brazos amasadores", stock: "1-2 días", price: "€200-450" }
+              { name: "Motores eléctricos", stock: "En stock", price: "$420.000-1.020.000" },
+              { name: "Engranajes y transmisiones", stock: "En stock", price: "$144.000-360.000" },
+              { name: "Sensores de seguridad", stock: "En stock", price: "$96.000-180.000" },
+              { name: "Brazos amasadores", stock: "1-2 días", price: "$240.000-540.000" }
             ]
           }
         ]);

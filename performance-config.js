@@ -22,12 +22,12 @@ export const performanceConfig = {
   // Recursos críticos para preload
   criticalResources: [
     {
-      href: '/Assets/logo.png',
+      href: '/Assets/logojcp.png',
       as: 'image',
       type: 'image/png'
     },
     {
-      href: '/Assets/logo.webp',
+      href: '/Assets/logojcp.png',
       as: 'image',
       type: 'image/webp'
     },
@@ -125,8 +125,8 @@ export const performanceConfig = {
   // Configuración de resource hints
   resourceHints: {
     preload: [
-      '/Assets/logo.png',
-      '/Assets/logo.webp'
+      '/Assets/logojcp.png',
+      '/Assets/logojcp.png'
     ],
     prefetch: [
       '/catalog',

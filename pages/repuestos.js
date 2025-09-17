@@ -34,7 +34,7 @@ export default function Repuestos() {
               },
               "category": "Repuestos Industriales",
               "url": "https://maquinariasjcp.netlify.app/repuestos",
-              "image": "https://maquinariasjcp.netlify.app/Assets/logo.png",
+              "image": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
               "offers": {
                 "@type": "Offer",
                 "availability": "https://schema.org/InStock",

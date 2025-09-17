@@ -17,17 +17,18 @@ export function Footer() {
             {/* Company Info */}
             <div className="lg:col-span-2">
               <div className="flex items-center mb-6">
-                <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-2xl p-4 mr-4">
-                  <Settings className="h-10 w-10 text-white" />
-                </div>
+                <img 
+                  src="/Assets/logojcp.png" 
+                  alt="JCP Maquinarias Logo" 
+                  className="h-24 w-24 object-contain mr-4"
+                />
                 <div>
-                  <h3 className="text-3xl font-black text-white tracking-tight">PanIndustrial</h3>
-                  <p className="text-[#adb5bd] font-bold uppercase tracking-wide text-sm">MAQUINARIA & REPUESTOS</p>
+                  <h3 className="text-3xl font-black text-white tracking-tight">MAQUINARIA & REPUESTOS</h3>
                 </div>
               </div>
               <p className="text-[#adb5bd] mb-8 max-w-lg leading-relaxed text-lg">
-                Pioneros en tecnología industrial para panaderías. Más de dos décadas 
-                desarrollando soluciones completas con la ingeniería europea más avanzada.
+                Líderes en maquinaria industrial para panaderías en Argentina. 
+                Amasadoras, hornos rotativos, sobadoras y repuestos originales.
               </p>
               
               {/* Contact Info */}
@@ -36,19 +37,19 @@ export function Footer() {
                   <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-2">
                     <Phone className="h-4 w-4 text-white" />
                   </div>
-                  <span className="font-bold text-white">+34 900 123 456</span>
+                  <span className="font-bold text-white">011-4441-0705</span>
                 </div>
                 <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg border border-[#ff6b35]/20">
                   <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-2">
                     <Mail className="h-4 w-4 text-white" />
                   </div>
-                  <span className="font-bold text-white">info@panindustrial.es</span>
+                  <span className="font-bold text-white">jcpmaquinasparapanaderias@outlook.com.ar</span>
                 </div>
                 <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg border border-[#ff6b35]/20">
                   <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-2">
                     <MapPin className="h-4 w-4 text-white" />
                   </div>
-                  <span className="font-bold text-white">Madrid, España</span>
+                  <span className="font-bold text-white">San Justo, Buenos Aires</span>
                 </div>
               </div>
             </div>
@@ -104,9 +105,9 @@ export function Footer() {
         <div className="border-t border-[#ff6b35]/30 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-[#adb5bd] mb-6 md:mb-0 text-center md:text-left">
-              <div className="font-bold text-white text-lg mb-2">© 2025 PanIndustrial S.L.</div>
+              <div className="font-bold text-white text-lg mb-2">© 2025 JCP Maquinarias</div>
               <div className="text-sm">
-                Todos los derechos reservados | Registro Industrial: ES-B-12345678 | ISO 9001:2015
+                Created by <a href="https://www.deamondd.com" target="_blank" rel="noopener noreferrer" className="text-[#ff6b35] hover:text-[#ffd23f] transition-colors font-semibold">@DeamonDD</a> | Registro Industrial: ES-B-12345678 | ISO 9001:2015
               </div>
             </div>
             

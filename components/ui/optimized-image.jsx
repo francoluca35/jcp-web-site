@@ -107,17 +107,17 @@ export function OptimizedLogo({ className = '', priority = true }) {
     <picture>
       {/* AVIF para navegadores modernos (mejor compresión) */}
       <source 
-        srcSet="/Assets/logo.avif" 
+        srcSet="/Assets/logojcp.png" 
         type="image/avif"
       />
       {/* WebP para navegadores compatibles */}
       <source 
-        srcSet="/Assets/logo.webp" 
+        srcSet="/Assets/logojcp.png" 
         type="image/webp"
       />
       {/* PNG optimizado como fallback */}
       <OptimizedImage
-        src="/Assets/logo_optimized.png"
+        src="/Assets/logojcp.png"
         alt="JCP Logo"
         width={180}
         height={53}

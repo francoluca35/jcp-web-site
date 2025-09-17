@@ -50,7 +50,7 @@ export default function Home() {
         <meta property="og:description" content="Líderes en amasadoras industriales, hornos rotativos y maquinaria para panaderías en Argentina. Asesoramiento especializado y repuestos originales garantizados." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://maquinariasjcp.netlify.app" />
-        <meta property="og:image" content="https://maquinariasjcp.netlify.app/Assets/logo.png" />
+        <meta property="og:image" content="https://maquinariasjcp.netlify.app/Assets/logojcp.png" />
         <meta property="og:site_name" content="JCP Maquinarias" />
         <meta property="og:locale" content="es_AR" />
         
@@ -58,7 +58,7 @@ export default function Home() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Amasadoras Industriales Argentina | JCP Maquinarias" />
         <meta name="twitter:description" content="Líderes en maquinaria industrial para panaderías. Amasadoras, hornos rotativos y repuestos originales." />
-        <meta name="twitter:image" content="https://maquinariasjcp.netlify.app/Assets/logo.png" />
+        <meta name="twitter:image" content="https://maquinariasjcp.netlify.app/Assets/logojcp.png" />
         
         {/* Canonical URL */}
         <link rel="canonical" href="https://maquinariasjcp.netlify.app" />
@@ -68,7 +68,7 @@ export default function Home() {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         
         {/* Preload critical resources */}
-        <link rel="preload" href="/Assets/logo.png" as="image" />
+        <link rel="preload" href="/Assets/logojcp.png" as="image" />
         
         {/* Manifest */}
         <link rel="manifest" href="/manifest.json" />
@@ -83,7 +83,7 @@ export default function Home() {
               "name": "JCP Maquinarias",
               "description": "Líderes en maquinaria industrial para panaderías en Argentina. Amasadoras, hornos rotativos, sobadoras y repuestos originales.",
               "url": "https://maquinariasjcp.netlify.app",
-              "logo": "https://maquinariasjcp.netlify.app/Assets/logo.png",
+              "logo": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
               "telephone": "+54 11 6396 2947",
               "address": {
                 "@type": "PostalAddress",

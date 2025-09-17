@@ -266,7 +266,7 @@ export function ContactSection() {
                         name="telefono"
                         value={formData.telefono}
                         onChange={handleInputChange}
-                        placeholder="+34 600 000 000" 
+                        placeholder="011-4441-0705" 
                         required 
                         className="h-14 text-lg border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all duration-300 group-hover:border-[#ff6b35]/50"
                       />
@@ -356,7 +356,7 @@ export function ContactSection() {
                     <div className="text-[#495057] font-medium mt-2 text-lg">
                       Polígono Industrial Norte<br />
                       Calle Maquinaria, 45<br />
-                      28050 Madrid, España
+                      San Justo, Buenos Aires
                     </div>
                   </div>
                 </div>
@@ -367,17 +367,17 @@ export function ContactSection() {
                   </div>
                   <div>
                     <div className="font-black text-[#1a1a1a] text-xl uppercase">Teléfono Industrial</div>
-                    <div className="text-[#495057] font-black text-2xl">+34 900 123 456</div>
+                    <div className="text-[#495057] font-black text-2xl">011-4441-0705</div>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-[#f8f9fa] to-white rounded-2xl border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg group">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-[#f8f9fa] to-white rounded-2xl border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg group overflow-hidden">
+                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-4 shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
                     <Mail className="h-6 w-6 text-white" />
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="font-black text-[#1a1a1a] text-xl uppercase">Email Comercial</div>
-                    <div className="text-[#495057] font-black text-xl">info@panindustrial.es</div>
+                    <div className="text-[#495057] font-black text-lg break-all">jcpmaquinasparapanaderias@outlook.com.ar</div>
                   </div>
                 </div>
 

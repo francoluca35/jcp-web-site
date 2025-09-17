@@ -65,7 +65,7 @@ export function CompleteCatalog() {
             // Campos adicionales para compatibilidad
             image: product.images && product.images.length > 0 
               ? product.images[product.mainImageIndex || 0] 
-              : '/Assets/logo.png',
+              : '/Assets/logojcp.png',
             catalogFile: catalogFile // PDF del producto o por defecto
           };
         });
@@ -192,7 +192,7 @@ export function CompleteCatalog() {
               {/* Logo JCP - Centrado en móvil, derecha en desktop */}
               <div className="flex items-center justify-center sm:justify-end order-2 sm:order-2">
                 <img 
-                  src="Assets/logo.png" 
+                  src="Assets/logojcp.png" 
                   alt="JCP Logo" 
                   className="h-12 sm:h-14 lg:h-16 w-auto"
                 />

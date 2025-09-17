@@ -34,7 +34,7 @@ export default function Maquinaria() {
               },
               "category": "Maquinaria Industrial",
               "url": "https://maquinariasjcp.netlify.app/maquinaria",
-              "image": "https://maquinariasjcp.netlify.app/Assets/logo.png",
+              "image": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
               "offers": {
                 "@type": "Offer",
                 "availability": "https://schema.org/InStock",

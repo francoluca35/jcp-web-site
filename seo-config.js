@@ -5,9 +5,9 @@ export const seoConfig = {
     name: "JCP Maquinarias",
     description: "Líderes en maquinaria industrial para panaderías en Argentina. Amasadoras, hornos rotativos, sobadoras y repuestos originales.",
     url: "https://maquinariasjcp.netlify.app",
-    logo: "https://maquinariasjcp.netlify.app/Assets/logo.png",
-    phone: "+54 11 6396 2947",
-    email: "info@maquinariasjcp.com",
+    logo: "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
+    phone: "011-4441-0705",
+    email: "jcpmaquinasparapanaderias@outlook.com.ar",
     address: {
       country: "AR",
       region: "Buenos Aires"
@@ -95,7 +95,7 @@ export const seoConfig = {
       "name": "JCP Maquinarias",
       "description": "Líderes en maquinaria industrial para panaderías en Argentina. Amasadoras, hornos rotativos, sobadoras y repuestos originales.",
       "url": "https://maquinariasjcp.netlify.app",
-      "logo": "https://maquinariasjcp.netlify.app/Assets/logo.png",
+      "logo": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
       "telephone": "+54 11 6396 2947",
       "address": {
         "@type": "PostalAddress",
@@ -139,7 +139,7 @@ export const seoConfig = {
     type: "website",
     images: [
       {
-        url: "https://maquinariasjcp.netlify.app/Assets/logo.png",
+        url: "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
         width: 1200,
         height: 630,
         alt: "JCP Maquinarias - Amasadoras Industriales Argentina"
@@ -174,8 +174,8 @@ export const seoConfig = {
     
     // Preload de recursos críticos
     criticalResources: [
-      '/Assets/logo.png',
-      '/Assets/logo.webp',
+      '/Assets/logojcp.png',
+      '/Assets/logojcp.png',
       '/data/modernProducts.json',
       '/data/productCatalog.json'
     ]
