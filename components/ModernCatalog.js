@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { QuoteModal } from "./QuoteModal";
+import { ImageModal } from "./ImageModal";
 
 // Datos por defecto en caso de error
 const defaultCatalogPages = [
@@ -29,9 +30,9 @@ const defaultCatalogPages = [
     description: "Amasadoras rápidas a espiral diseñadas para máxima productividad. Ideales para pastelerías, pizzerías y panaderías con espacio reducido.",
     products: [
       {
-        name: "Amasadora Rápida C-004",
+        name: "Amasadora Rapida",
         category: "Compacta",
-        image: "https://images.unsplash.com/photo-1703607888337-aae6d77b3d83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmR1c3RyaWFsJTIwbWl4ZXIlMjBiYWtlcnl8ZW58MXx8fHwxNzU2NDk0MTI5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/Assets/maquinarias/amasadora.jpg",
         specs: {
           capacidad: "25 kg harina / 40 kg masa",
           potencia: "Motor trifásico 4HP",
@@ -79,9 +80,9 @@ const defaultCatalogPages = [
     description: "Hornos rotativos de alta eficiencia para producción continua. Diseñados para maximizar la capacidad de cocción con mínimo consumo energético.",
     products: [
       {
-        name: "Horno Rotativo ZU-97",
+        name: "Mezcladora",
         category: "Industrial",
-        image: "https://images.unsplash.com/photo-1656180384586-0f1cde47a9d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tZXJjaWFsJTIwYnJlYWQlMjBvdmVufGVufDF8fHx8MTc1NjQ5NDEyOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/Assets/maquinarias/Mazcladora.jpg",
         specs: {
           capacidad: "50 kg/h cocción",
           bandejas: "9 unidades",
@@ -105,9 +106,9 @@ const defaultCatalogPages = [
         }
       },
       {
-        name: "Horno Rotativo SIGMA B-4570",
+        name: "Horno Rotativo",
         category: "Profesional",
-        image: "https://images.unsplash.com/photo-1656180384586-0f1cde47a9d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tZXJjaWFsJTIwYnJlYWQlMjBvdmVufGVufDF8fHx8MTc1NjQ5NDEyOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/Assets/maquinarias/horno-rotativo.png",
         specs: {
           bandejas: "15/18/20 unidades",
           medidas: "450x700 mm",
@@ -141,9 +142,9 @@ const defaultCatalogPages = [
     description: "Batidoras planetarias profesionales para todo tipo de preparaciones. Desde masas hasta cremas y merengues.",
     products: [
       {
-        name: "Batidora Planetaria B-20",
+        name: "Sobadora Pastelera",
         category: "Profesional",
-        image: "https://images.unsplash.com/photo-1572081608077-1af152703136?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWtlcnklMjBwcm9kdWN0aW9uJTIwbGluZXxlbnwxfHx8fDE3NTY0OTQxMjl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/Assets/maquinarias/sobadora.jpg",
         specs: {
           capacidad: "20L recipiente",
           potencia: "Motor potente",
@@ -160,9 +161,9 @@ const defaultCatalogPages = [
         description: "Batidora planetaria profesional ideal para pastelerías y panaderías. Sistema planetario que garantiza mezclado uniforme en todas las preparaciones."
       },
       {
-        name: "Batidora Planetaria B-30",
+        name: "Sobadora Pastelera",
         category: "Industrial",
-        image: "https://images.unsplash.com/photo-1572081608077-1af152703136?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWtlcnklMjBwcm9kdWN0aW9uJTIwbGluZXxlbnwxfHx8fDE3NTY0OTQxMjl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        image: "/Assets/maquinarias/sobadora.jpg",
         specs: {
           capacidad: "30L recipiente",
           potencia: "Motor industrial potente",
@@ -188,6 +189,8 @@ export function ModernCatalog() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [expandedProducts, setExpandedProducts] = useState(new Set());
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // Cargar productos destacados desde el JSON
   useEffect(() => {
@@ -253,6 +256,16 @@ export function ModernCatalog() {
     setSelectedProduct(null);
   };
 
+  const handleImageClick = (imageSrc, imageAlt) => {
+    setSelectedImage({ src: imageSrc, alt: imageAlt });
+    setIsImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setIsImageModalOpen(false);
+    setSelectedImage(null);
+  };
+
   const toggleProductExpansion = (productIndex) => {
     const newExpanded = new Set(expandedProducts);
     if (newExpanded.has(productIndex)) {
@@ -293,13 +306,22 @@ export function ModernCatalog() {
           {featuredProducts.map((product, index) => (
             <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-[#ff6b35]/30 overflow-hidden bg-gradient-to-br from-white to-[#f8f9fa]">
               {/* Product Image */}
-              <div className="relative aspect-[3/2] overflow-hidden">
+              <div className="relative aspect-[3/2] overflow-hidden cursor-pointer" onClick={() => handleImageClick(product.image, product.name)}>
                 <ImageWithFallback
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-transparent to-transparent"></div>
+                
+                {/* Hover overlay para indicar que es clickeable */}
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white bg-opacity-90 rounded-full p-3">
+                    <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                    </svg>
+                  </div>
+                </div>
                 
                 {/* Badges */}
                 <div className="absolute top-2 left-2 flex flex-col gap-1">
@@ -462,6 +484,16 @@ export function ModernCatalog() {
           isOpen={isQuoteModalOpen}
           onClose={closeQuoteModal}
           product={selectedProduct}
+        />
+      )}
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <ImageModal
+          isOpen={isImageModalOpen}
+          onClose={closeImageModal}
+          imageSrc={selectedImage.src}
+          imageAlt={selectedImage.alt}
         />
       )}
     </section>

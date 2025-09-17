@@ -940,7 +940,7 @@ export default function Admin() {
                                 alt={product.title}
                                 className="w-20 h-20 object-cover rounded-lg"
                                 onError={(e) => {
-                                  e.target.src = '/Assets/logo.png';
+                                  e.target.src = '/Assets/logojcp.png';
                                 }}
                               />
                             ) : (

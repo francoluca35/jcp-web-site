@@ -11,8 +11,8 @@ export default function App({ Component, pageProps }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         
         {/* Preload de recursos críticos */}
-        <link rel="preload" href="/Assets/logo.png" as="image" type="image/png" />
-        <link rel="preload" href="/Assets/logo.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/Assets/logojcp.png" as="image" type="image/png" />
+        <link rel="preload" href="/Assets/logojcp.png" as="image" type="image/webp" />
         
         {/* Preconnect a dominios externos */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,7 +43,7 @@ export default function App({ Component, pageProps }) {
               "@type": "Organization",
               "name": "JCP Maquinarias",
               "url": "https://maquinariasjcp.netlify.app",
-              "logo": "https://maquinariasjcp.netlify.app/Assets/logo.png",
+              "logo": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
               "description": "Líderes en maquinaria industrial para panaderías. Hornos, amasadoras, repuestos y servicio técnico 24/7.",
               "address": {
                 "@type": "PostalAddress",

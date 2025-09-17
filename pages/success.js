@@ -49,11 +49,11 @@ export default function Success() {
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-2 text-[#adb5bd]">
                   <Phone className="w-4 h-4" />
-                  <span>+34 900 123 456</span>
+                  <span>011-4441-0705</span>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-[#adb5bd]">
                   <Mail className="w-4 h-4" />
-                  <span>info@jcpmaquinaria.com</span>
+                  <span>jcpmaquinasparapanaderias@outlook.com.ar</span>
                 </div>
               </div>
             </div>

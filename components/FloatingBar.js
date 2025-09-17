@@ -29,7 +29,7 @@ export function FloatingBar() {
     >
               {/* WhatsApp Button */}
         <button
-          onClick={() => window.open('https://wa.me/34900123456?text=Hola,%20necesito%20información%20sobre%20maquinaria%20industrial', '_blank')}
+          onClick={() => window.open('https://wa.me/5411563962947?text=Hola,%20necesito%20información%20sobre%20maquinaria%20industrial', '_blank')}
           style={{
             backgroundColor: '#1a1a1a',
             color: 'white',
@@ -105,7 +105,7 @@ export function FloatingBar() {
 
                       {/* Email Button */}
         <button
-          onClick={() => window.open('mailto:info@panindustrial.com?subject=Consulta%20sobre%20maquinaria%20industrial&body=Hola,%20me%20interesa%20obtener%20más%20información%20sobre%20sus%20productos.', '_blank')}
+          onClick={() => window.open('mailto:jcpmaquinasparapanaderias@outlook.com.ar?subject=Consulta%20sobre%20maquinaria%20industrial&body=Hola,%20me%20interesa%20obtener%20más%20información%20sobre%20sus%20productos.', '_blank')}
           style={{
             backgroundColor: '#1a1a1a',
             color: 'white',
