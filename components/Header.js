@@ -58,7 +58,7 @@ export function Header() {
     // Smooth scroll to section with offset for fixed header
     const element = document.getElementById(actualSectionId);
     if (element) {
-      const headerHeight = 80; // Altura del header fijo
+      const headerHeight = 30; // Altura del header fijo
       const elementPosition = element.offsetTop - headerHeight;
       
       
@@ -232,6 +232,8 @@ export function Header() {
             </div>
           </div>
         </div>
+        {/* Línea amarilla fluorescente */}
+        <div className="w-full h-0.5 bg-gradient-to-r from-[#edc954] to-[#ffeb3b] shadow-lg"></div>
       </header>
 
       {/* Mobile Menu Overlay */}
