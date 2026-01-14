@@ -18,7 +18,7 @@ export function Footer() {
             <div className="lg:col-span-2">
               <div className="flex items-center mb-6">
                 <img 
-                  src="/Assets/logojcp.png" 
+                  src="/Assets/logojcp2.png" 
                   alt="JCP Maquinarias Logo" 
                   className="h-24 w-24 object-contain mr-4"
                 />
@@ -103,7 +103,7 @@ export function Footer() {
 
         {/* Industrial Bottom Footer */}
         <div className="border-t border-[#ff6b35]/30 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-[#adb5bd] mb-6 md:mb-0 text-center md:text-left">
               <div className="font-bold text-white text-lg mb-2">© 2025 JCP Maquinarias</div>
               <div className="text-sm">
@@ -112,7 +112,7 @@ export function Footer() {
             </div>
             
             {/* Industrial Social Links */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 pr-24 md:pr-32">
               <span className="text-[#adb5bd] font-medium uppercase tracking-wide text-sm">Síguenos:</span>
               <div className="flex space-x-3">
                 {[

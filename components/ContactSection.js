@@ -10,13 +10,12 @@ import {
   Mail, 
   Clock,
   MessageSquare,
-  Settings,
-  Award,
   Send,
   CheckCircle,
-  Zap,
-  Star,
-  AlertCircle
+  AlertCircle,
+  MessageCircle,
+  ArrowRight,
+  Zap
 } from "lucide-react";
 import { useState } from "react";
 
@@ -48,23 +47,30 @@ export function ContactSection() {
     }));
   };
 
+  const handleWhatsApp = () => {
+    const message = `Hola, me gustaría solicitar información sobre productos industriales para panadería.`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/5491163962947?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleEmail = () => {
+    const subject = "Consulta sobre productos industriales";
+    const body = `Hola JCP,
+
+Me gustaría recibir información sobre sus productos industriales para panadería.
+
+Cordiales saludos`;
+    const mailtoUrl = `mailto:jcpmaquinasparapanaderias@outlook.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl, '_blank');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
     
     try {
-      // Crear FormData para envío AJAX
-      const formDataToSend = new FormData();
-      formDataToSend.append('form-name', 'contacto-industrial');
-      formDataToSend.append('nombre', formData.nombre);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('empresa', formData.empresa);
-      formDataToSend.append('telefono', formData.telefono);
-      formDataToSend.append('producto', formData.producto);
-      formDataToSend.append('mensaje', formData.mensaje);
-
-      // Enviar usando fetch para evitar redirección
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -72,17 +78,8 @@ export function ContactSection() {
       });
 
       if (response.ok) {
-        // Obtener la respuesta JSON
         const result = await response.json();
         console.log('📧 Respuesta del servidor:', result);
-        
-        // Mostrar los logs en la consola
-        if (result.logs) {
-          console.log('🔍 Logs detallados:');
-          result.logs.forEach(log => console.log(log));
-        }
-        
-        // Mostrar mensaje de éxito sin redirección
         setIsSubmitted(true);
         console.log('✅ Formulario enviado exitosamente');
       } else {
@@ -98,122 +95,113 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contacto" className="py-24 bg-gradient-to-b from-white to-[#f8f9fa] relative overflow-hidden">
+    <section id="contacto" className="py-12 bg-gradient-to-b from-white via-[#f8f9fa] to-white relative overflow-hidden">
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b35]/10 to-[#ffd23f]/10"></div>
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-[#ffd23f] to-[#ff6b35] rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-[#ffd23f] to-[#ff6b35] rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* Enhanced Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center bg-gradient-to-r from-[#ff6b35]/20 to-[#ffd23f]/20 rounded-full px-8 py-4 mb-8 border-2 border-[#ff6b35]/30 shadow-lg">
-            <Settings className="h-6 w-6 text-[#ff6b35] mr-3 animate-spin" />
-            <span className="text-[#1a1a1a] font-black uppercase tracking-wider text-lg">Solicitud Industrial Premium</span>
-          </div>
-          <h2 className="text-6xl lg:text-7xl font-black text-[#1a1a1a] mb-8 leading-tight">
-            CONTACTA
-            <span className="block bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent animate-pulse">
-              CON EXPERTOS
-            </span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-4xl lg:text-5xl font-black text-[#1a1a1a] mb-3 leading-tight">
+            CONTACTO
           </h2>
-          <p className="text-2xl text-[#495057] max-w-4xl mx-auto leading-relaxed font-medium">
-            Nuestro equipo técnico especializado está preparado para diseñar la solución 
-            <span className="text-[#ff6b35] font-bold"> industrial perfecta </span>
-            para tu panadería. Cotización gratuita en 24 horas.
+          <p className="text-lg text-[#495057] max-w-3xl mx-auto">
+            Elige la forma más cómoda para contactarnos. Estamos aquí para ayudarte.
           </p>
-          
-          {/* Success Message */}
-          {isSubmitted && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle className="h-10 w-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-black text-[#1a1a1a] mb-4">
-                  ¡Solicitud Enviada!
-                </h3>
-                <p className="text-[#495057] text-lg mb-6">
-                  Tu solicitud de cotización industrial ha sido recibida exitosamente. Nuestro equipo técnico especializado se pondrá en contacto contigo en las próximas 24 horas.
-                </p>
-                <div className="bg-gradient-to-r from-[#ff6b35]/10 to-[#ffd23f]/10 p-4 rounded-xl mb-6">
-                  <p className="text-sm text-[#495057] font-medium">
-                    📧 Recibirás confirmación por email
-                  </p>
-                </div>
-                <button 
-                  onClick={() => {
-                    setIsSubmitted(false);
-                    window.location.href = '/';
-                  }}
-                  className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white font-bold py-3 px-6 rounded-xl hover:scale-105 transition-transform duration-300"
-                >
-                  ¡Perfecto!
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Error Message */}
-          {error && (
-            <div className="mt-8 p-6 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl shadow-2xl animate-bounce">
-              <div className="flex items-center justify-center space-x-3">
-                <AlertCircle className="h-8 w-8" />
-                <span className="text-xl font-bold">Error al enviar</span>
-              </div>
-              <p className="text-center mt-2">{error}</p>
-            </div>
-          )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Enhanced Contact Form */}
-          <div className="lg:col-span-2">
-            <Card className="bg-gradient-to-br from-white to-[#f8f9fa] border-4 border-[#dee2e6] hover:border-[#ff6b35]/50 transition-all duration-500 shadow-2xl hover:shadow-3xl transform hover:scale-[1.02]">
-              <CardHeader className="bg-gradient-to-r from-[#1a1a1a] via-[#495057] to-[#1a1a1a] text-white rounded-t-lg relative overflow-hidden">
-                {/* Animated background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b35]/20 to-[#ffd23f]/20"></div>
-                </div>
-                <CardTitle className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 relative z-10">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-3 sm:p-4 shadow-lg animate-pulse w-fit">
-                    <Send className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+        {/* Quick Contact Buttons */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          {/* WhatsApp Button */}
+          <Card className="group cursor-pointer hover:shadow-2xl transition-all duration-300 border-2 hover:border-green-500 bg-gradient-to-br from-green-50 to-white overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-400/0 to-green-400/0 group-hover:from-green-400/10 group-hover:to-green-400/5 transition-all duration-300"></div>
+            <CardContent className="p-5 relative">
+              <button
+                onClick={handleWhatsApp}
+                className="w-full text-left"
+              >
+                <div className="flex items-start space-x-4">
+                  <div className="bg-green-500 rounded-xl p-3 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <MessageCircle className="h-6 w-6 text-white" />
                   </div>
-                  <div>
-                    <span className="text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-wider">SOLICITAR COTIZACIÓN</span>
-                    <div className="text-sm sm:text-lg text-[#adb5bd] font-bold mt-2 flex items-center">
-                      <Zap className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-[#ffd23f] animate-bounce" />
-                      <span className="hidden sm:inline">Respuesta garantizada en 24h</span>
-                      <span className="sm:hidden">Respuesta en 24h</span>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-black text-[#1a1a1a] mb-1">WhatsApp</h3>
+                    <p className="text-[#495057] mb-3 text-sm">
+                      Respuesta inmediata. Escríbenos ahora mismo.
+                    </p>
+                    <div className="flex items-center text-green-600 font-bold text-base group-hover:translate-x-2 transition-transform duration-300">
+                      <span>Contactar ahora</span>
+                      <ArrowRight className="h-4 w-4 ml-2" />
                     </div>
                   </div>
+                </div>
+              </button>
+            </CardContent>
+          </Card>
+
+          {/* Email Button */}
+          <Card className="group cursor-pointer hover:shadow-2xl transition-all duration-300 border-2 hover:border-[#ff6b35] bg-gradient-to-br from-orange-50 to-white overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-400/0 to-orange-400/0 group-hover:from-orange-400/10 group-hover:to-orange-400/5 transition-all duration-300"></div>
+            <CardContent className="p-5 relative">
+              <button
+                onClick={handleEmail}
+                className="w-full text-left"
+              >
+                <div className="flex items-start space-x-4">
+                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-xl p-3 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <Mail className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-black text-[#1a1a1a] mb-1">Email</h3>
+                    <p className="text-[#495057] mb-3 text-sm">
+                      Envíanos un correo detallado. Te responderemos pronto.
+                    </p>
+                    <div className="flex items-center text-[#ff6b35] font-bold text-base group-hover:translate-x-2 transition-transform duration-300">
+                      <span>Enviar email</span>
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Contact Form */}
+          <div className="lg:col-span-2">
+            <Card className="border-2 border-[#e9ecef] hover:border-[#ff6b35]/50 transition-all duration-300 shadow-xl hover:shadow-2xl">
+              <CardHeader className="bg-gradient-to-r from-[#1a1a1a] to-[#495057] text-white py-4">
+                <CardTitle className="flex items-center space-x-3 text-xl">
+                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2">
+                    <Send className="h-5 w-5" />
+                  </div>
+                  <span>Formulario de Contacto</span>
                 </CardTitle>
-                <CardDescription className="text-[#adb5bd] text-sm sm:text-lg mt-4 relative z-10">
-                  <span className="hidden sm:inline">Completa el formulario y nuestros expertos te enviarán una cotización industrial personalizada</span>
-                  <span className="sm:hidden">Completa el formulario para recibir tu cotización personalizada</span>
+                <CardDescription className="text-gray-300 mt-1 text-sm">
+                  Completa el formulario y te responderemos en 24 horas
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-6 sm:p-8 lg:p-10">
+              <CardContent className="p-5 lg:p-6">
                 <form 
                   name="contacto-industrial" 
                   method="POST" 
                   data-netlify="true" 
                   data-netlify-honeypot="bot-field"
                   onSubmit={handleSubmit} 
-                  className="space-y-8"
+                  className="space-y-5"
                 >
-                  {/* Hidden inputs for Netlify Forms */}
                   <input type="hidden" name="form-name" value="contacto-industrial" />
                   <div className="hidden">
                     <input name="bot-field" />
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3 group">
-                      <Label htmlFor="nombre" className="text-lg font-bold text-[#1a1a1a] flex items-center">
-                        <Star className="h-4 w-4 mr-2 text-[#ff6b35]" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="nombre" className="text-sm font-semibold text-[#1a1a1a]">
                         Nombre completo *
                       </Label>
                       <Input 
@@ -223,26 +211,27 @@ export function ContactSection() {
                         onChange={handleInputChange}
                         placeholder="Tu nombre completo" 
                         required 
-                        className="h-14 text-lg border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all duration-300 group-hover:border-[#ff6b35]/50"
+                        className="h-11 border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all"
                       />
                     </div>
-                    <div className="space-y-3 group">
-                      <Label htmlFor="empresa" className="text-lg font-bold text-[#1a1a1a]">Empresa</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="empresa" className="text-sm font-semibold text-[#1a1a1a]">
+                        Empresa
+                      </Label>
                       <Input 
                         id="empresa" 
                         name="empresa"
                         value={formData.empresa}
                         onChange={handleInputChange}
-                        placeholder="Nombre de tu panadería" 
-                        className="h-14 text-lg border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all duration-300 group-hover:border-[#ff6b35]/50"
+                        placeholder="Nombre de tu empresa" 
+                        className="h-11 border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3 group">
-                      <Label htmlFor="email" className="text-lg font-bold text-[#1a1a1a] flex items-center">
-                        <Star className="h-4 w-4 mr-2 text-[#ff6b35]" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-semibold text-[#1a1a1a]">
                         Email *
                       </Label>
                       <Input 
@@ -253,12 +242,11 @@ export function ContactSection() {
                         onChange={handleInputChange}
                         placeholder="tu@email.com" 
                         required 
-                        className="h-14 text-lg border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all duration-300 group-hover:border-[#ff6b35]/50"
+                        className="h-11 border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all"
                       />
                     </div>
-                    <div className="space-y-3 group">
-                      <Label htmlFor="telefono" className="text-lg font-bold text-[#1a1a1a] flex items-center">
-                        <Star className="h-4 w-4 mr-2 text-[#ff6b35]" />
+                    <div className="space-y-2">
+                      <Label htmlFor="telefono" className="text-sm font-semibold text-[#1a1a1a]">
                         Teléfono *
                       </Label>
                       <Input 
@@ -268,18 +256,17 @@ export function ContactSection() {
                         onChange={handleInputChange}
                         placeholder="011-4441-0705" 
                         required 
-                        className="h-14 text-lg border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all duration-300 group-hover:border-[#ff6b35]/50"
+                        className="h-11 border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all"
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-3 group">
-                    <Label htmlFor="producto" className="text-lg font-bold text-[#1a1a1a] flex items-center">
-                      <Star className="h-4 w-4 mr-2 text-[#ff6b35]" />
+                  <div className="space-y-2">
+                    <Label htmlFor="producto" className="text-sm font-semibold text-[#1a1a1a]">
                       ¿Qué te interesa? *
                     </Label>
-                    <Select value={formData.producto} onValueChange={handleSelectChange}>
-                      <SelectTrigger className="h-14 text-lg border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all duration-300 group-hover:border-[#ff6b35]/50">
+                    <Select value={formData.producto} onValueChange={handleSelectChange} required>
+                      <SelectTrigger className="h-11 border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all">
                         <SelectValue placeholder="Selecciona una opción" />
                       </SelectTrigger>
                       <SelectContent>
@@ -290,13 +277,11 @@ export function ContactSection() {
                         <SelectItem value="otros">📦 Otros productos</SelectItem>
                       </SelectContent>
                     </Select>
-                    {/* Hidden input for the select value */}
                     <input type="hidden" name="producto" value={formData.producto} />
                   </div>
 
-                  <div className="space-y-3 group">
-                    <Label htmlFor="mensaje" className="text-lg font-bold text-[#1a1a1a] flex items-center">
-                      <Star className="h-4 w-4 mr-2 text-[#ff6b35]" />
+                  <div className="space-y-2">
+                    <Label htmlFor="mensaje" className="text-sm font-semibold text-[#1a1a1a]">
                       Mensaje *
                     </Label>
                     <Textarea 
@@ -305,29 +290,33 @@ export function ContactSection() {
                       value={formData.mensaje}
                       onChange={handleInputChange}
                       placeholder="Cuéntanos sobre tu proyecto, capacidad de producción necesaria, presupuesto aproximado, etc."
-                      className="min-h-[120px] text-lg border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all duration-300 group-hover:border-[#ff6b35]/50 resize-none"
+                      className="min-h-[100px] border-2 border-[#dee2e6] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 transition-all resize-none"
                       required 
                     />
                   </div>
 
+                  {error && (
+                    <div className="p-4 bg-red-50 border-2 border-red-200 rounded-lg flex items-center space-x-3">
+                      <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                      <p className="text-red-700">{error}</p>
+                    </div>
+                  )}
+
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-black text-lg sm:text-xl py-4 sm:py-6 border-0 shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed" 
+                    className="w-full bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold text-base py-5 border-0 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" 
                     size="lg"
                   >
                     {isSubmitting ? (
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-white"></div>
-                        <span className="text-sm sm:text-base">ENVIANDO SOLICITUD...</span>
+                      <div className="flex items-center space-x-3">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        <span>Enviando...</span>
                       </div>
                     ) : (
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <Send className="h-5 w-5 sm:h-6 sm:w-6" />
-                        <span className="text-sm sm:text-base">
-                          <span className="hidden sm:inline">ENVIAR SOLICITUD INDUSTRIAL</span>
-                          <span className="sm:hidden">ENVIAR SOLICITUD</span>
-                        </span>
+                      <div className="flex items-center space-x-3">
+                        <Send className="h-5 w-5" />
+                        <span>Enviar Formulario</span>
                       </div>
                     )}
                   </Button>
@@ -336,24 +325,23 @@ export function ContactSection() {
             </Card>
           </div>
 
-          {/* Enhanced Contact Info */}
-          <div className="space-y-8">
-            {/* Contact Details */}
-            <Card className="bg-gradient-to-br from-white to-[#f8f9fa] border-4 border-[#dee2e6] hover:border-[#ff6b35]/50 transition-all duration-500 shadow-2xl hover:shadow-3xl transform hover:scale-105">
-              <CardHeader className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white rounded-t-lg">
-                <CardTitle className="text-2xl font-black uppercase tracking-wider flex items-center">
-                  <MessageSquare className="h-6 w-6 mr-3" />
-                  CONTACTO DIRECTO
+          {/* Contact Info */}
+          <div className="space-y-4">
+            <Card className="border-2 border-[#e9ecef] hover:border-[#ff6b35]/50 transition-all duration-300 shadow-xl">
+              <CardHeader className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white py-3">
+                <CardTitle className="text-lg font-bold flex items-center space-x-2">
+                  <MessageSquare className="h-4 w-4" />
+                  <span>Información</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 p-8">
-                <div className="flex items-start space-x-4 p-6 bg-gradient-to-r from-[#f8f9fa] to-white rounded-2xl border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg group">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <MapPin className="h-6 w-6 text-white" />
+              <CardContent className="p-5 space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
+                    <MapPin className="h-4 w-4 text-white" />
                   </div>
                   <div>
-                    <div className="font-black text-[#1a1a1a] text-xl uppercase">Oficinas y Showroom</div>
-                    <div className="text-[#495057] font-medium mt-2 text-lg">
+                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Oficinas y Showroom</div>
+                    <div className="text-[#495057] text-xs leading-relaxed">
                       Polígono Industrial Norte<br />
                       Calle Maquinaria, 45<br />
                       San Justo, Buenos Aires
@@ -361,45 +349,105 @@ export function ContactSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-[#f8f9fa] to-white rounded-2xl border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg group">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Phone className="h-6 w-6 text-white" />
+                <div className="flex items-center space-x-3">
+                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
+                    <Phone className="h-4 w-4 text-white" />
                   </div>
                   <div>
-                    <div className="font-black text-[#1a1a1a] text-xl uppercase">Teléfono Industrial</div>
-                    <div className="text-[#495057] font-black text-2xl">011-4441-0705</div>
+                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Teléfono</div>
+                    <a href="tel:01144410705" className="text-[#ff6b35] font-bold text-base hover:underline">
+                      011-4441-0705
+                    </a>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-[#f8f9fa] to-white rounded-2xl border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg group overflow-hidden">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-4 shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
-                    <Mail className="h-6 w-6 text-white" />
+                <div className="flex items-start space-x-3">
+                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
+                    <Mail className="h-4 w-4 text-white" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="font-black text-[#1a1a1a] text-xl uppercase">Email Comercial</div>
-                    <div className="text-[#495057] font-black text-lg break-all">jcpmaquinasparapanaderias@outlook.com.ar</div>
+                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Email</div>
+                    <a 
+                      href="mailto:jcpmaquinasparapanaderias@outlook.com.ar" 
+                      className="text-[#ff6b35] font-bold text-xs break-all hover:underline"
+                    >
+                      jcpmaquinasparapanaderias@outlook.com.ar
+                    </a>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4 p-6 bg-gradient-to-r from-[#f8f9fa] to-white rounded-2xl border-2 border-[#dee2e6] hover:border-[#ff6b35]/30 transition-all duration-300 hover:shadow-lg group">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Clock className="h-6 w-6 text-white" />
+                <div className="flex items-start space-x-3">
+                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
+                    <Clock className="h-4 w-4 text-white" />
                   </div>
                   <div>
-                    <div className="font-black text-[#1a1a1a] text-xl uppercase">Horario Industrial</div>
-                    <div className="text-[#495057] font-medium mt-2 text-lg">
-                      <div className="flex justify-between mb-2"><span>Lun - Vie:</span> <span className="font-black">8:00 - 18:00</span></div>
-                      <div className="flex justify-between mb-2"><span>Sábados:</span> <span className="font-black">9:00 - 14:00</span></div>
-                      <div className="flex justify-between"><span>Emergencias:</span> <span className="font-black text-[#ff6b35] text-xl">24/7</span></div>
+                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Horario de Atención</div>
+                    <div className="text-[#495057] text-xs space-y-0.5">
+                      <div>Lun - Vie: <span className="font-semibold">8:00 - 18:00</span></div>
+                      <div>Sábados: <span className="font-semibold">9:00 - 14:00</span></div>
+                      <div>Emergencias: <span className="font-semibold text-[#ff6b35]">24/7</span></div>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-         
+            {/* Quick Response Card */}
+            <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-white shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-green-500 rounded-lg p-2 flex-shrink-0">
+                    <Zap className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Respuesta Rápida</div>
+                    <p className="text-[#495057] text-xs leading-relaxed">
+                      Usa WhatsApp para obtener respuesta inmediata o el formulario para solicitudes detalladas.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
+
+        {/* Success Modal */}
+        {isSubmitted && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl transform scale-100 animate-in fade-in-0 zoom-in-95">
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                <CheckCircle className="h-10 w-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-black text-[#1a1a1a] mb-4">
+                ¡Solicitud Enviada!
+              </h3>
+              <p className="text-[#495057] text-lg mb-6">
+                Tu solicitud ha sido recibida exitosamente. Nos pondremos en contacto contigo pronto.
+              </p>
+              <div className="bg-gradient-to-r from-[#ff6b35]/10 to-[#ffd23f]/10 p-4 rounded-xl mb-6">
+                <p className="text-sm text-[#495057] font-medium">
+                  📧 Recibirás confirmación por email
+                </p>
+              </div>
+              <button 
+                onClick={() => {
+                  setIsSubmitted(false);
+                  setFormData({
+                    nombre: '',
+                    empresa: '',
+                    email: '',
+                    telefono: '',
+                    producto: '',
+                    mensaje: ''
+                  });
+                }}
+                className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white font-bold py-3 px-8 rounded-xl hover:scale-105 transition-transform duration-300"
+              >
+                ¡Perfecto!
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

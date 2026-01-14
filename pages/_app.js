@@ -10,10 +10,6 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         
-        {/* Preload de recursos críticos */}
-        <link rel="preload" href="/Assets/logojcp.png" as="image" type="image/png" />
-        <link rel="preload" href="/Assets/logojcp.png" as="image" type="image/webp" />
-        
         {/* Preconnect a dominios externos */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -29,10 +25,6 @@ export default function App({ Component, pageProps }) {
         {/* Performance */}
         <meta name="theme-color" content="#1a1a1a" />
         <meta name="color-scheme" content="light dark" />
-        
-        {/* Resource Hints */}
-        <link rel="preload" href="/data/modernProducts.json" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/data/productCatalog.json" as="fetch" crossOrigin="anonymous" />
         
         {/* Structured Data - Organization */}
         <script

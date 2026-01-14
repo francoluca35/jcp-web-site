@@ -25,7 +25,8 @@ export default function Admin() {
   
   // Manejar errores en los hooks
   let categories, loadingCategories, addSubcategory, removeSubcategory, loadCategories;
-  let products, loadingProducts, createProduct, deleteProduct;
+  let products, loadingProducts, createProduct, deleteProduct, updateProduct; // Add updateProduct here
+  
   
   try {
     const categoriesHook = useCategories();
@@ -43,18 +44,20 @@ export default function Admin() {
     loadCategories = () => Promise.resolve();
   }
   
-  try {
+ try {
     const productsHook = useProducts();
     products = productsHook.products || [];
     loadingProducts = productsHook.loading;
     createProduct = productsHook.createProduct;
     deleteProduct = productsHook.deleteProduct;
+    updateProduct = productsHook.updateProduct; // Add this line
   } catch (error) {
     console.error('Error en useProducts:', error);
     products = [];
     loadingProducts = false;
     createProduct = () => Promise.resolve({ success: false, error: 'Hook error' });
     deleteProduct = () => Promise.resolve({ success: false, error: 'Hook error' });
+    updateProduct = () => Promise.resolve({ success: false, error: 'Hook error' }); // And this line for the fallback
   }
 
   // Hook para subida de imágenes y PDFs
@@ -73,7 +76,7 @@ export default function Admin() {
     condition: '', // nuevo o usado
     images: [],
     imagePreviews: [], // Para mostrar previews locales
-    pdfFile: null, // PDF de ficha técnica
+
     pdfUrl: '' // URL del PDF en Cloudinary
   });
 
@@ -227,7 +230,7 @@ export default function Admin() {
         setProductForm(prev => {
           const newForm = {
             ...prev,
-            pdfFile: file,
+          
             pdfUrl: result.url
           };
           console.log('Estado del formulario actualizado:', newForm);
@@ -254,7 +257,7 @@ export default function Admin() {
   const removePDF = () => {
     setProductForm(prev => ({
       ...prev,
-      pdfFile: null,
+   
       pdfUrl: ''
     }));
     setImageErrors({});
@@ -301,7 +304,7 @@ export default function Admin() {
           condition: '',
           images: [],
           imagePreviews: [],
-          pdfFile: null,
+   
           pdfUrl: ''
         });
         setMainImageIndex(0);
@@ -354,7 +357,7 @@ export default function Admin() {
       condition: product.condition,
       images: product.images || [],
       imagePreviews: [], // No hay previews para productos existentes
-      pdfFile: null,
+
       pdfUrl: product.pdfUrl || ''
     });
     setMainImageIndex(product.mainImageIndex || 0);
@@ -388,8 +391,6 @@ export default function Admin() {
 
       const result = await updateProduct(
         editingProduct.id,
-        editingProduct.condition,
-        editingProduct.subcategory,
         productData
       );
       
@@ -406,7 +407,7 @@ export default function Admin() {
           condition: '',
           images: [],
           imagePreviews: [],
-          pdfFile: null,
+    
           pdfUrl: ''
         });
         setMainImageIndex(0);
@@ -429,7 +430,7 @@ export default function Admin() {
       setDeletingProduct(product.id);
       
       try {
-        const result = await deleteProduct(product.id, product.condition, product.subcategory);
+        const result = await deleteProduct(product.id);
         
         if (result.success) {
           alert('Producto eliminado exitosamente!');

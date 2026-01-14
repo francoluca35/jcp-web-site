@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from "./ui/card";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { 
@@ -15,6 +16,24 @@ import {
 } from "lucide-react";
 
 export function AboutSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Aquí pones las rutas de tus 3 imágenes
+  const images = [
+   
+    "/Assets/about2.jpeg",
+    "/Assets/about3.png",
+    "/Assets/maquina3.jpeg"
+   
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); // 5000ms = 5 segundos
+
+    return () => clearInterval(interval);
+  }, [images.length]);
   return (
     <section id="nosotros" className="pt-16 lg:pt-20 pb-12 bg-gradient-to-b from-white to-[#f8f9fa] relative overflow-hidden">
       {/* Background Elements */}
@@ -35,9 +54,7 @@ export function AboutSection() {
             <span className="block bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">HISTORIA</span>
           </h2>
           <p className="text-xl text-[#495057] max-w-4xl mx-auto leading-relaxed">
-            Desde 2004, JCP Maquinarias ha sido pionera en la industria argentina de equipamiento panadero. 
-            Con más de 20 años de experiencia, hemos equipado más de 500 panaderías con tecnología de vanguardia, 
-            estableciendo estándares de calidad y excelencia que nos posicionan como líderes del sector.
+            Somos una empresa familiar dedicada a la fabricación de maquinarias nuevas para panaderías, como amasadoras rápidas, sobadoras y trinchadoras, y a la fabricación de repuestos de otras marcas y modelos, con experiencia real de taller. Nuestra trayectoria se construyó dentro del rubro fabricando equipos propios, modernos y repuestos. Realizando reparaciones y reacondicionamiento de máquinas para panaderías, resolviendo problemas concretos del trabajo diario.
           </p>
         </div>
 
@@ -99,15 +116,27 @@ export function AboutSection() {
           {/* Right Content - Image and Stats */}
           <div className="space-y-8">
             {/* Main Image */}
-            <div className="relative">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-[#ff6b35]/30">
-                <ImageWithFallback
-                  src="/Assets/about.jpg"
-                  alt="Equipo de JCP Maquinarias trabajando"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-transparent to-transparent"></div>
-              </div>
+       <div className="relative">
+      {/* Contenedor Principal de Imágenes */}
+      <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-[#ff6b35]/30 relative">
+        {images.map((src, index) => (
+          <div
+            key={src}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <ImageWithFallback
+              src={src}
+              alt={`Equipo de JCP Maquinarias trabajando ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+        
+        {/* Gradiente superpuesto (siempre arriba de las imágenes) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-transparent to-transparent pointer-events-none"></div>
+      </div>
               
               {/* Floating Stats Card */}
               <div className="absolute -bottom-8 -left-8 bg-gradient-to-br from-[#1a1a1a] to-[#495057] rounded-2xl shadow-2xl p-6 border-2 border-[#ffd23f]">
@@ -127,7 +156,7 @@ export function AboutSection() {
             {/* Company Stats */}
             <div className="grid grid-cols-2 gap-6">
               {[
-                { value: "20+", label: "Años de Experiencia", icon: Clock },
+                { value: "89+", label: "Años de Experiencia", icon: Clock },
                 { value: "500+", label: "Clientes Satisfechos", icon: Users },
                 { value: "24/7", label: "Soporte Técnico", icon: Shield },
                 { value: "100%", label: "Garantía", icon: CheckCircle }
@@ -145,7 +174,7 @@ export function AboutSection() {
         </div>
 
         {/* Certificaciones y Logros */}
-        <div className="bg-gradient-to-r from-[#1a1a1a] to-[#495057] rounded-3xl p-8 lg:p-12 mb-16 text-white">
+        {/* <div className="bg-gradient-to-r from-[#1a1a1a] to-[#495057] rounded-3xl p-8 lg:p-12 mb-16 text-white">
           <div className="text-center mb-12">
             <h3 className="text-3xl lg:text-4xl font-black mb-4">
               CERTIFICACIONES Y <span className="text-[#ffd23f]">LOGROS</span>
@@ -171,7 +200,7 @@ export function AboutSection() {
                 color: "from-[#ffd23f] to-[#ff6b35]"
               },
               {
-                title: "20+ Años",
+                title: "89+ Años",
                 description: "Experiencia en el Mercado",
                 icon: Clock,
                 color: "from-[#ff6b35] to-[#ffd23f]"
@@ -192,7 +221,7 @@ export function AboutSection() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
       </div>
     </section>

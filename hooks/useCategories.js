@@ -35,6 +35,8 @@ export function useCategories() {
     try {
       setError(null);
       
+      console.log('📤 Hook: Agregando subcategoría:', { type, subcategory });
+      
       const response = await fetch('/api/categories', {
         method: 'POST',
         headers: {
@@ -43,20 +45,37 @@ export function useCategories() {
         body: JSON.stringify({ type, subcategory }),
       });
       
+      console.log('📥 Hook: Respuesta recibida, status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { error: errorText };
+        }
+        console.error('❌ Hook: Error en respuesta HTTP:', response.status, errorData);
+        throw new Error(errorData.error || errorData.details || `Error HTTP ${response.status}: ${errorText}`);
+      }
+      
       const result = await response.json();
+      console.log('📥 Hook: Resultado parseado:', result);
       
       if (result.success) {
-        // Actualizar estado local
-        setCategories(prev => ({
-          ...prev,
-          [type]: result.data.subcategorias
-        }));
+        // Actualizar estado local - recargar todas las categorías para asegurar consistencia
+        await loadCategories();
+        console.log('✅ Hook: Subcategoría agregada exitosamente');
         return { success: true, message: result.message };
       } else {
-        throw new Error(result.error || 'Error agregando subcategoría');
+        throw new Error(result.error || result.details || 'Error agregando subcategoría');
       }
     } catch (err) {
       console.error('❌ Hook Error agregando subcategoría:', err);
+      console.error('❌ Error details:', {
+        message: err.message,
+        stack: err.stack
+      });
       setError(err.message);
       return { success: false, error: err.message };
     }
@@ -67,24 +86,43 @@ export function useCategories() {
     try {
       setError(null);
       
-      const response = await fetch(`/api/categories?type=${type}&index=${index}`, {
+      console.log('📤 Hook: Eliminando subcategoría:', { type, index });
+      
+      const response = await fetch(`/api/categories?type=${encodeURIComponent(type)}&index=${encodeURIComponent(index)}`, {
         method: 'DELETE',
       });
       
+      console.log('📥 Hook: Respuesta recibida, status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { error: errorText };
+        }
+        console.error('❌ Hook: Error en respuesta HTTP:', response.status, errorData);
+        throw new Error(errorData.error || errorData.details || `Error HTTP ${response.status}: ${errorText}`);
+      }
+      
       const result = await response.json();
+      console.log('📥 Hook: Resultado parseado:', result);
       
       if (result.success) {
-        // Actualizar estado local
-        setCategories(prev => ({
-          ...prev,
-          [type]: result.data.subcategorias
-        }));
+        // Actualizar estado local - recargar todas las categorías para asegurar consistencia
+        await loadCategories();
+        console.log('✅ Hook: Subcategoría eliminada exitosamente');
         return { success: true, message: result.message };
       } else {
-        throw new Error(result.error || 'Error eliminando subcategoría');
+        throw new Error(result.error || result.details || 'Error eliminando subcategoría');
       }
     } catch (err) {
       console.error('❌ Hook Error eliminando subcategoría:', err);
+      console.error('❌ Error details:', {
+        message: err.message,
+        stack: err.stack
+      });
       setError(err.message);
       return { success: false, error: err.message };
     }

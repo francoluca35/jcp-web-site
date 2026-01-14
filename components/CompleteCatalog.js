@@ -15,16 +15,41 @@ import { useState, useEffect } from "react";
 import { ContactModal } from "./ContactModal";
 import { ImageGallery } from "./ImageGallery";
 
+// Función para formatear el precio
+const formatPrice = (price) => {
+  // Si el precio es null, undefined, cadena vacía, o 0, mostrar "A consultar"
+  if (!price || price === 0 || price === '0' || price === '' || price === null || price === undefined) {
+    return 'A consultar';
+  }
+  
+  // Convertir a número si es string
+  const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+  
+  // Si no es un número válido, mostrar "A consultar"
+  if (isNaN(numPrice) || numPrice === 0) {
+    return 'A consultar';
+  }
+  
+  // Formatear con signo de pesos
+  return `$${numPrice.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+};
+
 export function CompleteCatalog() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [selectedCondition, setSelectedCondition] = useState("Todos");
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+const [productDescription, setProductDescription] = useState("");
+const [productTitle, setProductTitle] = useState("");
+
   const [allProducts, setAllProducts] = useState([]);
+  const [allProductsIncludingRepuestos, setAllProductsIncludingRepuestos] = useState([]); // Todos los productos incluyendo repuestos
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showRepuestos, setShowRepuestos] = useState(false); // Flag para mostrar repuestos cuando se busca uno específico
 
   // Cargar productos desde la base de datos
   useEffect(() => {
@@ -45,8 +70,57 @@ export function CompleteCatalog() {
           throw new Error(result.error || 'Error al cargar productos');
         }
         
-        // Transformar los productos de la BD al formato esperado por el catálogo
-        const transformedProducts = result.data.map(product => {
+        // Guardar todos los productos (incluyendo repuestos) para búsqueda por ID
+        const allProductsData = result.data;
+        
+        // Filtrar solo máquinas (excluir repuestos) para mostrar por defecto
+        const maquinas = result.data.filter(product => {
+          const subcategory = (product.subcategory || '').toLowerCase();
+          const title = (product.title || '').toLowerCase();
+          const description = (product.description || '').toLowerCase();
+          
+          // Excluir productos que sean repuestos
+          const isRepuesto = subcategory.includes('repuesto') || 
+                            subcategory.includes('repuestos') ||
+                            title.includes('repuesto') ||
+                            description.includes('repuesto') ||
+                            subcategory.includes('spare');
+          
+          return !isRepuesto; // Solo incluir si NO es repuesto
+        });
+        
+        // Transformar todos los productos (máquinas y repuestos) para búsqueda
+        const transformedAllProducts = allProductsData.map(product => {
+          const catalogFile = product.pdfUrl || '/Document/catalogo_maquinaria.pdf';
+          return {
+            id: product.id,
+            name: product.title,
+            description: product.description,
+            price: product.price,
+            condition: product.condition === 'nuevo' ? 'Nuevo' : 'Usado',
+            category: product.subcategory || 'Maquinarias',
+            images: product.images || [],
+            mainImageIndex: product.mainImageIndex || 0,
+            characteristics: product.characteristics,
+            image: product.images && product.images.length > 0 
+              ? product.images[product.mainImageIndex || 0] 
+              : '/Assets/logojcp.png',
+            catalogFile: catalogFile,
+            isRepuesto: (() => {
+              const subcategory = (product.subcategory || '').toLowerCase();
+              const title = (product.title || '').toLowerCase();
+              const description = (product.description || '').toLowerCase();
+              return subcategory.includes('repuesto') || 
+                     subcategory.includes('repuestos') ||
+                     title.includes('repuesto') ||
+                     description.includes('repuesto') ||
+                     subcategory.includes('spare');
+            })()
+          };
+        });
+        
+        // Transformar solo máquinas para mostrar por defecto
+        const transformedProducts = maquinas.map(product => {
           const catalogFile = product.pdfUrl || '/Document/catalogo_maquinaria.pdf';
           console.log(`🔍 Producto: ${product.title}`);
           console.log(`📄 PDF URL: ${catalogFile}`);
@@ -70,7 +144,10 @@ export function CompleteCatalog() {
           };
         });
         
+        console.log(`✅ Cargadas ${transformedProducts.length} máquinas (excluyendo repuestos)`);
+        console.log(`✅ Cargados ${transformedAllProducts.length} productos totales (incluyendo repuestos)`);
         setAllProducts(transformedProducts);
+        setAllProductsIncludingRepuestos(transformedAllProducts);
         setLoading(false);
       } catch (error) {
         console.error('Error cargando productos:', error);
@@ -83,6 +160,59 @@ export function CompleteCatalog() {
 
     loadProducts();
   }, []);
+
+  // Detectar productId en la URL y hacer scroll al producto específico
+  useEffect(() => {
+    if ((allProducts.length === 0 && allProductsIncludingRepuestos.length === 0) || loading) return;
+
+    // Obtener productId de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('productId');
+
+    if (productId) {
+      // Buscar el producto en todos los productos (incluyendo repuestos)
+      const foundProduct = allProductsIncludingRepuestos.find(p => p.id === productId || p.id.toString() === productId);
+      
+      if (foundProduct) {
+        // Si es un repuesto y no está en la lista de productos mostrados, agregarlo temporalmente
+        const isNewRepuesto = foundProduct.isRepuesto && !allProducts.find(p => p.id === foundProduct.id);
+        
+        if (isNewRepuesto) {
+          setAllProducts(prev => [...prev, foundProduct]);
+          setShowRepuestos(true);
+        }
+
+        // Esperar un poco más si es un repuesto nuevo que se acaba de agregar
+        const scrollDelay = isNewRepuesto ? 1000 : 500;
+        
+        setTimeout(() => {
+          const productElement = document.getElementById(`product-${productId}`);
+          if (productElement) {
+            // Hacer scroll al producto con un offset para el header
+            const headerHeight = 100; // Ajustar según la altura del header
+            const elementPosition = productElement.offsetTop - headerHeight;
+            
+            window.scrollTo({
+              top: elementPosition,
+              behavior: 'smooth'
+            });
+
+            // Resaltar el producto brevemente
+            productElement.style.transition = 'box-shadow 0.3s ease';
+            productElement.style.boxShadow = '0 0 20px rgba(255, 107, 53, 0.5)';
+            
+            setTimeout(() => {
+              productElement.style.boxShadow = '';
+            }, 2000);
+
+            // Limpiar el parámetro de la URL sin recargar la página
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+          }
+        }, scrollDelay);
+      }
+    }
+  }, [allProducts, allProductsIncludingRepuestos, loading]);
 
   // Detectar scroll para mostrar/ocultar botón de ir arriba
   useEffect(() => {
@@ -174,25 +304,16 @@ export function CompleteCatalog() {
   return (
     <div className="min-h-screen bg-gray-50">
              {/* Header */}
-       <div className="bg-[#1a1a1a] shadow-sm border-b">
+       <div className="bg-[#424242] shadow-sm border-b">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               {/* Botón Volver - Esquina izquierda en móvil */}
-              <div className="flex text-white justify-start sm:hidden order-1">
-                <Button
-                  variant="ghost"
-                  onClick={handleBack}
-                  className="text-white hover:text-gray-900"
-                >
-                  <ArrowLeft className="h-5 text-white w-5 mr-2" />
-                  Volver
-                </Button>
-              </div>
+          
               
               {/* Logo JCP - Centrado en móvil, derecha en desktop */}
               <div className="flex items-center justify-center sm:justify-end order-2 sm:order-2">
                 <img 
-                  src="Assets/logojcp.png" 
+                  src="/Assets/logojcp.png" 
                   alt="JCP Logo" 
                   className="h-12 sm:h-14 lg:h-16 w-auto"
                 />
@@ -204,7 +325,7 @@ export function CompleteCatalog() {
                 <Button
                   variant="ghost"
                   onClick={handleBack}
-                  className="hidden sm:flex text-white hover:text-gray-900 self-start sm:self-auto"
+                  className="hidden sm:flex text-xl text-white hover:text-yellow-600 self-start sm:self-auto"
                 >
                   <ArrowLeft className="h-5 w-5 mr-2" />
                   Volver
@@ -307,7 +428,7 @@ export function CompleteCatalog() {
           <div className="flex-1">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <Card key={product.id} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <Card key={product.id} id={`product-${product.id}`} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
                                      {/* Galería de imágenes del producto */}
                    <div className="relative">
                      <ImageGallery 
@@ -342,15 +463,52 @@ export function CompleteCatalog() {
                     </h3>
 
                     {/* Descripción */}
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                      {product.description}
-                    </p>
+              <div className="text-sm text-gray-600 mb-4">
+  <p className="line-clamp-2">
+    {product.description}
+  </p>
+
+  {product.description && product.description.length > 120 && (
+    <button
+      onClick={() => {
+        setProductDescription(product.description);
+        setProductTitle(product.name);
+        setShowDescriptionModal(true);
+      }}
+      className="text-orange-600 font-semibold hover:underline mt-1"
+    >
+      Ver más
+    </button>
+  )}
+                    </div>
+                    {showDescriptionModal && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg max-w-lg w-full p-6 shadow-lg">
+      <h2 className="text-xl font-bold mb-4">{productTitle}</h2>
+
+      <p className="text-gray-700 whitespace-pre-line">
+        {productDescription}
+      </p>
+
+      <div className="flex justify-end mt-6">
+        <Button
+          className="bg-gray-900 hover:bg-orange-600 text-white"
+          onClick={() => setShowDescriptionModal(false)}
+        >
+          Cerrar
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
+
 
                   
 
                     {/* Precio */}
                     <div className="text-xl font-bold text-gray-900 mb-4">
-                      {product.price}
+                      {formatPrice(product.price)}
                     </div>
 
                     {/* Botones de acción */}
@@ -391,7 +549,7 @@ export function CompleteCatalog() {
                           : 'Catálogo'}
                       </Button>
                                              <Button 
-                         className="flex-1 text-sm bg-gray-900 hover:bg-orange-600"
+                         className="flex-1 text-sm text-white bg-gray-900 hover:bg-orange-600"
                          size="sm"
                          onClick={() => handleContact(product)}
                        >

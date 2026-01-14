@@ -117,7 +117,7 @@ export function OptimizedLogo({ className = '', priority = true }) {
       />
       {/* PNG optimizado como fallback */}
       <OptimizedImage
-        src="/Assets/logojcp.png"
+        src="/Assets/logojcp2.png"
         alt="JCP Logo"
         width={180}
         height={53}

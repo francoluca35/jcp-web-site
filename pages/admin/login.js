@@ -3,15 +3,18 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../hooks/useAuth';
 
 import SEOHead from '../../components/SEOHead';
-import { LogIn, Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { LogIn, User, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
 export default function Login() {
   const [formData, setFormData] = useState({
+    usuario: '',
     email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { login, loading, error } = useAuth();
+  const [localError, setLocalError] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const { loginWithUsername, createUser, loading, error } = useAuth();
   const router = useRouter();
 
   const handleInputChange = (e) => {
@@ -24,21 +27,30 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLocalError('');
 
     try {
       
       // Basic validation
-      if (!formData.email || !formData.password) {
+      if (!formData.usuario || !formData.password) {
         return;
       }
 
-      if (!formData.email.includes('@')) {
+      const normalizedUser = formData.usuario.trim();
+      if (normalizedUser.includes('@')) {
+        setLocalError('Usa tu usuario, no el email.');
         return;
       }
 
-      
-      // Login con Firestore
-      const result = await login(formData.email, formData.password);
+      if (isCreating) {
+        const result = await createUser({
+          username: normalizedUser,
+          email: formData.email.trim(),
+          password: formData.password
+        });
+      } else {
+        const result = await loginWithUsername(normalizedUser, formData.password);
+      }
       
       // Redirect to admin dashboard after successful login
       
@@ -98,24 +110,45 @@ export default function Login() {
             
             <div>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {error && (
+                {(localError || error) && (
                   <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-400 text-sm">
-                    {error}
+                    {localError || error}
+                  </div>
+                )}
+
+                {isCreating && (
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-white font-medium block">
+                      Email
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#adb5bd]" />
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 rounded-lg transition-all duration-200"
+                        required
+                      />
+                    </div>
                   </div>
                 )}
 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-white font-medium block">
-                    Correo Electrónico
+                  <label htmlFor="usuario" className="text-white font-medium block">
+                    Usuario
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#adb5bd]" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#adb5bd]" />
                     <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="tu@email.com"
-                      value={formData.email}
+                      id="usuario"
+                      name="usuario"
+                      type="text"
+                      placeholder="tu usuario"
+                      value={formData.usuario}
                       onChange={handleInputChange}
                       className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 rounded-lg transition-all duration-200"
                       required
@@ -177,14 +210,25 @@ export default function Login() {
                   {loading ? (
                     <div className="flex items-center justify-center space-x-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Iniciando sesión...</span>
+                      <span>{isCreating ? 'Creando usuario...' : 'Iniciando sesión...'}</span>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center space-x-2">
                       <LogIn className="h-4 w-4" />
-                      <span>Iniciar Sesión</span>
+                      <span>{isCreating ? 'Crear Usuario' : 'Iniciar Sesión'}</span>
                     </div>
                   )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLocalError('');
+                    setIsCreating((prev) => !prev);
+                  }}
+                  className="w-full text-sm text-[#ff6b35] hover:text-[#ffd23f] transition-colors"
+                >
+                  {isCreating ? 'Volver al login' : 'Crear usuario nuevo'}
                 </button>
               </form>
 

@@ -21,6 +21,25 @@ import { useState, useEffect } from "react";
 import { QuoteModal } from "./QuoteModal";
 import { ImageModal } from "./ImageModal";
 
+// Función para formatear el precio
+const formatPrice = (price) => {
+  // Si el precio es null, undefined, cadena vacía, o 0, mostrar "A consultar"
+  if (!price || price === 0 || price === '0' || price === '' || price === null || price === undefined) {
+    return 'A consultar';
+  }
+  
+  // Convertir a número si es string
+  const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+  
+  // Si no es un número válido, mostrar "A consultar"
+  if (isNaN(numPrice) || numPrice === 0) {
+    return 'A consultar';
+  }
+  
+  // Formatear con signo de pesos
+  return `$${numPrice.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+};
+
 // Datos por defecto en caso de error
 const defaultCatalogPages = [
   {
@@ -192,34 +211,131 @@ export function ModernCatalog() {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // Cargar productos destacados desde el JSON
+  // Cargar productos destacados desde la API (solo máquinas, no repuestos)
   useEffect(() => {
     const loadFeaturedProducts = async () => {
       try {
-        const response = await fetch('/data/modernProducts.json');
-        const data = await response.json();
+        setLoading(true);
         
-        // Seleccionar los 4 productos más importantes
-        const allProducts = data.maquinarias || [];
+        // Cargar productos desde la API
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         
-        // Si no hay productos del JSON, usar los datos por defecto
-        if (allProducts.length === 0) {
-          // Extraer productos destacados de los datos por defecto
+        const result = await response.json();
+        
+        if (result.success && result.data && result.data.length > 0) {
+          // Filtrar solo máquinas (excluir repuestos)
+          const maquinas = result.data.filter(product => {
+            const subcategory = (product.subcategory || '').toLowerCase();
+            const title = (product.title || '').toLowerCase();
+            const description = (product.description || '').toLowerCase();
+            
+            // Excluir productos que sean repuestos
+            const isRepuesto = subcategory.includes('repuesto') || 
+                              subcategory.includes('repuestos') ||
+                              title.includes('repuesto') ||
+                              description.includes('repuesto') ||
+                              subcategory.includes('spare');
+            
+            return !isRepuesto; // Solo incluir si NO es repuesto
+          });
+          
+          if (maquinas.length > 0) {
+            // Transformar al formato esperado y seleccionar los primeros 4
+            const transformedProducts = maquinas.slice(0, 4).map(product => {
+              // Convertir characteristics a specs y features
+              // Si characteristics es un string, intentar parsearlo o dividirlo por líneas
+              let specs = {};
+              let features = [];
+              
+              if (product.characteristics) {
+                if (typeof product.characteristics === 'string') {
+                  // Intentar dividir por líneas o puntos
+                  const lines = product.characteristics.split('\n').filter(line => line.trim());
+                  lines.forEach((line, idx) => {
+                    // Intentar detectar si es "clave: valor" o solo texto
+                    if (line.includes(':')) {
+                      const [key, ...valueParts] = line.split(':');
+                      specs[key.trim()] = valueParts.join(':').trim();
+                    } else {
+                      // Si no tiene formato clave:valor, agregarlo como feature
+                      features.push(line.trim());
+                    }
+                  });
+                  
+                  // Si no se encontraron specs, usar características como features
+                  if (Object.keys(specs).length === 0 && features.length === 0) {
+                    features = lines.slice(0, 5); // Máximo 5 features
+                  }
+                } else if (typeof product.characteristics === 'object') {
+                  // Si es un objeto, usarlo directamente como specs
+                  specs = product.characteristics;
+                }
+              }
+              
+              // Si no hay specs, crear algunos básicos
+              if (Object.keys(specs).length === 0) {
+                specs = {
+                  'Condición': product.condition === 'nuevo' ? 'Nuevo' : 'Usado',
+                  'Categoría': product.subcategory || 'Maquinaria'
+                };
+              }
+              
+              // Si no hay features, usar la descripción o características
+              if (features.length === 0) {
+                if (product.description) {
+                  features = [product.description.substring(0, 100) + '...'];
+                } else {
+                  features = ['Producto de alta calidad'];
+                }
+              }
+              
+              return {
+                id: product.id,
+                name: product.title,
+                description: product.description,
+                price: product.price,
+                category: product.subcategory || 'Maquinarias',
+                image: product.images && product.images.length > 0 
+                  ? product.images[product.mainImageIndex || 0] 
+                  : '/Assets/logojcp.png',
+                images: product.images || [],
+                mainImageIndex: product.mainImageIndex || 0,
+                characteristics: product.characteristics,
+                specs: specs, // Agregar specs
+                features: features, // Agregar features
+                rating: 4.5, // Valor por defecto
+                isNew: product.condition === 'nuevo'
+              };
+            });
+            
+            setFeaturedProducts(transformedProducts);
+            console.log(`✅ Cargadas ${transformedProducts.length} máquinas destacadas`);
+          } else {
+            // Si no hay máquinas, usar datos por defecto
+            const defaultProducts = [];
+            defaultCatalogPages.forEach(category => {
+              category.products.forEach(product => {
+                defaultProducts.push(product);
+              });
+            });
+            setFeaturedProducts(defaultProducts.slice(0, 4));
+          }
+        } else {
+          // Si no hay datos en la API, usar datos por defecto
           const defaultProducts = [];
           defaultCatalogPages.forEach(category => {
             category.products.forEach(product => {
               defaultProducts.push(product);
             });
           });
-          // Tomar solo los primeros 4
           setFeaturedProducts(defaultProducts.slice(0, 4));
-        } else {
-          // Seleccionar los 4 más importantes del JSON
-          setFeaturedProducts(allProducts.slice(0, 4));
         }
         setLoading(false);
       } catch (error) {
-        console.error('Error cargando productos:', error);
+        console.error('Error cargando productos desde API:', error);
         // En caso de error, usar los datos por defecto
         const defaultProducts = [];
         defaultCatalogPages.forEach(category => {
@@ -343,7 +459,7 @@ export function ModernCatalog() {
 
                 {/* Price Badge */}
                 <div className="absolute bottom-2 right-2 bg-gradient-to-r from-[#1a1a1a] to-[#495057] text-white px-3 py-1 rounded-full">
-                  <span className="font-black text-sm">{product.price}</span>
+                  <span className="font-black text-sm">{formatPrice(product.price)}</span>
                 </div>
               </div>
 
@@ -351,29 +467,33 @@ export function ModernCatalog() {
                 <h3 className="text-lg font-black text-[#1a1a1a] mb-2">{product.name}</h3>
                 
                 {/* Specs Grid - Mostrar 2 o todas según expansión */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  {Object.entries(product.specs).slice(0, expandedProducts.has(index) ? Object.keys(product.specs).length : 2).map(([key, value], specIndex) => (
-                    <div key={specIndex} className="bg-[#f8f9fa] rounded p-2 border border-[#dee2e6]">
-                      <div className="text-xs font-bold text-[#495057] uppercase tracking-wide">{key}</div>
-                      <div className="text-xs font-black text-[#1a1a1a]">{value}</div>
-                    </div>
-                  ))}
-                </div>
+                {product.specs && Object.keys(product.specs).length > 0 && (
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {Object.entries(product.specs).slice(0, expandedProducts.has(index) ? Object.keys(product.specs).length : 2).map(([key, value], specIndex) => (
+                      <div key={specIndex} className="bg-[#f8f9fa] rounded p-2 border border-[#dee2e6]">
+                        <div className="text-xs font-bold text-[#495057] uppercase tracking-wide">{key}</div>
+                        <div className="text-xs font-black text-[#1a1a1a]">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Features - Mostrar 2 o todas según expansión */}
-                <div className="space-y-1 mb-4">
-                  {product.features.slice(0, expandedProducts.has(index) ? product.features.length : 2).map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-center space-x-2">
-                      <div className="w-1.5 h-1.5 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full"></div>
-                      <span className="text-xs text-[#495057] font-medium">{feature}</span>
-                    </div>
-                  ))}
-                  {!expandedProducts.has(index) && product.features.length > 2 && (
-                    <div className="text-xs text-[#495057] italic">
-                      +{product.features.length - 2} características más...
-                    </div>
-                  )}
-                </div>
+                {product.features && Array.isArray(product.features) && product.features.length > 0 && (
+                  <div className="space-y-1 mb-4">
+                    {product.features.slice(0, expandedProducts.has(index) ? product.features.length : 2).map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center space-x-2">
+                        <div className="w-1.5 h-1.5 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-full"></div>
+                        <span className="text-xs text-[#495057] font-medium">{feature}</span>
+                      </div>
+                    ))}
+                    {!expandedProducts.has(index) && product.features.length > 2 && (
+                      <div className="text-xs text-[#495057] italic">
+                        +{product.features.length - 2} características más...
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Description - Solo mostrar si está expandido */}
                 {expandedProducts.has(index) && product.description && (
@@ -385,7 +505,9 @@ export function ModernCatalog() {
                 )}
 
                 {/* Ver más/Ver menos button */}
-                {(Object.keys(product.specs).length > 2 || product.features.length > 2 || product.description) && (
+                {((product.specs && Object.keys(product.specs).length > 2) || 
+                  (product.features && Array.isArray(product.features) && product.features.length > 2) || 
+                  product.description) && (
                   <div className="mb-4">
                     <Button
                       size="sm"
@@ -414,15 +536,11 @@ export function ModernCatalog() {
                     size="sm"
                     className="flex-1 bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold border-0 text-xs"
                     onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = product.catalogFile;
-                      link.download = 'catalogo_maquinaria.pdf';
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
+                      // Navegar al catálogo completo con el ID del producto
+                      window.location.href = `/catalog?productId=${product.id}`;
                     }}
                   >
-                    INFO
+                    VER PRODUCTO
                   </Button>
                   <Button 
                     size="sm"
@@ -448,19 +566,21 @@ export function ModernCatalog() {
               Explora nuestro catálogo completo con todas las máquinas disponibles, 
               especificaciones técnicas detalladas y opciones de personalización.
             </p>
-            <Button 
-              className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold border-0 px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300"
-              onClick={() => window.location.href = '/catalog'}
-            >
-              <BookOpen className="mr-3 h-6 w-6" />
-              VER CATÁLOGO COMPLETO
-              <ArrowRight className="ml-3 h-6 w-6" />
-            </Button>
+            <div className="flex justify-center">
+              <Button 
+                className="w-full sm:w-auto bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-bold border-0 px-6 sm:px-8 py-4 text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                onClick={() => window.location.href = '/catalog'}
+              >
+                <BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
+                <span className="text-center">VER CATÁLOGO COMPLETO</span>
+                <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
+              </Button>
+            </div>
           </div>
         </div>
 
         {/* Industrial Stats */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
               { icon: TrendingUp, value: "200+", label: "Instalaciones", color: "text-[#ff6b35]" },
               { icon: Award, value: "20+", label: "Años Experiencia", color: "text-[#ffd23f]" },
@@ -475,7 +595,7 @@ export function ModernCatalog() {
                 <div className="text-sm font-bold text-[#495057] uppercase tracking-wide">{stat.label}</div>
               </Card>
             ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Quote Modal */}

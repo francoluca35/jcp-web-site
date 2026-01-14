@@ -9,17 +9,31 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const router = useRouter();
 
-  // Handle scroll effect
+  // Handle scroll effect with hide/show on scroll direction
   useEffect(() => {
     setIsMounted(true);
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 20);
+      
+      // Show navbar when scrolling up, hide when scrolling down
+      if (currentScrollY < lastScrollY) {
+        // Scrolling up
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down and past 100px
+        setIsVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   // Handle hover events for menu
   const handleMenuHover = () => {
@@ -99,8 +113,10 @@ export function Header() {
         isScrolled 
           ? 'bg-[#1a1a1a] shadow-2xl' 
           : 'bg-[#1a1a1a] shadow-lg'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      } ${isVisible ? '' : 'min-h-[2px]'}`}>
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full h-0 overflow-hidden'
+        }`}>
           <div className="flex justify-between items-center py-3 lg:py-4">
             {/* Logo */}
             <div className="flex items-center">
@@ -159,13 +175,13 @@ export function Header() {
                     onMouseEnter={handleDropdownHover}
                     onMouseLeave={handleDropdownLeave}
                   >
-                    <button 
+                    {/* <button 
                       className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium uppercase tracking-wide text-sm border-b-2 border-transparent hover:border-[#ff6b35] pb-1 transform hover:scale-105 flex items-center space-x-1"
                       aria-label="Ver más opciones"
                     >
                       <span>Ver Más</span>
                       <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                    </button>
+                    </button> */}
                     
                     {/* Dropdown Content */}
                     <div className={`absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-200 ${isDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
@@ -216,38 +232,37 @@ export function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-            <div 
-              className="lg:hidden relative"
-              onMouseEnter={handleMenuHover}
-              onMouseLeave={handleMenuLeave}
-            >
+            <div className="lg:hidden relative">
               <button 
                 className="text-white hover:bg-[#ff6b35]/20 p-2 rounded-lg transition-all duration-200"
                 aria-label="Abrir menú de navegación"
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
+                onClick={() => setIsMenuOpen((prev) => !prev)}
               >
                 <Menu className="h-6 w-6" />
               </button>
             </div>
           </div>
         </div>
-        {/* Línea amarilla fluorescente */}
-        <div className="w-full h-0.5 bg-gradient-to-r from-[#edc954] to-[#ffeb3b] shadow-lg"></div>
+        {/* Línea amarilla fluorescente - siempre visible */}
+        <div className="w-full h-0.5 bg-gradient-to-r from-[#edc954] to-[#ffeb3b] shadow-lg absolute bottom-0 left-0"></div>
       </header>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
-        isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-      }`}>
+      <div
+        className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
+          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      >
         {/* Mobile Menu */}
         <div 
           id="mobile-menu"
           className={`mobile-menu absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-[#1a1a1a] shadow-2xl transform transition-transform duration-300 ease-in-out ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
-          onMouseEnter={handleMenuHover}
-          onMouseLeave={handleMenuLeave}
+          onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-label="Menú de navegación móvil"
@@ -314,42 +329,6 @@ export function Header() {
                       </button>
                     ))}
                     
-                    {/* Mobile Dropdown for landing page */}
-                    <div className="space-y-2">
-                      <button 
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="w-full text-left text-white hover:text-[#ff6b35] transition-all duration-300 font-medium uppercase tracking-wide text-lg border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-3 transform hover:translate-x-2 flex items-center justify-between"
-                        aria-label="Ver más opciones"
-                      >
-                        <span>Ver Más</span>
-                        <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                      </button>
-                      
-                      {/* Mobile Dropdown Content */}
-                      <div className={`space-y-2 ml-4 transition-all duration-200 ${isDropdownOpen ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0 overflow-hidden'}`}>
-                        <a 
-                          href="/maquinaria" 
-                          className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Catálogo Maquinaria
-                        </a>
-                        <a 
-                          href="/catalog" 
-                          className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Catálogo Completo
-                        </a>
-                        <a 
-                          href="/blog" 
-                          className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium tracking-wide text-base border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-2 transform hover:translate-x-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Blog Técnico
-                        </a>
-                      </div>
-                    </div>
                   </>
                 )}
               </div>
@@ -372,7 +351,7 @@ export function Header() {
                 className="w-full text-white hover:text-[#ff6b35] hover:bg-[#ff6b35]/10 font-medium py-3 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
                 onClick={() => {
                   setIsMenuOpen(false);
-                  router.push('/admin/login');
+                  window.location.href = '/admin/login';
                 }}
               >
                 <LogIn className="h-5 w-5" />

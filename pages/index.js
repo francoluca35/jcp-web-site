@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Header } from "../components/Header"
 import { HeroSection } from "../components/HeroSection"
 import { AboutSection } from "../components/AboutSection"
+import { HistoryGallery } from "../components/HistoryGallery"
 import { ModernCatalog } from "../components/ModernCatalog"
 import { PartsAndServicesSection } from "../components/PartsAndServicesSection"
 import { ContactSection } from "../components/ContactSection"
@@ -14,13 +15,22 @@ import { useState, useEffect } from "react"
 export default function Home() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Detectar scroll para mostrar/ocultar botón de ir arriba
+  // Detectar scroll para mostrar/ocultar botón de ir arriba solo al final de la página
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      setShowScrollTop(scrollTop > 600);
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Mostrar el botón cuando esté a menos de 300px del final de la página
+      const threshold = 300;
+      const isNearBottom = scrollTop + windowHeight >= documentHeight - threshold;
+      
+      setShowScrollTop(isNearBottom);
     };
 
+    // Verificar también al cargar la página
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -134,23 +144,24 @@ export default function Home() {
         <main role="main">
           <HeroSection />
           <AboutSection />
-          <ModernCatalog />
+          <HistoryGallery />
           <PartsAndServicesSection />
+          <ModernCatalog />
           <ContactSection />
         </main>
         <Footer />
         <FloatingBar />
         
-        {/* Botón Ir hacia arriba */}
+        {/* Botón Ir hacia arriba - solo aparece al final de la página */}
         {showScrollTop && (
           <Button
             onClick={scrollToTop}
-            className="fixed bottom-0 right-4 bg-orange-600 hover:bg-[#1a1a1a] text-white rounded-md w-8 h-8 md:w-10 md:h-10 shadow-lg transition-all duration-300 z-40 flex items-center justify-center"
+            className="fixed bottom-0 left-4 bg-orange-600 hover:bg-[#1a1a1a] text-white rounded-md w-10 h-10 md:w-12 md:h-12 shadow-lg transition-all duration-300 z-40 flex items-center justify-center"
             size="sm"
             aria-label="Ir hacia arriba"
             title="Ir hacia arriba"
           >
-            <ArrowUp className="h-4 w-4 md:h-8 md:w-8" />
+            <ArrowUp className="h-5 w-5 md:h-6 md:w-6" />
           </Button>
         )}
       </div>
