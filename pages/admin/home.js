@@ -77,7 +77,8 @@ export default function Admin() {
     images: [],
     imagePreviews: [], // Para mostrar previews locales
 
-    pdfUrl: '' // URL del PDF en Cloudinary
+    pdfUrl: '', // URL del PDF en Cloudinary
+    rating: ''
   });
 
   const [newSubcategory, setNewSubcategory] = useState({
@@ -98,6 +99,20 @@ export default function Admin() {
   // Estados para manejo de imágenes
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [imageErrors, setImageErrors] = useState({});
+
+  const isRepuestoForm = (form) => {
+    const subcategory = (form.subcategory || '').toLowerCase();
+    const title = (form.title || '').toLowerCase();
+    const description = (form.description || '').toLowerCase();
+
+    return (
+      subcategory.includes('repuesto') ||
+      subcategory.includes('repuestos') ||
+      subcategory.includes('spare') ||
+      title.includes('repuesto') ||
+      description.includes('repuesto')
+    );
+  };
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -281,11 +296,19 @@ export default function Admin() {
     }
 
     try {
+      const isRepuesto = isRepuestoForm(productForm);
+      const { rating, ...productFields } = productForm;
+      const ratingValue = rating !== '' ? parseFloat(rating) : null;
+
       // Agregar información de imagen principal al producto
       const productData = {
-        ...productForm,
+        ...productFields,
         mainImageIndex: mainImageIndex
       };
+
+      if (!isRepuesto && Number.isFinite(ratingValue)) {
+        productData.rating = ratingValue;
+      }
 
       console.log('📋 Estado del formulario antes de enviar:', productForm);
       console.log('📤 Enviando producto a la base de datos:', productData);
@@ -304,8 +327,9 @@ export default function Admin() {
           condition: '',
           images: [],
           imagePreviews: [],
-   
-          pdfUrl: ''
+
+          pdfUrl: '',
+          rating: ''
         });
         setMainImageIndex(0);
         setImageErrors({});
@@ -358,7 +382,8 @@ export default function Admin() {
       images: product.images || [],
       imagePreviews: [], // No hay previews para productos existentes
 
-      pdfUrl: product.pdfUrl || ''
+      pdfUrl: product.pdfUrl || '',
+      rating: product.rating ?? ''
     });
     setMainImageIndex(product.mainImageIndex || 0);
     setImageErrors({});
@@ -383,11 +408,21 @@ export default function Admin() {
     }
 
     try {
+      const isRepuesto = isRepuestoForm(productForm);
+      const { rating, ...productFields } = productForm;
+      const ratingValue = rating !== '' ? parseFloat(rating) : null;
+
       // Agregar información de imagen principal al producto
       const productData = {
-        ...productForm,
+        ...productFields,
         mainImageIndex: mainImageIndex
       };
+
+      if (!isRepuesto && Number.isFinite(ratingValue)) {
+        productData.rating = ratingValue;
+      } else if (isRepuesto) {
+        productData.rating = null;
+      }
 
       const result = await updateProduct(
         editingProduct.id,
@@ -407,8 +442,9 @@ export default function Admin() {
           condition: '',
           images: [],
           imagePreviews: [],
-    
-          pdfUrl: ''
+
+          pdfUrl: '',
+          rating: ''
         });
         setMainImageIndex(0);
         setImageErrors({});
@@ -622,6 +658,29 @@ export default function Admin() {
                       placeholder="Ej: $2,500"
                     />
                       </div>
+
+                  {/* Calificación (solo maquinarias) */}
+                  {!isRepuestoForm(productForm) && (
+                    <div>
+                      <label className="block text-white font-medium mb-2">
+                        Calificación
+                      </label>
+                      <input
+                        type="number"
+                        name="rating"
+                        value={productForm.rating}
+                        onChange={handleInputChange}
+                        min="0"
+                        max="5"
+                        step="0.1"
+                        className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
+                        placeholder="Ej: 4.5"
+                      />
+                      <p className="text-xs text-[#adb5bd] mt-2">
+                        Solo para maquinarias (0 a 5)
+                      </p>
+                    </div>
+                  )}
 
                   {/* Condición (Nuevo/Usado) */}
                   <div>
@@ -1207,6 +1266,29 @@ export default function Admin() {
                     placeholder="Ej: $2,500"
                   />
                 </div>
+
+                {/* Calificación (solo maquinarias) */}
+                {!isRepuestoForm(productForm) && (
+                  <div>
+                    <label className="block text-white font-medium mb-2">
+                      Calificación
+                    </label>
+                    <input
+                      type="number"
+                      name="rating"
+                      value={productForm.rating}
+                      onChange={handleInputChange}
+                      min="0"
+                      max="5"
+                      step="0.1"
+                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
+                      placeholder="Ej: 4.5"
+                    />
+                    <p className="text-xs text-[#adb5bd] mt-2">
+                      Solo para maquinarias (0 a 5)
+                    </p>
+                  </div>
+                )}
 
                 {/* Condición (Nuevo/Usado) */}
                 <div>

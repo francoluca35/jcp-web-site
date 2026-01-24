@@ -306,7 +306,7 @@ export function ModernCatalog() {
                 characteristics: product.characteristics,
                 specs: specs, // Agregar specs
                 features: features, // Agregar features
-                rating: 4.5, // Valor por defecto
+                rating: product.rating ?? 4.5, // Valor por defecto
                 isNew: product.condition === 'nuevo'
               };
             });

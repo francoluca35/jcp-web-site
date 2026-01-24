@@ -513,7 +513,7 @@ const [productTitle, setProductTitle] = useState("");
 
                     {/* Botones de acción */}
                     <div className="flex space-x-2">
-                      <Button 
+                      {/* <Button 
                         variant="outline" 
                         className={`flex-1 text-sm ${
                           product.catalogFile && 
@@ -547,7 +547,7 @@ const [productTitle, setProductTitle] = useState("");
                          (product.catalogFile.startsWith('/pdfs/') || product.catalogFile.startsWith('http'))
                           ? 'F. Técnica' 
                           : 'Catálogo'}
-                      </Button>
+                      </Button> */}
                                              <Button 
                          className="flex-1 text-sm text-white bg-gray-900 hover:bg-orange-600"
                          size="sm"

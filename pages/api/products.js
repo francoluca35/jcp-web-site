@@ -141,7 +141,8 @@ async function handleCreateProduct(req, res) {
       subcategory, 
       images,
       pdfUrl,
-      mainImageIndex
+      mainImageIndex,
+      rating
     } = req.body;
     
     console.log('📥 Datos recibidos en API:', {
@@ -153,7 +154,8 @@ async function handleCreateProduct(req, res) {
       subcategory,
       imagesCount: Array.isArray(images) ? images.length : 0,
       hasPdf: !!pdfUrl,
-      mainImageIndex: mainImageIndex || 0
+      mainImageIndex: mainImageIndex || 0,
+      rating
     });
     
     // Validar que db esté inicializado
@@ -205,6 +207,7 @@ async function handleCreateProduct(req, res) {
       images: Array.isArray(images) ? images : (images ? [images] : []), // Asegurar que sea array
       pdfUrl: pdfUrl || '',
       mainImageIndex: parseInt(mainImageIndex) || 0,
+      ...(Number.isFinite(parseFloat(rating)) ? { rating: parseFloat(rating) } : {}),
       status: 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -398,6 +401,10 @@ async function handleUpdateProduct(req, res) {
       if (updateData.images !== undefined) updateFields.images = Array.isArray(updateData.images) ? updateData.images : (updateData.images ? [updateData.images] : []);
       if (updateData.pdfUrl !== undefined) updateFields.pdfUrl = updateData.pdfUrl || '';
       if (updateData.mainImageIndex !== undefined) updateFields.mainImageIndex = parseInt(updateData.mainImageIndex) || 0;
+      if (updateData.rating !== undefined) {
+        const parsedRating = parseFloat(updateData.rating);
+        updateFields.rating = Number.isNaN(parsedRating) ? null : parsedRating;
+      }
       if (updateData.status !== undefined) updateFields.status = updateData.status;
       
       // Siempre actualizar updatedAt
