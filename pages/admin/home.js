@@ -61,8 +61,8 @@ export default function Admin() {
     updateProduct = () => Promise.resolve({ success: false, error: 'Hook error' }); // And this line for the fallback
   }
 
-  // Hook para subida de imágenes y PDFs
-  const { uploadMultipleImages, uploadPDF, uploading: imageUploading } = useImageUpload();
+  // Hook para subida de imágenes
+  const { uploadMultipleImages, uploading: imageUploading } = useImageUpload();
   
   const router = useRouter();
 
@@ -76,10 +76,7 @@ export default function Admin() {
     subcategory: '',
     condition: '', // nuevo o usado
     images: [],
-    imagePreviews: [], // Para mostrar previews locales
-
-    pdfUrl: '', // URL del PDF en Cloudinary
-    rating: ''
+    imagePreviews: [] // Para mostrar previews locales
   });
 
   const [newSubcategory, setNewSubcategory] = useState({
@@ -269,74 +266,7 @@ export default function Admin() {
     setImageErrors({});
   };
 
-  const handlePDFUpload = async (e) => {
-    const file = e.target.files[0];
-    
-    if (!file) return;
-    
-    // Validar que sea un PDF
-    if (file.type !== 'application/pdf') {
-      setImageErrors({ 
-        ...imageErrors, 
-        pdfError: 'Solo se permiten archivos PDF' 
-      });
-      return;
-    }
-    
-    // Validar tamaño (máximo 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      setImageErrors({ 
-        ...imageErrors, 
-        pdfError: 'El PDF no puede ser mayor a 10MB' 
-      });
-      return;
-    }
-    
-    // Limpiar errores
-    setImageErrors({});
-    
-    try {
-      console.log('Iniciando subida de PDF:', file.name, file.size);
-      // Subir PDF a Cloudinary
-      const result = await uploadPDF(file);
-      
-      if (result.success) {
-        console.log('PDF subido exitosamente:', result.url);
-        setProductForm(prev => {
-          const newForm = {
-            ...prev,
-          
-            pdfUrl: result.url
-          };
-          console.log('Estado del formulario actualizado:', newForm);
-          return newForm;
-        });
-      } else {
-        setImageErrors({ 
-          ...imageErrors, 
-          pdfError: result.error || 'Error subiendo PDF' 
-        });
-      }
-    } catch (error) {
-      console.error('Error subiendo PDF:', error);
-      setImageErrors({ 
-        ...imageErrors, 
-        pdfError: 'Error subiendo PDF' 
-      });
-    }
-    
-    // Resetear el input
-    e.target.value = '';
-  };
-
-  const removePDF = () => {
-    setProductForm(prev => ({
-      ...prev,
-   
-      pdfUrl: ''
-    }));
-    setImageErrors({});
-  };
+  // PDF upload removed from form
 
   const handleSubmitProduct = async (e) => {
     e.preventDefault();
@@ -356,19 +286,11 @@ export default function Admin() {
     }
 
     try {
-      const isRepuesto = isRepuestoForm(productForm);
-      const { rating, ...productFields } = productForm;
-      const ratingValue = rating !== '' ? parseFloat(rating) : null;
-
       // Agregar información de imagen principal al producto
       const productData = {
-        ...productFields,
+        ...productForm,
         mainImageIndex: mainImageIndex
       };
-
-      if (!isRepuesto && Number.isFinite(ratingValue)) {
-        productData.rating = ratingValue;
-      }
 
       console.log('📋 Estado del formulario antes de enviar:', productForm);
       console.log('📤 Enviando producto a la base de datos:', productData);
@@ -386,10 +308,7 @@ export default function Admin() {
           subcategory: '',
           condition: '',
           images: [],
-          imagePreviews: [],
-
-          pdfUrl: '',
-          rating: ''
+          imagePreviews: []
         });
         setMainImageIndex(0);
         setImageErrors({});
@@ -440,10 +359,7 @@ export default function Admin() {
       subcategory: product.subcategory,
       condition: product.condition,
       images: product.images || [],
-      imagePreviews: [], // No hay previews para productos existentes
-
-      pdfUrl: product.pdfUrl || '',
-      rating: product.rating ?? ''
+      imagePreviews: [] // No hay previews para productos existentes
     });
     setMainImageIndex(product.mainImageIndex || 0);
     setImageErrors({});
@@ -468,21 +384,11 @@ export default function Admin() {
     }
 
     try {
-      const isRepuesto = isRepuestoForm(productForm);
-      const { rating, ...productFields } = productForm;
-      const ratingValue = rating !== '' ? parseFloat(rating) : null;
-
       // Agregar información de imagen principal al producto
       const productData = {
-        ...productFields,
+        ...productForm,
         mainImageIndex: mainImageIndex
       };
-
-      if (!isRepuesto && Number.isFinite(ratingValue)) {
-        productData.rating = ratingValue;
-      } else if (isRepuesto) {
-        productData.rating = null;
-      }
 
       const result = await updateProduct(
         editingProduct.id,
@@ -501,10 +407,7 @@ export default function Admin() {
           subcategory: '',
           condition: '',
           images: [],
-          imagePreviews: [],
-
-          pdfUrl: '',
-          rating: ''
+          imagePreviews: []
         });
         setMainImageIndex(0);
         setImageErrors({});
@@ -732,29 +635,6 @@ export default function Admin() {
                     />
                       </div>
 
-                  {/* Calificación (solo maquinarias) */}
-                  {!isRepuestoForm(productForm) && (
-                    <div>
-                      <label className="block text-white font-medium mb-2">
-                        Calificación
-                      </label>
-                      <input
-                        type="number"
-                        name="rating"
-                        value={productForm.rating}
-                        onChange={handleInputChange}
-                        min="0"
-                        max="5"
-                        step="0.1"
-                        className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
-                        placeholder="Ej: 4.5"
-                      />
-                      <p className="text-xs text-[#adb5bd] mt-2">
-                        Solo para maquinarias (0 a 5)
-                      </p>
-                    </div>
-                  )}
-
                   {/* Condición (Nuevo/Usado) */}
                   <div>
                     <label className="block text-white font-medium mb-2">
@@ -877,54 +757,6 @@ export default function Admin() {
                           ))}
                         </div>
                       </div>
-                    )}
-                  </div>
-
-                  {/* PDF de Ficha Técnica */}
-                  <div className="mt-6">
-                    <label className="block text-white font-medium mb-2">
-                      Ficha Técnica (PDF)
-                      <span className="text-sm text-[#adb5bd] ml-2">
-                        (Opcional - máximo 10MB)
-                      </span>
-                    </label>
-                    <input
-                      type="file"
-                      accept=".pdf"
-                      onChange={handlePDFUpload}
-                      disabled={imageUploading}
-                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none disabled:opacity-50"
-                    />
-                    
-                    {/* Mostrar PDF actual */}
-                    {productForm.pdfUrl && (
-                      <div className="mt-3 p-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center mr-3">
-                              <span className="text-white text-xs font-bold">PDF</span>
-                            </div>
-                            <div>
-                              <p className="text-white text-sm font-medium">
-                                {productForm.pdfFile ? productForm.pdfFile.name : 'Ficha Técnica'}
-                              </p>
-                              <p className="text-[#adb5bd] text-xs">PDF guardado en Vercel Blob</p>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={removePDF}
-                            className="text-red-400 hover:text-red-300"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Mostrar errores de PDF */}
-                    {imageErrors.pdfError && (
-                      <p className="mt-2 text-red-400 text-sm">{imageErrors.pdfError}</p>
                     )}
                   </div>
 
@@ -1419,29 +1251,6 @@ export default function Admin() {
                   />
                 </div>
 
-                {/* Calificación (solo maquinarias) */}
-                {!isRepuestoForm(productForm) && (
-                  <div>
-                    <label className="block text-white font-medium mb-2">
-                      Calificación
-                    </label>
-                    <input
-                      type="number"
-                      name="rating"
-                      value={productForm.rating}
-                      onChange={handleInputChange}
-                      min="0"
-                      max="5"
-                      step="0.1"
-                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white placeholder-[#adb5bd] focus:border-[#ff6b35] focus:outline-none"
-                      placeholder="Ej: 4.5"
-                    />
-                    <p className="text-xs text-[#adb5bd] mt-2">
-                      Solo para maquinarias (0 a 5)
-                    </p>
-                  </div>
-                )}
-
                 {/* Condición (Nuevo/Usado) */}
                 <div>
                   <label className="block text-white font-medium mb-2">
@@ -1567,53 +1376,6 @@ export default function Admin() {
                   )}
                 </div>
 
-                {/* PDF de Ficha Técnica */}
-                <div className="mt-6">
-                  <label className="block text-white font-medium mb-2">
-                    Ficha Técnica (PDF)
-                    <span className="text-sm text-[#adb5bd] ml-2">
-                      (Opcional - máximo 10MB)
-                    </span>
-                  </label>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handlePDFUpload}
-                    disabled={imageUploading}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none disabled:opacity-50"
-                  />
-                  
-                  {/* Mostrar PDF actual */}
-                  {productForm.pdfUrl && (
-                    <div className="mt-3 p-3 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center mr-3">
-                            <span className="text-white text-xs font-bold">PDF</span>
-                          </div>
-                            <div>
-                              <p className="text-white text-sm font-medium">
-                                {productForm.pdfFile ? productForm.pdfFile.name : 'Ficha Técnica'}
-                              </p>
-                              <p className="text-[#adb5bd] text-xs">PDF guardado en Vercel Blob</p>
-                            </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={removePDF}
-                          className="text-red-400 hover:text-red-300"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Mostrar errores de PDF */}
-                  {imageErrors.pdfError && (
-                    <p className="mt-2 text-red-400 text-sm">{imageErrors.pdfError}</p>
-                  )}
-                </div>
 
                 {/* Botones */}
                 <div className="flex space-x-4">
