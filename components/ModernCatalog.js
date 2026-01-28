@@ -243,8 +243,13 @@ export function ModernCatalog() {
           });
           
           if (maquinas.length > 0) {
-            // Transformar al formato esperado y seleccionar los primeros 4
-            const transformedProducts = maquinas.slice(0, 4).map(product => {
+            const fixedMachines = maquinas.filter(product => product.fixedFeatured);
+            const featuredSource = fixedMachines.length > 0 ? fixedMachines : maquinas;
+            
+            // Transformar al formato esperado y seleccionar las 3 requeridas
+            const transformedProducts = featuredSource
+              .slice(0, 3)
+              .map(product => {
               // Convertir characteristics a specs y features
               // Si characteristics es un string, intentar parsearlo o dividirlo por líneas
               let specs = {};
@@ -321,7 +326,7 @@ export function ModernCatalog() {
                 defaultProducts.push(product);
               });
             });
-            setFeaturedProducts(defaultProducts.slice(0, 4));
+            setFeaturedProducts(defaultProducts.slice(0, 3));
           }
         } else {
           // Si no hay datos en la API, usar datos por defecto
@@ -331,7 +336,7 @@ export function ModernCatalog() {
               defaultProducts.push(product);
             });
           });
-          setFeaturedProducts(defaultProducts.slice(0, 4));
+          setFeaturedProducts(defaultProducts.slice(0, 3));
         }
         setLoading(false);
       } catch (error) {
@@ -418,15 +423,15 @@ export function ModernCatalog() {
         </div>
 
         {/* Productos Destacados Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 justify-items-center">
           {featuredProducts.map((product, index) => (
-            <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-[#ff6b35]/30 overflow-hidden bg-gradient-to-br from-white to-[#f8f9fa]">
+            <Card key={index} className="group w-full max-w-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-[#ff6b35]/30 overflow-hidden bg-gradient-to-br from-white to-[#f8f9fa]">
               {/* Product Image */}
               <div className="relative aspect-[3/2] overflow-hidden cursor-pointer" onClick={() => handleImageClick(product.image, product.name)}>
                 <ImageWithFallback
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-transparent to-transparent"></div>
                 

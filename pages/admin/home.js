@@ -16,7 +16,8 @@ import {
   LogOut,
   Settings,
   Search,
-  Filter
+  Filter,
+  Award
 } from 'lucide-react';
 
 export default function Admin() {
@@ -99,11 +100,27 @@ export default function Admin() {
   // Estados para manejo de imágenes
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [imageErrors, setImageErrors] = useState({});
+  const [fixedSelection, setFixedSelection] = useState([]);
+  const [savingFixed, setSavingFixed] = useState(false);
 
   const isRepuestoForm = (form) => {
     const subcategory = (form.subcategory || '').toLowerCase();
     const title = (form.title || '').toLowerCase();
     const description = (form.description || '').toLowerCase();
+
+    return (
+      subcategory.includes('repuesto') ||
+      subcategory.includes('repuestos') ||
+      subcategory.includes('spare') ||
+      title.includes('repuesto') ||
+      description.includes('repuesto')
+    );
+  };
+
+  const isRepuestoProduct = (product) => {
+    const subcategory = (product.subcategory || '').toLowerCase();
+    const title = (product.title || '').toLowerCase();
+    const description = (product.description || '').toLowerCase();
 
     return (
       subcategory.includes('repuesto') ||
@@ -121,12 +138,55 @@ export default function Admin() {
     }
   }, [user, loading, router]);
 
+  useEffect(() => {
+    if (!products || products.length === 0) return;
+    const fixed = products.filter((product) => product.fixedFeatured).map((product) => product.id);
+    setFixedSelection(fixed);
+  }, [products]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProductForm(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleToggleFixed = (productId) => {
+    setFixedSelection((prev) => {
+      if (prev.includes(productId)) {
+        return prev.filter((id) => id !== productId);
+      }
+      if (prev.length >= 3) {
+        return prev;
+      }
+      return [...prev, productId];
+    });
+  };
+
+  const handleSaveFixed = async () => {
+    if (fixedSelection.length !== 3) {
+      alert('Debes seleccionar exactamente 3 máquinas fijas.');
+      return;
+    }
+
+    setSavingFixed(true);
+    try {
+      const machines = products.filter((product) => !isRepuestoProduct(product));
+      await Promise.all(
+        machines.map((product) =>
+          updateProduct(product.id, {
+            fixedFeatured: fixedSelection.includes(product.id)
+          })
+        )
+      );
+      alert('Máquinas fijas actualizadas correctamente.');
+    } catch (error) {
+      console.error('Error guardando máquinas fijas:', error);
+      alert('Error al guardar las máquinas fijas.');
+    } finally {
+      setSavingFixed(false);
+    }
   };
 
   const handleImageUpload = async (e) => {
@@ -499,6 +559,8 @@ export default function Admin() {
     return matchesSearch && matchesCondition && matchesSubcategory;
   });
 
+  const machineProducts = products.filter((product) => !isRepuestoProduct(product));
+
   // Obtener subcategorías únicas para el filtro
   const getUniqueSubcategories = () => {
     const subcategories = new Set();
@@ -581,6 +643,17 @@ export default function Admin() {
                 <Settings className="h-4 w-4" />
                 <span>Categorías</span>
                 </button>
+              <button
+                onClick={() => setActiveTab('fixed')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                  activeTab === 'fixed'
+                    ? 'bg-[#ff6b35] text-white'
+                    : 'text-[#adb5bd] hover:text-white'
+                }`}
+              >
+                <Award className="h-4 w-4" />
+                <span>Fijas</span>
+              </button>
             </div>
           </div>
 
@@ -1041,9 +1114,9 @@ export default function Admin() {
                             </button>
                             <button 
                               onClick={() => handleDeleteProduct(product)}
-                              disabled={deletingProduct === product.id}
+                              disabled={deletingProduct === product.id || product.fixedFeatured}
                               className="text-red-400 hover:text-red-300 p-2 hover:bg-[#2d2d2d] rounded transition-colors disabled:opacity-50"
-                              title="Eliminar producto"
+                              title={product.fixedFeatured ? 'No se puede eliminar un producto fijo' : 'Eliminar producto'}
                             >
                               {deletingProduct === product.id ? (
                                 <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></div>
@@ -1057,6 +1130,85 @@ export default function Admin() {
                     ))
                   )}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Fixed Products Tab */}
+          {activeTab === 'fixed' && (
+            <div className="bg-[#2d2d2d] border border-[#ff6b35]/20 rounded-xl p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-white flex items-center">
+                    <Award className="h-5 w-5 mr-2" />
+                    Máquinas Fijas (3)
+                  </h2>
+                  <p className="text-[#adb5bd] text-sm">
+                    Selecciona las 3 máquinas que se verán fijas en la portada. No se pueden borrar.
+                  </p>
+                </div>
+                <div className="text-sm text-[#adb5bd]">
+                  Seleccionadas: <span className="text-white font-semibold">{fixedSelection.length}</span>/3
+                </div>
+              </div>
+
+              <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+                {machineProducts.length === 0 ? (
+                  <p className="text-[#adb5bd] text-center py-6">No hay máquinas disponibles</p>
+                ) : (
+                  machineProducts.map((product) => {
+                    const isSelected = fixedSelection.includes(product.id);
+                    const isDisabled = !isSelected && fixedSelection.length >= 3;
+                    return (
+                      <label
+                        key={product.id}
+                        className={`flex items-center gap-4 p-4 rounded-lg border transition-colors ${
+                          isSelected
+                            ? 'border-[#ff6b35] bg-[#1a1a1a]'
+                            : 'border-[#ff6b35]/10 bg-[#1a1a1a]/60'
+                        } ${isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:border-[#ff6b35]/40'}`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          disabled={isDisabled}
+                          onChange={() => handleToggleFixed(product.id)}
+                          className="h-4 w-4 accent-[#ff6b35]"
+                        />
+                        <div className="flex items-center gap-4 flex-1">
+                          {product.images && product.images.length > 0 ? (
+                            <img
+                              src={product.images[product.mainImageIndex || 0]}
+                              alt={product.title}
+                              className="w-16 h-16 object-cover rounded-lg border border-[#ff6b35]/10"
+                              onError={(e) => {
+                                e.target.src = '/Assets/logojcp.png';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-16 h-16 bg-[#2d2d2d] rounded-lg flex items-center justify-center">
+                              <Package className="h-6 w-6 text-[#adb5bd]" />
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <div className="text-white font-semibold truncate">{product.title}</div>
+                            <div className="text-[#adb5bd] text-sm truncate">{product.subcategory}</div>
+                          </div>
+                        </div>
+                      </label>
+                    );
+                  })
+                )}
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-end">
+                <button
+                  onClick={handleSaveFixed}
+                  disabled={savingFixed || fixedSelection.length !== 3}
+                  className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {savingFixed ? 'Guardando...' : 'Guardar Fijas'}
+                </button>
               </div>
             </div>
           )}

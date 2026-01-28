@@ -145,8 +145,9 @@ export default function Home() {
           <HeroSection />
           <AboutSection />
           <HistoryGallery />
+            <ModernCatalog />
           <PartsAndServicesSection />
-          <ModernCatalog />
+        
           <ContactSection />
         </main>
         <Footer />

@@ -142,7 +142,8 @@ async function handleCreateProduct(req, res) {
       images,
       pdfUrl,
       mainImageIndex,
-      rating
+      rating,
+      fixedFeatured
     } = req.body;
     
     console.log('📥 Datos recibidos en API:', {
@@ -155,7 +156,8 @@ async function handleCreateProduct(req, res) {
       imagesCount: Array.isArray(images) ? images.length : 0,
       hasPdf: !!pdfUrl,
       mainImageIndex: mainImageIndex || 0,
-      rating
+      rating,
+      fixedFeatured
     });
     
     // Validar que db esté inicializado
@@ -208,6 +210,7 @@ async function handleCreateProduct(req, res) {
       pdfUrl: pdfUrl || '',
       mainImageIndex: parseInt(mainImageIndex) || 0,
       ...(Number.isFinite(parseFloat(rating)) ? { rating: parseFloat(rating) } : {}),
+      fixedFeatured: fixedFeatured === true,
       status: 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -405,6 +408,7 @@ async function handleUpdateProduct(req, res) {
         const parsedRating = parseFloat(updateData.rating);
         updateFields.rating = Number.isNaN(parsedRating) ? null : parsedRating;
       }
+      if (updateData.fixedFeatured !== undefined) updateFields.fixedFeatured = !!updateData.fixedFeatured;
       if (updateData.status !== undefined) updateFields.status = updateData.status;
       
       // Siempre actualizar updatedAt
@@ -506,6 +510,13 @@ async function handleDeleteProduct(req, res) {
       }
       
       const productData = productDoc.data();
+      if (productData?.fixedFeatured) {
+        return res.status(400).json({
+          success: false,
+          error: 'No se puede eliminar un producto fijo. Primero quítalo de la sección Fijas.',
+          code: 'FIXED_FEATURED'
+        });
+      }
       console.log(`✅ Producto encontrado: "${productData.title}" - Procediendo a eliminar...`);
       
       // Eliminar el documento directamente

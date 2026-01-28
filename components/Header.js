@@ -102,8 +102,8 @@ export function Header() {
   const landingPageNavItems = [
     { href: '/', label: 'Inicio', isAnchor: true },
     { href: '#nosotros', label: 'Nosotros', isAnchor: true },
-     { href: '#repuestos', label: 'Repuestos', isAnchor: true },
     { href: '#maquinas', label: 'Máquinas', isAnchor: true },
+    { href: '#repuestos', label: 'Repuestos', isAnchor: true },
     { href: '#contacto', label: 'Contacto', isAnchor: true }
   ];
 
@@ -133,7 +133,7 @@ export function Header() {
                 }}
                 className="flex items-center hover:scale-105 transition-transform duration-200 cursor-pointer"
               >
-                <OptimizedLogo className="mr-3" />
+                <OptimizedLogo className="mr-3 origin-center rotate-3 scale-x-150 scale-y-90" />
               </button>
             </div>
 
@@ -284,7 +284,7 @@ export function Header() {
                 }}
                 className="flex items-center hover:scale-105 transition-transform duration-200 cursor-pointer"
               >
-                <OptimizedLogo className="mr-3" />
+                <OptimizedLogo className="mr-3 origin-center rotate-45 scale-x-125 scale-y-90" />
                 <span className="text-white font-bold text-lg">JCP</span>
               </button>
               <button 

@@ -13,9 +13,9 @@ export function Footer() {
             {/* Brand */}
             <div className="flex items-center gap-4">
               <img 
-                src="/Assets/logojcp.png" 
+                src="/Assets/logojcp2.png" 
                 alt="JCP Maquinarias Logo" 
-                className="h-12 w-12 object-contain"
+                className="h-12 w-12 rotate-2 object-contain"
               />
               <div>
                 <h3 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight">

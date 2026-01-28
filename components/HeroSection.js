@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 export function HeroSection() {
   // Array de imágenes para desktop - fácil de expandir agregando más rutas aquí
   const images = [
-    "/Assets/home.png",
+    "/Assets/home-r.png",
     "/Assets/home2.png",
     "/Assets/home3.png",
     // "/Assets/home4.png",
@@ -56,7 +56,7 @@ export function HeroSection() {
 
       {/* Contenido centrado */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-        <div className="bg-black/55 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-2xl px-4 py-6 sm:px-6 sm:py-8">
+        <div className="bg-black/25 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-2xl px-4 py-6 sm:px-6 sm:py-8">
         {/* Título principal */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight tracking-tight">
           <span className="text-white drop-shadow-lg block mb-2">Fabricación de Máquinas</span>

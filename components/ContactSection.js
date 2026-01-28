@@ -170,7 +170,7 @@ Cordiales saludos`;
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <Card className="border-2 border-[#e9ecef] hover:border-[#ff6b35]/50 transition-all duration-300 shadow-xl hover:shadow-2xl">
@@ -326,89 +326,7 @@ Cordiales saludos`;
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-4">
-            <Card className="border-2 border-[#e9ecef] hover:border-[#ff6b35]/50 transition-all duration-300 shadow-xl">
-              <CardHeader className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] text-white py-3">
-                <CardTitle className="text-lg font-bold flex items-center space-x-2">
-                  <MessageSquare className="h-4 w-4" />
-                  <span>Información</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
-                    <MapPin className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Oficinas y Showroom</div>
-                    <div className="text-[#495057] text-xs leading-relaxed">
-                      Polígono Industrial Norte<br />
-                      Calle Maquinaria, 45<br />
-                      San Justo, Buenos Aires
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
-                    <Phone className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Teléfono</div>
-                    <a href="tel:01144410705" className="text-[#ff6b35] font-bold text-base hover:underline">
-                      011-4441-0705
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
-                    <Mail className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Email</div>
-                    <a 
-                      href="mailto:jcpmaquinasparapanaderias@outlook.com.ar" 
-                      className="text-[#ff6b35] font-bold text-xs break-all hover:underline"
-                    >
-                      jcpmaquinasparapanaderias@outlook.com.ar
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] rounded-lg p-2 flex-shrink-0">
-                    <Clock className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Horario de Atención</div>
-                    <div className="text-[#495057] text-xs space-y-0.5">
-                      <div>Lun - Vie: <span className="font-semibold">8:00 - 18:00</span></div>
-                      <div>Sábados: <span className="font-semibold">9:00 - 14:00</span></div>
-                      <div>Emergencias: <span className="font-semibold text-[#ff6b35]">24/7</span></div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Response Card */}
-            <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-white shadow-lg">
-              <CardContent className="p-4">
-                <div className="flex items-start space-x-3">
-                  <div className="bg-green-500 rounded-lg p-2 flex-shrink-0">
-                    <Zap className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-[#1a1a1a] mb-1 text-sm">Respuesta Rápida</div>
-                    <p className="text-[#495057] text-xs leading-relaxed">
-                      Usa WhatsApp para obtener respuesta inmediata o el formulario para solicitudes detalladas.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+         
         </div>
 
         {/* Success Modal */}

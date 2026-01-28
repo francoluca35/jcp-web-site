@@ -107,12 +107,12 @@ export function OptimizedLogo({ className = '', priority = true }) {
     <picture>
       {/* AVIF para navegadores modernos (mejor compresión) */}
       <source 
-        srcSet="/Assets/logojcp.png" 
+        srcSet="/Assets/logojcp2.png" 
         type="image/avif"
       />
       {/* WebP para navegadores compatibles */}
       <source 
-        srcSet="/Assets/logojcp.png" 
+        srcSet="/Assets/logojcp2.png" 
         type="image/webp"
       />
       {/* PNG optimizado como fallback */}

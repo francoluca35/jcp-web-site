@@ -256,9 +256,9 @@ const [productTitle, setProductTitle] = useState("");
               {/* Logo JCP - Centrado en móvil, derecha en desktop */}
               <div className="flex items-center justify-center sm:justify-end order-2 sm:order-2">
                 <img 
-                  src="/Assets/logojcp.png" 
+                  src="/Assets/logojcp2.png" 
                   alt="JCP Logo" 
-                  className="h-12 sm:h-14 lg:h-16 w-auto"
+                  className="h-12 sm:h-14 lg:h-16 w-auto rotate-3 scale-x-150 scale-y-90"
                 />
               </div>
               
