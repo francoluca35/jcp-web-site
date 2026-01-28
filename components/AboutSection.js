@@ -157,7 +157,7 @@ export function AboutSection() {
             <div className="grid grid-cols-2 gap-6">
               {[
                 { value: "89+", label: "Años de Experiencia", icon: Clock },
-                { value: "500+", label: "Clientes Satisfechos", icon: Users },
+                { value: "50+", label: "Clientes Satisfechos", icon: Users },
                 { value: "24/7", label: "Soporte Técnico", icon: Shield },
                 { value: "100%", label: "Garantía", icon: CheckCircle }
               ].map((stat, index) => (
