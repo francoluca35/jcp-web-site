@@ -102,8 +102,8 @@ export function Header() {
   const landingPageNavItems = [
     { href: '/', label: 'Inicio', isAnchor: true },
     { href: '#nosotros', label: 'Nosotros', isAnchor: true },
+     { href: '#repuestos', label: 'Repuestos', isAnchor: true },
     { href: '#maquinas', label: 'Máquinas', isAnchor: true },
-    { href: '#repuestos', label: 'Repuestos', isAnchor: true },
     { href: '#contacto', label: 'Contacto', isAnchor: true }
   ];
 

@@ -43,14 +43,11 @@ const [productDescription, setProductDescription] = useState("");
 const [productTitle, setProductTitle] = useState("");
 
   const [allProducts, setAllProducts] = useState([]);
-  const [allProductsIncludingRepuestos, setAllProductsIncludingRepuestos] = useState([]); // Todos los productos incluyendo repuestos
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [showRepuestos, setShowRepuestos] = useState(false); // Flag para mostrar repuestos cuando se busca uno específico
-
   // Cargar productos desde la base de datos
   useEffect(() => {
     const loadProducts = async () => {
@@ -72,22 +69,6 @@ const [productTitle, setProductTitle] = useState("");
         
         // Guardar todos los productos (incluyendo repuestos) para búsqueda por ID
         const allProductsData = result.data;
-        
-        // Filtrar solo máquinas (excluir repuestos) para mostrar por defecto
-        const maquinas = result.data.filter(product => {
-          const subcategory = (product.subcategory || '').toLowerCase();
-          const title = (product.title || '').toLowerCase();
-          const description = (product.description || '').toLowerCase();
-          
-          // Excluir productos que sean repuestos
-          const isRepuesto = subcategory.includes('repuesto') || 
-                            subcategory.includes('repuestos') ||
-                            title.includes('repuesto') ||
-                            description.includes('repuesto') ||
-                            subcategory.includes('spare');
-          
-          return !isRepuesto; // Solo incluir si NO es repuesto
-        });
         
         // Transformar todos los productos (máquinas y repuestos) para búsqueda
         const transformedAllProducts = allProductsData.map(product => {
@@ -119,35 +100,8 @@ const [productTitle, setProductTitle] = useState("");
           };
         });
         
-        // Transformar solo máquinas para mostrar por defecto
-        const transformedProducts = maquinas.map(product => {
-          const catalogFile = product.pdfUrl || '/Document/catalogo_maquinaria.pdf';
-          console.log(`🔍 Producto: ${product.title}`);
-          console.log(`📄 PDF URL: ${catalogFile}`);
-          console.log(`🌐 URL completa: ${catalogFile.startsWith('http') ? catalogFile : window.location.origin + catalogFile}`);
-          console.log(`✅ Tiene PDF específico: ${!!product.pdfUrl}`);
-          return {
-            id: product.id,
-            name: product.title,
-            description: product.description,
-            price: product.price,
-            condition: product.condition === 'nuevo' ? 'Nuevo' : 'Usado',
-            category: product.subcategory || 'Maquinarias', // Usar subcategoría como categoría
-            images: product.images || [],
-            mainImageIndex: product.mainImageIndex || 0,
-            characteristics: product.characteristics,
-            // Campos adicionales para compatibilidad
-            image: product.images && product.images.length > 0 
-              ? product.images[product.mainImageIndex || 0] 
-              : '/Assets/logojcp.png',
-            catalogFile: catalogFile // PDF del producto o por defecto
-          };
-        });
-        
-        console.log(`✅ Cargadas ${transformedProducts.length} máquinas (excluyendo repuestos)`);
         console.log(`✅ Cargados ${transformedAllProducts.length} productos totales (incluyendo repuestos)`);
-        setAllProducts(transformedProducts);
-        setAllProductsIncludingRepuestos(transformedAllProducts);
+        setAllProducts(transformedAllProducts);
         setLoading(false);
       } catch (error) {
         console.error('Error cargando productos:', error);
@@ -163,7 +117,7 @@ const [productTitle, setProductTitle] = useState("");
 
   // Detectar productId en la URL y hacer scroll al producto específico
   useEffect(() => {
-    if ((allProducts.length === 0 && allProductsIncludingRepuestos.length === 0) || loading) return;
+    if (allProducts.length === 0 || loading) return;
 
     // Obtener productId de la URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -171,20 +125,9 @@ const [productTitle, setProductTitle] = useState("");
 
     if (productId) {
       // Buscar el producto en todos los productos (incluyendo repuestos)
-      const foundProduct = allProductsIncludingRepuestos.find(p => p.id === productId || p.id.toString() === productId);
+      const foundProduct = allProducts.find(p => p.id === productId || p.id.toString() === productId);
       
       if (foundProduct) {
-        // Si es un repuesto y no está en la lista de productos mostrados, agregarlo temporalmente
-        const isNewRepuesto = foundProduct.isRepuesto && !allProducts.find(p => p.id === foundProduct.id);
-        
-        if (isNewRepuesto) {
-          setAllProducts(prev => [...prev, foundProduct]);
-          setShowRepuestos(true);
-        }
-
-        // Esperar un poco más si es un repuesto nuevo que se acaba de agregar
-        const scrollDelay = isNewRepuesto ? 1000 : 500;
-        
         setTimeout(() => {
           const productElement = document.getElementById(`product-${productId}`);
           if (productElement) {
@@ -209,10 +152,10 @@ const [productTitle, setProductTitle] = useState("");
             const newUrl = window.location.pathname;
             window.history.replaceState({}, '', newUrl);
           }
-        }, scrollDelay);
+        }, 500);
       }
     }
-  }, [allProducts, allProductsIncludingRepuestos, loading]);
+  }, [allProducts, loading]);
 
   // Detectar scroll para mostrar/ocultar botón de ir arriba
   useEffect(() => {
