@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState('products');
+  const [activeTab, setActiveTab] = useState('new-product');
   const { user, loading, logout } = useAuth();
   
   // Manejar errores en los hooks
@@ -540,6 +540,17 @@ export default function Admin() {
           <div className="mb-8">
             <div className="flex space-x-1 bg-[#2d2d2d] p-1 rounded-lg">
               <button
+                onClick={() => setActiveTab('new-product')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                  activeTab === 'new-product'
+                    ? 'bg-[#ff6b35] text-white'
+                    : 'text-[#adb5bd] hover:text-white'
+                }`}
+              >
+                <Plus className="h-4 w-4" />
+                <span>Nuevo producto</span>
+              </button>
+              <button
                 onClick={() => setActiveTab('products')}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   activeTab === 'products'
@@ -576,9 +587,8 @@ export default function Admin() {
           </div>
 
           {/* Products Tab */}
-          {activeTab === 'products' && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Product Form */}
+          {activeTab === 'new-product' && (
+            <div className="space-y-8">
               <div className="bg-[#2d2d2d] border border-[#ff6b35]/20 rounded-xl p-6">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center">
                   <Plus className="h-5 w-5 mr-2" />
@@ -795,8 +805,11 @@ export default function Admin() {
                   </button>
                 </form>
               </div>
+            </div>
+          )}
 
-              {/* Products List */}
+          {activeTab === 'products' && (
+            <div className="space-y-8">
               <div className="bg-[#2d2d2d] border border-[#ff6b35]/20 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold text-white">
