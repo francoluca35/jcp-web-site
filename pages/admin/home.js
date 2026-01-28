@@ -467,11 +467,26 @@ export default function Admin() {
   // Obtener subcategorías únicas para el filtro
   const getUniqueSubcategories = () => {
     const subcategories = new Set();
+
+    const addSubcategoryIfValid = (subcategory) => {
+      if (subcategory && subcategory.toString().trim()) {
+        subcategories.add(subcategory);
+      }
+    };
+
+    if (filterCondition === 'all') {
+      (categories?.nuevo || []).forEach(addSubcategoryIfValid);
+      (categories?.usado || []).forEach(addSubcategoryIfValid);
+    } else {
+      (categories?.[filterCondition] || []).forEach(addSubcategoryIfValid);
+    }
+
     products.forEach(product => {
       if (filterCondition === 'all' || product.condition === filterCondition) {
-        subcategories.add(product.subcategory);
+        addSubcategoryIfValid(product.subcategory);
       }
     });
+
     return Array.from(subcategories).sort();
   };
 
@@ -811,9 +826,9 @@ export default function Admin() {
                   </div>
 
                   {/* Filtros */}
-                  <div className="flex flex-wrap gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
                     {/* Filtro por condición */}
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 min-w-0">
                       <Filter className="h-4 w-4 text-[#ff6b35]" />
                       <select
                         value={filterCondition}
@@ -821,7 +836,7 @@ export default function Admin() {
                           setFilterCondition(e.target.value);
                           setFilterSubcategory('all'); // Reset subcategory filter
                         }}
-                        className="px-3 py-2 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                        className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
                       >
                         <option value="all">Todas las condiciones</option>
                         <option value="nuevo">Nuevo</option>
@@ -830,12 +845,12 @@ export default function Admin() {
                     </div>
 
                     {/* Filtro por subcategoría */}
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 min-w-0">
                       <Package className="h-4 w-4 text-[#ff6b35]" />
                       <select
                         value={filterSubcategory}
                         onChange={(e) => setFilterSubcategory(e.target.value)}
-                        className="px-3 py-2 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
+                        className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#ff6b35]/20 rounded-lg text-white focus:border-[#ff6b35] focus:outline-none"
                       >
                         <option value="all">Todas las subcategorías</option>
                         {getUniqueSubcategories().map((sub) => (
@@ -852,7 +867,7 @@ export default function Admin() {
                           setFilterCondition('all');
                           setFilterSubcategory('all');
                         }}
-                        className="px-4 py-2 bg-[#6c757d] hover:bg-[#5a6268] text-white rounded-lg transition-colors text-sm"
+                        className="px-4 py-2 bg-[#6c757d] hover:bg-[#5a6268] text-white rounded-lg transition-colors text-sm w-full"
                       >
                         Limpiar filtros
                       </button>

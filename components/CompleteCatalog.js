@@ -50,9 +50,7 @@ export function CompleteCatalog() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [selectedCondition, setSelectedCondition] = useState("Todos");
-  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
-const [productDescription, setProductDescription] = useState("");
-const [productTitle, setProductTitle] = useState("");
+  const [expandedText, setExpandedText] = useState({});
 
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -179,6 +177,13 @@ const [productTitle, setProductTitle] = useState("");
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const getProductDescription = (product) => {
+    const description = (product?.description || '').trim();
+    if (description) return description;
+    const characteristics = (product?.characteristics || '').trim();
+    return characteristics;
+  };
 
   // Filtrar productos de forma segura
   const filteredProducts = allProducts.filter(product => {
@@ -382,7 +387,19 @@ const [productTitle, setProductTitle] = useState("");
           {/* Contenido principal - Grid de productos */}
           <div className="flex-1">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
+              {filteredProducts.map((product) => {
+                const fullDescription = getProductDescription(product);
+                const displayDescription = fullDescription || 'Sin descripción';
+                const showMoreDescription = fullDescription.length > 50;
+                const fullCharacteristics = (product?.characteristics || '').trim();
+                const displayCharacteristics = fullCharacteristics || 'Sin características';
+                const showMoreCharacteristics = fullCharacteristics.length > 50;
+                const descriptionKey = `${product.id}-description`;
+                const characteristicsKey = `${product.id}-characteristics`;
+                const isDescriptionExpanded = !!expandedText[descriptionKey];
+                const isCharacteristicsExpanded = !!expandedText[characteristicsKey];
+
+                return (
                 <Card key={product.id} id={`product-${product.id}`} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
                                      {/* Galería de imágenes del producto */}
                    <div className="relative">
@@ -418,44 +435,51 @@ const [productTitle, setProductTitle] = useState("");
                     </h3>
 
                     {/* Descripción */}
-              <div className="text-sm text-gray-600 mb-4">
-  <p className="line-clamp-2">
-    {product.description}
-  </p>
+                    <div className="mb-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-1">
+                        Descripción
+                      </p>
+                      <p className={`text-sm text-gray-700 ${isDescriptionExpanded ? '' : 'line-clamp-2'}`}>
+                        {displayDescription}
+                      </p>
 
-  {product.description && product.description.length > 120 && (
-    <button
-      onClick={() => {
-        setProductDescription(product.description);
-        setProductTitle(product.name);
-        setShowDescriptionModal(true);
-      }}
-      className="text-orange-600 font-semibold hover:underline mt-1"
-    >
-      Ver más
-    </button>
-  )}
+                      {showMoreDescription && (
+                        <button
+                          onClick={() =>
+                            setExpandedText((prev) => ({
+                              ...prev,
+                              [descriptionKey]: !prev[descriptionKey]
+                            }))
+                          }
+                          className="text-orange-600 font-semibold hover:underline mt-1 text-sm"
+                        >
+                          {isDescriptionExpanded ? 'Ver menos' : 'Ver descripción completa'}
+                        </button>
+                      )}
                     </div>
-                    {showDescriptionModal && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg max-w-lg w-full p-6 shadow-lg">
-      <h2 className="text-xl font-bold mb-4">{productTitle}</h2>
 
-      <p className="text-gray-700 whitespace-pre-line">
-        {productDescription}
-      </p>
-
-      <div className="flex justify-end mt-6">
-        <Button
-          className="bg-gray-900 hover:bg-orange-600 text-white"
-          onClick={() => setShowDescriptionModal(false)}
-        >
-          Cerrar
-        </Button>
-      </div>
-    </div>
-  </div>
-)}
+                    {/* Características */}
+                    <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-1">
+                        Características
+                      </p>
+                      <p className={`text-sm text-gray-700 ${isCharacteristicsExpanded ? '' : 'line-clamp-2'}`}>
+                        {displayCharacteristics}
+                      </p>
+                      {showMoreCharacteristics && (
+                        <button
+                          onClick={() =>
+                            setExpandedText((prev) => ({
+                              ...prev,
+                              [characteristicsKey]: !prev[characteristicsKey]
+                            }))
+                          }
+                          className="text-orange-600 font-semibold hover:underline mt-1 text-sm"
+                        >
+                          {isCharacteristicsExpanded ? 'Ver menos' : 'Ver características completas'}
+                        </button>
+                      )}
+                    </div>
 
 
 
@@ -514,7 +538,8 @@ const [productTitle, setProductTitle] = useState("");
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              );
+            })}
             </div>
 
             {/* Mensaje cuando no hay productos */}
