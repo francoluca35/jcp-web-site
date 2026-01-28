@@ -7,7 +7,6 @@ import {
   Filter,
   MapPin,
   Eye,
-  MessageCircle,
   ArrowLeft,
   ArrowUp
 } from "lucide-react";
@@ -15,6 +14,19 @@ import { useState, useEffect } from "react";
 import { ContactModal } from "./ContactModal";
 import { ImageGallery } from "./ImageGallery";
 
+const WhatsAppIcon = ({ className = "" }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fill="currentColor"
+      d="M20.52 3.48A11.8 11.8 0 0 0 12.02 0C5.5 0 .2 5.3.2 11.82c0 2.08.54 4.12 1.56 5.93L0 24l6.4-1.68a11.82 11.82 0 0 0 5.62 1.43h.01c6.52 0 11.82-5.3 11.82-11.82 0-3.16-1.23-6.14-3.33-8.45ZM12.03 21.1h-.01a9.3 9.3 0 0 1-4.74-1.3l-.34-.2-3.8 1 1.01-3.7-.22-.36a9.2 9.2 0 0 1-1.42-4.96c0-5.07 4.12-9.2 9.2-9.2 2.46 0 4.77.96 6.5 2.7a9.13 9.13 0 0 1 2.69 6.5c0 5.08-4.13 9.2-9.2 9.2Zm5.35-6.95c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.96 1.17-.18.2-.36.23-.66.08-.3-.15-1.27-.47-2.42-1.49-.9-.8-1.5-1.78-1.68-2.08-.18-.3-.02-.46.14-.61.13-.13.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.07-.15-.68-1.64-.93-2.24-.24-.58-.48-.5-.68-.51-.17-.01-.38-.01-.58-.01-.2 0-.53.08-.8.38-.28.3-1.06 1.03-1.06 2.5 0 1.48 1.08 2.91 1.23 3.11.15.2 2.12 3.25 5.14 4.56.72.31 1.29.5 1.73.64.73.23 1.4.2 1.93.12.59-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.07-.12-.27-.2-.57-.35Z"
+    />
+  </svg>
+);
 // Función para formatear el precio
 const formatPrice = (price) => {
   // Si el precio es null, undefined, cadena vacía, o 0, mostrar "A consultar"
@@ -496,7 +508,7 @@ const [productTitle, setProductTitle] = useState("");
                          size="sm"
                          onClick={() => handleContact(product)}
                        >
-                        <MessageCircle className="h-4 w-4 mr-1" />
+                        <WhatsAppIcon className="h-4 w-4 mr-1" />
                          Contactar
                        </Button>
                     </div>
