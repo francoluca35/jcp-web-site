@@ -7,7 +7,7 @@ import {
   Filter,
   MapPin,
   Eye,
-  ShoppingCart,
+  MessageCircle,
   ArrowLeft,
   ArrowUp
 } from "lucide-react";
@@ -276,7 +276,7 @@ const [productTitle, setProductTitle] = useState("");
                 
                 <div className="flex-1 min-w-0">
                   <h1 className="text-xl sm:text-2xl lg:text-3xl text-center font-bold text-white leading-tight">
-                    Catálogo de Herramientas, Maquinarias y Repuestos
+                    Catálogo de Maquinarias, Repuestos y utiles
                   </h1>
                   <p className="text-sm sm:text-base text-center text-white mt-1 leading-relaxed">
                     Encuentra el equipo perfecto para tu panadería. Productos nuevos y usados de la mejor calidad.
@@ -496,7 +496,7 @@ const [productTitle, setProductTitle] = useState("");
                          size="sm"
                          onClick={() => handleContact(product)}
                        >
-                         <ShoppingCart className="h-4 w-4 mr-1" />
+                        <MessageCircle className="h-4 w-4 mr-1" />
                          Contactar
                        </Button>
                     </div>
