@@ -528,7 +528,7 @@ export function CompleteCatalog() {
                           : 'Catálogo'}
                       </Button> */}
                                              <Button 
-                         className="flex-1 text-sm text-white bg-gray-900 hover:bg-orange-600"
+                         className="flex-1 text-sm text-white bg-gray-900 hover:bg-green-600"
                          size="sm"
                          onClick={() => handleContact(product)}
                        >
