@@ -1,4 +1,5 @@
-import Head from 'next/head'
+import SEOHead from '../components/SEOHead'
+import { seoConfig } from '../seo-config'
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 import { Button } from "../components/ui/button"
@@ -69,58 +70,40 @@ export default function HornosIndustriales() {
 
   return (
     <>
-      <Head>
-        <title>Hornos Industriales para Panadería | Rotativos y Convector Argentina | JCP</title>
-        <meta name="description" content="Catálogo completo de hornos industriales para panadería: rotativos, convector y de convección. Capacidades de 50kg a 100kg/h. Especificaciones técnicas detalladas, precios y asesoramiento especializado en Argentina." />
-        <meta name="keywords" content="hornos industriales panadería, hornos rotativos argentina, hornos convector industriales, horno panadero 50 kg, especificaciones técnicas hornos, consumo gas horno industrial, guía compra horno panadero, hornos 220v 380v" />
-        <meta name="robots" content="index, follow" />
-        <meta name="language" content="es-AR" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Hornos Industriales para Panadería | Rotativos y Convector Argentina" />
-        <meta property="og:description" content="Catálogo completo de hornos industriales con especificaciones técnicas detalladas. Capacidades de 50kg a 100kg/h para panaderías." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://maquinariasjcp.netlify.app/hornos-industriales" />
-        <meta property="og:locale" content="es_AR" />
-        
-        {/* Canonical */}
-        <link rel="canonical" href="https://maquinariasjcp.netlify.app/hornos-industriales" />
-        
-        {/* Structured Data - Product Collection */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              "name": "Hornos Industriales para Panadería",
-              "description": "Catálogo completo de hornos industriales para panaderías con especificaciones técnicas detalladas",
-              "url": "https://maquinariasjcp.netlify.app/hornos-industriales",
-              "mainEntity": {
-                "@type": "ItemList",
-                "numberOfItems": 3,
-                "itemListElement": hornosData.map((item, index) => ({
-                  "@type": "ListItem",
-                  "position": index + 1,
-                  "item": {
-                    "@type": "Product",
-                    "name": item.name,
-                    "description": `Horno industrial con capacidad de ${item.capacity}`,
-                    "category": "Hornos Industriales",
-                    "brand": "JCP Maquinarias",
-                    "offers": {
-                      "@type": "Offer",
-                      "price": item.price,
-                      "priceCurrency": "ARS",
-                      "availability": "https://schema.org/InStock"
-                    }
-                  }
-                }))
+      <SEOHead
+        title={seoConfig.pages.hornos.title}
+        description={seoConfig.pages.hornos.description}
+        keywords={seoConfig.pages.hornos.keywords}
+        canonicalUrl={`${seoConfig.company.url}/hornos-industriales`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Hornos Industriales para Panadería",
+          "description": "Catálogo completo de hornos industriales para panaderías con especificaciones técnicas detalladas",
+          "url": `${seoConfig.company.url}/hornos-industriales`,
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": 3,
+            "itemListElement": hornosData.map((item, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "Product",
+                "name": item.name,
+                "description": `Horno industrial con capacidad de ${item.capacity}`,
+                "category": "Hornos Industriales",
+                "brand": "JCP Maquinarias",
+                "offers": {
+                  "@type": "Offer",
+                  "price": item.price,
+                  "priceCurrency": "ARS",
+                  "availability": "https://schema.org/InStock"
+                }
               }
-            })
-          }}
-        />
-      </Head>
+            }))
+          }
+        }}
+      />
       
       <div className="min-h-screen bg-[#f8f9fa]" lang="es">
         <Header />

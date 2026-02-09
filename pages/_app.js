@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import Head from 'next/head'
+import WebVitals from '../components/WebVitals'
 
 export default function App({ Component, pageProps }) {
   return (
@@ -26,55 +27,10 @@ export default function App({ Component, pageProps }) {
         <meta name="theme-color" content="#1a1a1a" />
         <meta name="color-scheme" content="light dark" />
         
-        {/* Structured Data - Organization */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "JCP Maquinarias",
-              "url": "https://maquinariasjcp.netlify.app",
-              "logo": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
-              "description": "Líderes en maquinaria industrial para panaderías. Hornos, amasadoras, repuestos y servicio técnico 24/7.",
-              "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "AR"
-              },
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+54-11-6396-2947",
-                "contactType": "customer service"
-              }
-            })
-          }}
-        />
-        
-        {/* Structured Data - WebSite */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "JCP Maquinarias",
-              "url": "https://maquinariasjcp.netlify.app",
-              "description": "Catálogo completo de maquinaria industrial para panaderías en Argentina",
-              "publisher": {
-                "@type": "Organization",
-                "name": "JCP Maquinarias"
-              },
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://maquinariasjcp.netlify.app/catalog?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
-            })
-          }}
-        />
       </Head>
       
       <Component {...pageProps} />
+      <WebVitals />
     </>
   )
 }

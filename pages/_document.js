@@ -10,6 +10,10 @@ export default function Document() {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JCP Maquinarias" />
+        <meta
+          name="google-site-verification"
+          content="0_y9ramkSULynQRxCiveQiNgnMafq5ejYYkmw_eCQ7o"
+        />
         
         {/* Preload de fuentes críticas */}
         <link

@@ -88,6 +88,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
           alt={`${productName} - Imagen ${currentImageIndex + 1}`}
           className="w-full h-full object-cover transition-transform duration-500"
           loading="lazy"
+          aria-live="polite"
         />
         
         {/* Overlay con botón de galería */}
@@ -96,6 +97,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
             onClick={openModal}
             className="opacity-0 group-hover:opacity-100 bg-white/90 hover:bg-white text-gray-900 rounded-full p-2 transition-all duration-300"
             size="sm"
+            aria-label={`Abrir galería de imágenes de ${productName}`}
           >
             <Maximize2 className="h-4 w-4" />
           </Button>
@@ -113,6 +115,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
                     ? "bg-white"
                     : "bg-white/50 hover:bg-white/75"
                 }`}
+                aria-label={`Ver imagen ${index + 1} de ${memoizedImages.length}`}
               />
             ))}
           </div>
@@ -125,6 +128,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
               onClick={prevImage}
               className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all duration-300"
               size="sm"
+              aria-label="Ver imagen anterior"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -132,6 +136,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
               onClick={nextImage}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all duration-300"
               size="sm"
+              aria-label="Ver siguiente imagen"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -141,13 +146,19 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
 
       {/* Modal de galería */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Galería de imágenes de ${productName}`}
+        >
           <div className="relative max-w-4xl max-h-full w-full">
             {/* Botón cerrar */}
             <Button
               onClick={closeModal}
               className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 z-10"
               size="sm"
+              aria-label="Cerrar galería"
             >
               <X className="h-5 w-5" />
             </Button>
@@ -158,6 +169,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
                 src={memoizedImages[modalImageIndex]}
                 alt={`${productName} - Imagen ${modalImageIndex + 1}`}
                 className="w-full h-auto max-h-[80vh] object-contain"
+                loading="eager"
               />
             </div>
 
@@ -168,6 +180,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
                   onClick={prevModalImage}
                   className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
                   size="sm"
+                  aria-label="Ver imagen anterior"
                 >
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
@@ -175,6 +188,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
                   onClick={nextModalImage}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2"
                   size="sm"
+                  aria-label="Ver siguiente imagen"
                 >
                   <ChevronRight className="h-6 w-6" />
                 </Button>
@@ -198,6 +212,7 @@ export function ImageGallery({ images, productName, mainImageIndex = 0 }) {
                         ? "border-white"
                         : "border-white/30 hover:border-white/60"
                     }`}
+                    aria-label={`Ver miniatura ${index + 1} de ${memoizedImages.length}`}
                   >
                     <ImageWithFallback
                       src={image}

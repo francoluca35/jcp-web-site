@@ -61,7 +61,7 @@ export function ContactSection() {
 Me gustaría recibir información sobre sus productos industriales para panadería.
 
 Cordiales saludos`;
-    const mailtoUrl = `mailto:jcpmaquinasparapanaderias@outlook.com.ar?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoUrl = `mailto:jcppanaderia@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(mailtoUrl, '_blank');
   };
 

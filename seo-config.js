@@ -4,8 +4,8 @@ export const seoConfig = {
   company: {
     name: "JCP Maquinarias",
     description: "Líderes en maquinaria industrial para panaderías en Argentina. Amasadoras, hornos rotativos, sobadoras y repuestos originales.",
-    url: "https://maquinariasjcp.netlify.app",
-    logo: "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
+    url: "https://jcpamasadoras.com",
+    logo: "https://jcpamasadoras.com/Assets/logojcp.png",
     phone: "011-4441-0705",
     email: "jcpmaquinasparapanaderias@outlook.com.ar",
     address: {
@@ -19,6 +19,15 @@ export const seoConfig = {
   // Keywords principales por categoría
   keywords: {
     primary: [
+      "ingenieria",
+      "maquinas de panaderia",
+      "maquinaria industrial",
+      "amasadoras",
+      "amasadoras industriales",
+      "sobadoras",
+      "repuestos de panaderia",
+      "empresa maquinaria de panaderia",
+      "jcp",
       "amasadoras industriales argentina",
       "hornos rotativos panadería",
       "maquinaria panadería argentina",
@@ -30,14 +39,20 @@ export const seoConfig = {
       "hornos convector industriales",
       "combos equipamiento panadería",
       "guía compra amasadora industrial",
-      "especificaciones técnicas maquinaria"
+      "especificaciones técnicas maquinaria",
+      "trinchadoras",
+      "repuestos",
+      "repuestos maquinaria panaderia",
+      "maquinaria panaderia industrial"
     ],
     longTail: [
       "cómo elegir amasadora industrial para panadería",
       "hornos rotativos vs convector diferencias",
       "repuestos originales maquinaria panadería argentina",
       "instalación amasadoras industriales buenos aires",
-      "mantenimiento hornos panadería industrial"
+      "mantenimiento hornos panadería industrial",
+      "empresa de maquinas de panaderia en argentina",
+      "maquinaria industrial para panaderias y pastelerias"
     ]
   },
 
@@ -58,12 +73,12 @@ export const seoConfig = {
     home: {
       title: "Amasadoras Industriales Argentina | Hornos Panadería | JCP Maquinarias",
       description: "Líderes en amasadoras industriales, hornos rotativos y maquinaria para panaderías en Argentina. Más de 20 años de experiencia. Asesoramiento especializado y repuestos originales garantizados.",
-      keywords: "amasadora industrial argentina, hornos rotativos panadería, maquinaria panadería argentina, amasadoras 50 kg, hornos convector industriales, sobadoras martino, repuestos amasadoras, combos equipamiento panadería, guía compra amasadora industrial"
+      keywords: "ingenieria, maquinas de panaderia, maquinaria industrial, amasadoras, amasadoras industriales, sobadoras, trinchadoras, repuestos, repuestos de panaderia, empresa maquinaria de panaderia, jcp, maquinaria panadería argentina, hornos rotativos panadería, sobadoras martino, repuestos amasadoras"
     },
     catalog: {
       title: "Catálogo Amasadoras Industriales | Hornos Rotativos | Sobadoras Martino Argentina",
       description: "Catálogo completo de amasadoras industriales, hornos rotativos, sobadoras Martino y maquinaria para panaderías en Argentina. Especificaciones técnicas detalladas, precios y combos especiales. Asesoramiento técnico gratuito.",
-      keywords: "catálogo amasadoras industriales, hornos rotativos argentina, sobadoras martino, amasadoras 50 kg precio, hornos convector panadería, combos equipamiento panadería, especificaciones técnicas maquinaria, guía compra amasadora industrial"
+      keywords: "catálogo amasadoras industriales, hornos rotativos argentina, sobadoras martino, amasadoras 50 kg precio, hornos convector panadería, combos equipamiento panadería, especificaciones técnicas maquinaria, guía compra amasadora industrial, maquinaria industrial, repuestos de panaderia, trinchadoras"
     },
     amasadoras: {
       title: "Amasadoras Industriales Argentina | Guía Completa de Compra | JCP Maquinarias",
@@ -94,8 +109,8 @@ export const seoConfig = {
       "@type": "Organization",
       "name": "JCP Maquinarias",
       "description": "Líderes en maquinaria industrial para panaderías en Argentina. Amasadoras, hornos rotativos, sobadoras y repuestos originales.",
-      "url": "https://maquinariasjcp.netlify.app",
-      "logo": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
+      "url": "https://jcpamasadoras.com",
+      "logo": "https://jcpamasadoras.com/Assets/logojcp.png",
       "telephone": "+54 11 6396 2947",
       "address": {
         "@type": "PostalAddress",
@@ -118,7 +133,7 @@ export const seoConfig = {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "JCP Maquinarias",
-      "url": "https://maquinariasjcp.netlify.app",
+      "url": "https://jcpamasadoras.com",
       "description": "Catálogo completo de maquinaria industrial para panaderías en Argentina",
       "publisher": {
         "@type": "Organization",
@@ -126,7 +141,7 @@ export const seoConfig = {
       },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://maquinariasjcp.netlify.app/catalog?q={search_term_string}",
+        "target": "https://jcpamasadoras.com/catalog?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }
@@ -139,7 +154,7 @@ export const seoConfig = {
     type: "website",
     images: [
       {
-        url: "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
+        url: "https://jcpamasadoras.com/Assets/logojcp.png",
         width: 1200,
         height: 630,
         alt: "JCP Maquinarias - Amasadoras Industriales Argentina"
@@ -174,7 +189,6 @@ export const seoConfig = {
     
     // Preload de recursos críticos
     criticalResources: [
-      '/Assets/logojcp.png',
       '/Assets/logojcp.png',
       '/data/modernProducts.json',
       '/data/productCatalog.json'

@@ -1,4 +1,5 @@
-import Head from 'next/head';
+import SEOHead from '../components/SEOHead';
+import { seoConfig } from '../seo-config';
 import { CheckCircle, ArrowLeft, Mail, Phone } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useRouter } from 'next/router';
@@ -18,11 +19,13 @@ export default function Success() {
 
   return (
     <>
-      <Head>
-        <title>Mensaje Enviado - JCP Maquinaria Industrial</title>
-        <meta name="description" content="Tu mensaje ha sido enviado exitosamente. Te contactaremos pronto." />
-        <meta name="robots" content="noindex, nofollow" />
-      </Head>
+      <SEOHead
+        title="Mensaje Enviado - JCP Maquinaria Industrial"
+        description="Tu mensaje ha sido enviado exitosamente. Te contactaremos pronto."
+        canonicalUrl={`${seoConfig.company.url}/success`}
+        noindex
+        nofollow
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] via-[#2d2d2d] to-[#1a1a1a] flex items-center justify-center px-4">
         <div className="max-w-md w-full">

@@ -1,53 +1,39 @@
-import Head from 'next/head'
+import SEOHead from '../components/SEOHead'
+import { seoConfig } from '../seo-config'
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 
 export default function Maquinaria() {
   return (
     <>
-      <Head>
-        <title>Maquinaria Industrial para Panaderías | Hornos, Amasadoras, Sobadoras | JCP Maquinarias</title>
-        <meta name="description" content="Maquinaria industrial especializada para panaderías y pastelerías. Hornos rotativos, amasadoras de espiral y brazos, sobadoras industriales, batidoras planetarias. Fabricación argentina con garantía." />
-        <meta name="keywords" content="maquinaria panadería industrial, hornos rotativos argentina, amasadoras sobadoras, batidoras planetarias, equipos panadería" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Maquinaria Industrial para Panaderías | JCP Maquinarias" />
-        <meta property="og:description" content="Maquinaria industrial especializada para panaderías. Hornos, amasadoras, sobadoras y equipos de alta calidad." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://maquinariasjcp.netlify.app/maquinaria" />
-        
-        {/* Canonical */}
-        <link rel="canonical" href="https://maquinariasjcp.netlify.app/maquinaria" />
-        
-        {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Product",
-              "name": "Maquinaria Industrial para Panaderías",
-              "description": "Maquinaria industrial especializada para panaderías y pastelerías",
-              "brand": {
-                "@type": "Brand",
-                "name": "JCP Maquinarias"
-              },
-              "category": "Maquinaria Industrial",
-              "url": "https://maquinariasjcp.netlify.app/maquinaria",
-              "image": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
-              "offers": {
-                "@type": "Offer",
-                "availability": "https://schema.org/InStock",
-                "priceCurrency": "ARS",
-                "seller": {
-                  "@type": "Organization",
-                  "name": "JCP Maquinarias"
-                }
-              }
-            })
-          }}
-        />
-      </Head>
+      <SEOHead
+        title="Maquinaria Industrial para Panaderías | Hornos, Amasadoras, Sobadoras | JCP Maquinarias"
+        description="Maquinaria industrial especializada para panaderías y pastelerías. Hornos rotativos, amasadoras de espiral y brazos, sobadoras industriales, batidoras planetarias. Fabricación argentina con garantía."
+        keywords="maquinaria panadería industrial, hornos rotativos argentina, amasadoras sobadoras, batidoras planetarias, equipos panadería, maquinaria industrial, maquinas de panaderia, repuestos de panaderia, trinchadoras, jcp"
+        canonicalUrl={`${seoConfig.company.url}/maquinaria`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Maquinaria Industrial para Panaderías",
+          "description": "Maquinaria industrial especializada para panaderías y pastelerías",
+          "brand": {
+            "@type": "Brand",
+            "name": "JCP Maquinarias"
+          },
+          "category": "Maquinaria Industrial",
+          "url": `${seoConfig.company.url}/maquinaria`,
+          "image": seoConfig.openGraph.images[0].url,
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "ARS",
+            "seller": {
+              "@type": "Organization",
+              "name": "JCP Maquinarias"
+            }
+          }
+        }}
+      />
       
       <div className="min-h-screen bg-[#f8f9fa]" lang="es">
         <Header />

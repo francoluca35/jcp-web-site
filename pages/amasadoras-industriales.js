@@ -1,4 +1,5 @@
-import Head from 'next/head'
+import SEOHead from '../components/SEOHead'
+import { seoConfig } from '../seo-config'
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 import { Button } from "../components/ui/button"
@@ -60,58 +61,40 @@ export default function AmasadorasIndustriales() {
 
   return (
     <>
-      <Head>
-        <title>Amasadoras Industriales Argentina | Guía Completa de Compra | JCP Maquinarias</title>
-        <meta name="description" content="Guía completa para elegir la amasadora industrial ideal. Catálogo de amasadoras de 25kg a 75kg, especificaciones técnicas detalladas, precios y combos especiales. Asesoramiento técnico gratuito en Argentina." />
-        <meta name="keywords" content="amasadora industrial argentina, amasadoras 50 kg precio, cómo elegir amasadora industrial, amasadora rápida panadería, especificaciones técnicas amasadora, motor trifásico amasadora, guía compra amasadora industrial, combos amasadora sobadora" />
-        <meta name="robots" content="index, follow" />
-        <meta name="language" content="es-AR" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Amasadoras Industriales Argentina | Guía Completa de Compra" />
-        <meta property="og:description" content="Guía completa para elegir la amasadora industrial ideal. Especificaciones técnicas detalladas y asesoramiento técnico gratuito." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://maquinariasjcp.netlify.app/amasadoras-industriales" />
-        <meta property="og:locale" content="es_AR" />
-        
-        {/* Canonical */}
-        <link rel="canonical" href="https://maquinariasjcp.netlify.app/amasadoras-industriales" />
-        
-        {/* Structured Data - Product Collection */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              "name": "Amasadoras Industriales Argentina",
-              "description": "Catálogo completo de amasadoras industriales para panaderías con especificaciones técnicas detalladas",
-              "url": "https://maquinariasjcp.netlify.app/amasadoras-industriales",
-              "mainEntity": {
-                "@type": "ItemList",
-                "numberOfItems": 3,
-                "itemListElement": amasadorasData.map((item, index) => ({
-                  "@type": "ListItem",
-                  "position": index + 1,
-                  "item": {
-                    "@type": "Product",
-                    "name": item.name,
-                    "description": `Amasadora industrial con capacidad de ${item.capacity}`,
-                    "category": "Amasadoras Industriales",
-                    "brand": "JCP Maquinarias",
-                    "offers": {
-                      "@type": "Offer",
-                      "price": item.price,
-                      "priceCurrency": "ARS",
-                      "availability": "https://schema.org/InStock"
-                    }
-                  }
-                }))
+      <SEOHead
+        title={seoConfig.pages.amasadoras.title}
+        description={seoConfig.pages.amasadoras.description}
+        keywords={seoConfig.pages.amasadoras.keywords}
+        canonicalUrl={`${seoConfig.company.url}/amasadoras-industriales`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Amasadoras Industriales Argentina",
+          "description": "Catálogo completo de amasadoras industriales para panaderías con especificaciones técnicas detalladas",
+          "url": `${seoConfig.company.url}/amasadoras-industriales`,
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": 3,
+            "itemListElement": amasadorasData.map((item, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "Product",
+                "name": item.name,
+                "description": `Amasadora industrial con capacidad de ${item.capacity}`,
+                "category": "Amasadoras Industriales",
+                "brand": "JCP Maquinarias",
+                "offers": {
+                  "@type": "Offer",
+                  "price": item.price,
+                  "priceCurrency": "ARS",
+                  "availability": "https://schema.org/InStock"
+                }
               }
-            })
-          }}
-        />
-      </Head>
+            }))
+          }
+        }}
+      />
       
       <div className="min-h-screen bg-[#f8f9fa]" lang="es">
         <Header />

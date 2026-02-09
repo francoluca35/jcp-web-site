@@ -1,4 +1,5 @@
-import Head from 'next/head'
+import SEOHead from '../components/SEOHead'
+import { seoConfig } from '../seo-config'
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 import { Button } from "../components/ui/button"
@@ -113,59 +114,41 @@ export default function CombosSoluciones() {
 
   return (
     <>
-      <Head>
-        <title>Combos y Soluciones Integrales para Panaderías | JCP Maquinarias</title>
-        <meta name="description" content="Combos completos de equipamiento para panaderías, pizzerías y pastelerías. Soluciones integrales con descuentos especiales, instalación incluida y soporte técnico. Ahorra hasta 16% comprando en combo." />
-        <meta name="keywords" content="combos equipamiento panadería, soluciones integrales panadería, combo amasadora horno, equipamiento completo panadería, descuentos maquinaria industrial, instalación incluida panadería" />
-        <meta name="robots" content="index, follow" />
-        <meta name="language" content="es-AR" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Combos y Soluciones Integrales para Panaderías | JCP Maquinarias" />
-        <meta property="og:description" content="Combos completos de equipamiento con descuentos especiales, instalación incluida y soporte técnico para panaderías." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://maquinariasjcp.netlify.app/combos-soluciones" />
-        <meta property="og:locale" content="es_AR" />
-        
-        {/* Canonical */}
-        <link rel="canonical" href="https://maquinariasjcp.netlify.app/combos-soluciones" />
-        
-        {/* Structured Data - Product Collection */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              "name": "Combos y Soluciones Integrales para Panaderías",
-              "description": "Combos completos de equipamiento industrial para panaderías con descuentos especiales",
-              "url": "https://maquinariasjcp.netlify.app/combos-soluciones",
-              "mainEntity": {
-                "@type": "ItemList",
-                "numberOfItems": 4,
-                "itemListElement": combosData.map((combo, index) => ({
-                  "@type": "ListItem",
-                  "position": index + 1,
-                  "item": {
-                    "@type": "Product",
-                    "name": combo.name,
-                    "description": combo.description,
-                    "category": "Combos de Equipamiento",
-                    "brand": "JCP Maquinarias",
-                    "offers": {
-                      "@type": "Offer",
-                      "price": combo.comboPrice,
-                      "priceCurrency": "ARS",
-                      "availability": "https://schema.org/InStock",
-                      "priceValidUntil": "2025-12-31"
-                    }
-                  }
-                }))
+      <SEOHead
+        title={seoConfig.pages.combos.title}
+        description={seoConfig.pages.combos.description}
+        keywords={seoConfig.pages.combos.keywords}
+        canonicalUrl={`${seoConfig.company.url}/combos-soluciones`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Combos y Soluciones Integrales para Panaderías",
+          "description": "Combos completos de equipamiento industrial para panaderías con descuentos especiales",
+          "url": `${seoConfig.company.url}/combos-soluciones`,
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": 4,
+            "itemListElement": combosData.map((combo, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "Product",
+                "name": combo.name,
+                "description": combo.description,
+                "category": "Combos de Equipamiento",
+                "brand": "JCP Maquinarias",
+                "offers": {
+                  "@type": "Offer",
+                  "price": combo.comboPrice,
+                  "priceCurrency": "ARS",
+                  "availability": "https://schema.org/InStock",
+                  "priceValidUntil": "2025-12-31"
+                }
               }
-            })
-          }}
-        />
-      </Head>
+            }))
+          }
+        }}
+      />
       
       <div className="min-h-screen bg-[#f8f9fa]" lang="es">
         <Header />

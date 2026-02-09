@@ -1,4 +1,5 @@
-import Head from 'next/head'
+import SEOHead from '../components/SEOHead'
+import { seoConfig } from '../seo-config'
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 import { Button } from "../components/ui/button"
@@ -106,54 +107,36 @@ export default function Blog() {
 
   return (
     <>
-      <Head>
-        <title>Blog Técnico Maquinaria Panadería | Guías y Consejos | JCP Maquinarias</title>
-        <meta name="description" content="Blog especializado en maquinaria para panaderías. Guías de compra, mantenimiento preventivo, técnicas de producción y consejos técnicos de expertos en equipamiento industrial." />
-        <meta name="keywords" content="blog maquinaria panadería, guías compra amasadoras, mantenimiento equipamiento industrial, técnicas producción panadería, consejos técnicos hornos, optimización procesos panadería" />
-        <meta name="robots" content="index, follow" />
-        <meta name="language" content="es-AR" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Blog Técnico Maquinaria Panadería | Guías y Consejos Expertos" />
-        <meta property="og:description" content="Blog especializado con guías de compra, mantenimiento preventivo y técnicas de producción para equipamiento de panaderías." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://maquinariasjcp.netlify.app/blog" />
-        <meta property="og:locale" content="es_AR" />
-        
-        {/* Canonical */}
-        <link rel="canonical" href="https://maquinariasjcp.netlify.app/blog" />
-        
-        {/* Structured Data - Blog */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Blog",
-              "name": "Blog Técnico JCP Maquinarias",
-              "description": "Blog especializado en maquinaria industrial para panaderías",
-              "url": "https://maquinariasjcp.netlify.app/blog",
-              "publisher": {
-                "@type": "Organization",
-                "name": "JCP Maquinarias",
-                "logo": "https://maquinariasjcp.netlify.app/Assets/logojcp.png"
-              },
-              "blogPost": blogPosts.map(post => ({
-                "@type": "BlogPosting",
-                "headline": post.title,
-                "description": post.excerpt,
-                "datePublished": post.date,
-                "author": {
-                  "@type": "Organization",
-                  "name": "JCP Maquinarias"
-                },
-                "url": `https://maquinariasjcp.netlify.app${post.url}`,
-                "keywords": post.tags.join(", ")
-              }))
-            })
-          }}
-        />
-      </Head>
+      <SEOHead
+        title="Blog Técnico Maquinaria Panadería | Guías y Consejos | JCP Maquinarias"
+        description="Blog especializado en maquinaria para panaderías. Guías de compra, mantenimiento preventivo, técnicas de producción y consejos técnicos de expertos en equipamiento industrial."
+        keywords="blog maquinaria panadería, guías compra amasadoras, mantenimiento equipamiento industrial, técnicas producción panadería, consejos técnicos hornos, optimización procesos panadería, maquinaria industrial, maquinas de panaderia, sobadoras, repuestos de panaderia, jcp"
+        canonicalUrl={`${seoConfig.company.url}/blog`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "name": "Blog Técnico JCP Maquinarias",
+          "description": "Blog especializado en maquinaria industrial para panaderías",
+          "url": `${seoConfig.company.url}/blog`,
+          "publisher": {
+            "@type": "Organization",
+            "name": "JCP Maquinarias",
+            "logo": seoConfig.openGraph.images[0].url
+          },
+          "blogPost": blogPosts.map(post => ({
+            "@type": "BlogPosting",
+            "headline": post.title,
+            "description": post.excerpt,
+            "datePublished": post.date,
+            "author": {
+              "@type": "Organization",
+              "name": "JCP Maquinarias"
+            },
+            "url": `${seoConfig.company.url}${post.url}`,
+            "keywords": post.tags.join(", ")
+          }))
+        }}
+      />
       
       <div className="min-h-screen bg-[#f8f9fa]" lang="es">
         <Header />
@@ -375,6 +358,7 @@ export default function Blog() {
               <input 
                 type="email" 
                 placeholder="Tu email"
+                aria-label="Tu email"
                 className="flex-1 px-4 py-3 rounded-lg border-0 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
               />
               <Button 

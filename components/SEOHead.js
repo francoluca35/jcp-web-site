@@ -24,6 +24,15 @@ const SEOHead = ({
   
   if (nofollow) robotsContent.push('nofollow');
   else robotsContent.push('follow');
+  if (!noindex) {
+    robotsContent.push('max-image-preview:large', 'max-snippet:-1', 'max-video-preview:-1');
+  }
+
+  const structuredDataList = Array.isArray(structuredData)
+    ? structuredData
+    : structuredData
+    ? [structuredData]
+    : [];
 
   return (
     <Head>
@@ -37,6 +46,8 @@ const SEOHead = ({
       <meta name="geo.region" content="AR" />
       <meta name="geo.placename" content="Argentina" />
       <meta name="revisit-after" content="3 days" />
+      <meta name="format-detection" content="telephone=no" />
+      <link rel="alternate" hrefLang="es-AR" href={fullCanonicalUrl} />
       
       {/* Canonical URL */}
       <link rel="canonical" href={fullCanonicalUrl} />
@@ -47,6 +58,8 @@ const SEOHead = ({
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={fullCanonicalUrl} />
       <meta property="og:image" content={fullOgImage} />
+      <meta property="og:image:width" content={seoConfig.openGraph.images[0].width} />
+      <meta property="og:image:height" content={seoConfig.openGraph.images[0].height} />
       <meta property="og:site_name" content={seoConfig.company.name} />
       <meta property="og:locale" content="es_AR" />
       
@@ -55,6 +68,7 @@ const SEOHead = ({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={fullDescription} />
       <meta name="twitter:image" content={fullOgImage} />
+      <meta name="twitter:image:alt" content={seoConfig.openGraph.images[0].alt} />
       <meta name="twitter:site" content={seoConfig.twitter.site} />
       <meta name="twitter:creator" content={seoConfig.twitter.creator} />
       
@@ -77,14 +91,15 @@ const SEOHead = ({
       ))}
       
       {/* Datos estructurados */}
-      {structuredData && (
+      {structuredDataList.map((data, index) => (
         <script
+          key={`structured-data-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData)
+            __html: JSON.stringify(data)
           }}
         />
-      )}
+      ))}
       
       {/* Schema.org por defecto */}
       <script

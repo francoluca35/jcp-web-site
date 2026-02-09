@@ -1,53 +1,39 @@
-import Head from 'next/head'
+import SEOHead from '../components/SEOHead'
+import { seoConfig } from '../seo-config'
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 
 export default function Repuestos() {
   return (
     <>
-      <Head>
-        <title>Repuestos para Maquinaria de Panadería | JCP Maquinarias Argentina</title>
-        <meta name="description" content="Repuestos originales para maquinaria de panadería. Motores, engranajes, rodamientos, sinfines, coronas, quemadores, sondas de temperatura. Envío a todo Argentina. Stock permanente." />
-        <meta name="keywords" content="repuestos maquinaria panadería, motores amasadoras, engranajes sobadoras, sinfines coronas, quemadores hornos, repuestos Pauna, repuestos Imepa" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Repuestos para Maquinaria de Panadería | JCP Maquinarias" />
-        <meta property="og:description" content="Repuestos originales para maquinaria de panadería. Motores, engranajes, sinfines y más. Envío a todo Argentina." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://maquinariasjcp.netlify.app/repuestos" />
-        
-        {/* Canonical */}
-        <link rel="canonical" href="https://maquinariasjcp.netlify.app/repuestos" />
-        
-        {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Product",
-              "name": "Repuestos para Maquinaria de Panadería",
-              "description": "Repuestos originales para maquinaria de panadería y pastelería",
-              "brand": {
-                "@type": "Brand",
-                "name": "JCP Maquinarias"
-              },
-              "category": "Repuestos Industriales",
-              "url": "https://maquinariasjcp.netlify.app/repuestos",
-              "image": "https://maquinariasjcp.netlify.app/Assets/logojcp.png",
-              "offers": {
-                "@type": "Offer",
-                "availability": "https://schema.org/InStock",
-                "priceCurrency": "ARS",
-                "seller": {
-                  "@type": "Organization",
-                  "name": "JCP Maquinarias"
-                }
-              }
-            })
-          }}
-        />
-      </Head>
+      <SEOHead
+        title={seoConfig.pages.repuestos.title}
+        description={seoConfig.pages.repuestos.description}
+        keywords={seoConfig.pages.repuestos.keywords}
+        canonicalUrl={`${seoConfig.company.url}/repuestos`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Repuestos para Maquinaria de Panadería",
+          "description": "Repuestos originales para maquinaria de panadería y pastelería",
+          "brand": {
+            "@type": "Brand",
+            "name": "JCP Maquinarias"
+          },
+          "category": "Repuestos Industriales",
+          "url": `${seoConfig.company.url}/repuestos`,
+          "image": seoConfig.openGraph.images[0].url,
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "ARS",
+            "seller": {
+              "@type": "Organization",
+              "name": "JCP Maquinarias"
+            }
+          }
+        }}
+      />
       
       <div className="min-h-screen bg-[#f8f9fa]" lang="es">
         <Header />
