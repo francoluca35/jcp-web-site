@@ -12,6 +12,10 @@ export function HeroSection() {
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const line1 = "Fabricación de Máquinas";
+  const line2 = "& Repuestos para Panadería";
+  const [typedLine1, setTypedLine1] = useState("");
+  const [typedLine2, setTypedLine2] = useState("");
 
   // Cambiar imagen automáticamente cada 5 segundos solo en desktop
   useEffect(() => {
@@ -21,6 +25,30 @@ export function HeroSection() {
 
     return () => clearInterval(interval);
   }, [images.length]);
+
+  useEffect(() => {
+    const line1Done = typedLine1.length >= line1.length;
+    const line2Done = typedLine2.length >= line2.length;
+
+    const timeout = setTimeout(() => {
+      if (!line1Done) {
+        setTypedLine1(line1.slice(0, typedLine1.length + 1));
+        return;
+      }
+      if (!line2Done) {
+        setTypedLine2(line2.slice(0, typedLine2.length + 1));
+        return;
+      }
+      // Pausa y reinicio para efecto infinito
+      setTypedLine1("");
+      setTypedLine2("");
+    }, line1Done && line2Done ? 1200 : 65);
+
+    return () => clearTimeout(timeout);
+  }, [typedLine1, typedLine2, line1, line2]);
+
+  const showCursorOnLine1 = typedLine1.length < line1.length;
+  const showCursorOnLine2 = !showCursorOnLine1 && typedLine2.length < line2.length;
 
   return (
     <section 
@@ -52,17 +80,28 @@ export function HeroSection() {
       </div>
       
       {/* Overlay oscuro para mejorar legibilidad */}
-      <div className="absolute inset-0 bg-black/70 lg:bg-black/40"></div>
+      <div className="absolute inset-0 bg-black/30 lg:bg-black/40"></div>
 
       {/* Contenido centrado */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-        <div className="bg-black/25 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-2xl px-4 py-6 sm:px-6 sm:py-8">
+        <div className=" rounded-2xl px-4 py-6 sm:px-6 sm:py-8">
         {/* Título principal */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight tracking-tight">
-          <span className="text-white drop-shadow-lg block mb-2">Fabricación de Máquinas</span>
+          <span className="sr-only">
+            Fabricación de Máquinas & Repuestos para Panadería
+          </span>
+          <span className="text-white drop-shadow-lg block mb-2">
+            {typedLine1}
+            {showCursorOnLine1 && <span className="ml-1 animate-pulse">|</span>}
+          </span>
           <span className="block">
-            <span className="text-white drop-shadow-lg">& </span>
-            <span className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent drop-shadow-lg">Repuestos para Panadería</span>
+            <span className="text-white drop-shadow-lg">
+              {typedLine2.startsWith("&") ? "& " : ""}
+            </span>
+            <span className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent drop-shadow-lg">
+              {typedLine2.startsWith("&") ? typedLine2.slice(2) : typedLine2}
+            </span>
+            {showCursorOnLine2 && <span className="ml-1 animate-pulse text-white">|</span>}
           </span>
         </h1>
         

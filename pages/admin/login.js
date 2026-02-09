@@ -194,12 +194,12 @@ export default function Login() {
                     />
                     <span className="text-sm text-[#adb5bd]">Recordarme</span>
                   </label>
-                  <a 
-                    href="#" 
+                  <button
+                    type="button"
                     className="text-sm text-[#ff6b35] hover:text-[#ffd23f] transition-colors"
                   >
                     ¿Olvidaste tu contraseña?
-                  </a>
+                  </button>
                 </div>
 
                 <button

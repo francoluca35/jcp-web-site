@@ -100,11 +100,11 @@ export function Header() {
 
   // Navigation items for landing page
   const landingPageNavItems = [
-    { href: '/', label: 'Inicio', isAnchor: true },
-    { href: '#nosotros', label: 'Nosotros', isAnchor: true },
-    { href: '#maquinas', label: 'Máquinas', isAnchor: true },
-    { href: '#repuestos', label: 'Repuestos', isAnchor: true },
-    { href: '#contacto', label: 'Contacto', isAnchor: true }
+    { label: 'Inicio', sectionId: 'inicio' },
+    { label: 'Nosotros', sectionId: 'nosotros' },
+    { label: 'Máquinas', sectionId: 'maquinas' },
+    { label: 'Repuestos', sectionId: 'repuestos' },
+    { label: 'Contacto', sectionId: 'contacto' }
   ];
 
   return (
@@ -159,14 +159,15 @@ export function Header() {
                 // Navigation for landing page
                 <>
                   {landingPageNavItems.map((item, index) => (
-                    <a 
+                    <button 
                       key={index}
-                      href={item.href} 
+                      type="button"
+                      onClick={() => handleNavClick(item.sectionId)}
                       className="text-white hover:text-[#ff6b35] transition-all duration-300 font-medium uppercase tracking-wide text-sm border-b-2 border-transparent hover:border-[#ff6b35] pb-1 transform hover:scale-105"
                       aria-label={`Ir a la sección de ${item.label.toLowerCase()}`}
                     >
                       {item.label}
-                    </a>
+                    </button>
                   ))}
                   
                   {/* Dropdown Menu for landing page */}
@@ -321,7 +322,8 @@ export function Header() {
                     {landingPageNavItems.map((item, index) => (
                       <button 
                         key={index}
-                        onClick={() => handleNavClick(item.label.toLowerCase())}
+                        type="button"
+                        onClick={() => handleNavClick(item.sectionId)}
                         className="block w-full text-left text-white hover:text-[#ff6b35] transition-all duration-300 font-medium uppercase tracking-wide text-lg border-l-4 border-transparent hover:border-[#ff6b35] pl-4 py-3 transform hover:translate-x-2"
                         aria-label={`Ir a la sección de ${item.label.toLowerCase()}`}
                       >

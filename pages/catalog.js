@@ -22,25 +22,25 @@ export default function Catalog() {
               "@type": "ListItem",
               "position": 1,
               "name": "Hornos Rotativos Industriales",
-              "url": `${seoConfig.company.url}/catalog#hornos`
+              "url": `${seoConfig.company.url}/catalog`
             },
             {
               "@type": "ListItem",
               "position": 2,
               "name": "Amasadoras Industriales",
-              "url": `${seoConfig.company.url}/catalog#amasadoras`
+              "url": `${seoConfig.company.url}/catalog`
             },
             {
               "@type": "ListItem",
               "position": 3,
               "name": "Sobadoras Industriales",
-              "url": `${seoConfig.company.url}/catalog#sobadoras`
+              "url": `${seoConfig.company.url}/catalog`
             },
             {
               "@type": "ListItem",
               "position": 4,
               "name": "Repuestos Originales",
-              "url": `${seoConfig.company.url}/catalog#repuestos`
+              "url": `${seoConfig.company.url}/catalog`
             }
           ]
         }}
