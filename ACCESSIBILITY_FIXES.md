@@ -79,8 +79,8 @@ const OptimizedImage = ({ src, alt, ...props }) => {
 ```html
 <!-- Meta tags completos -->
 <title>Amasadoras Industriales Argentina | Hornos Panadería | JCP Maquinarias</title>
-<meta name="description" content="Líderes en amasadoras industriales, hornos rotativos y maquinaria para panaderías en Argentina. Más de 20 años de experiencia." />
-<meta name="keywords" content="amasadora industrial argentina, hornos rotativos panadería, maquinaria panadería argentina" />
+<meta name="description" content="Líderes en amasadoras rapidas industriales, trinchadoras y sobadoras panaderas en Argentina. Más de 50 años de experiencia." />
+<meta name="keywords" content="amasadora rapidas industrial argentina, hornos rotativos panadería, maquinaria panadería argentina" />
 
 <!-- Estructura de headers correcta -->
 <h1>Amasadoras Industriales Argentina</h1>

@@ -3,7 +3,7 @@ export const seoConfig = {
   // Información de la empresa
   company: {
     name: "JCP Maquinarias",
-    description: "Líderes en maquinaria industrial para panaderías en Argentina. Amasadoras, hornos rotativos, sobadoras y repuestos originales.",
+    description: "Líderes en amasadoras industriales, trinchadoras y sobadoras panaderas en Argentina. Repuestos originales y asesoramiento especializado.",
     url: "https://jcpamasadoras.com",
     logo: "https://jcpamasadoras.com/Assets/logojcp.png",
     phone: "011-4441-0705",
@@ -71,8 +71,8 @@ export const seoConfig = {
   // Configuración de metadatos por página
   pages: {
     home: {
-      title: "Amasadoras Industriales Argentina | Hornos Panadería | JCP Maquinarias",
-      description: "Líderes en amasadoras industriales, hornos rotativos y maquinaria para panaderías en Argentina. Más de 20 años de experiencia. Asesoramiento especializado y repuestos originales garantizados.",
+      title: "Amasadoras Industriales | Trinchadoras y Sobadoras Panaderas | JCP Maquinarias",
+      description: "Líderes en amasadoras industriales, trinchadoras y sobadoras panaderas en Argentina. Más de 50 años de experiencia. Asesoramiento especializado y repuestos originales garantizados.",
       keywords: "ingenieria, maquinas de panaderia, maquinaria industrial, amasadoras, amasadoras industriales, sobadoras, trinchadoras, repuestos, repuestos de panaderia, empresa maquinaria de panaderia, jcp, maquinaria panadería argentina, hornos rotativos panadería, sobadoras martino, repuestos amasadoras"
     },
     catalog: {
@@ -108,7 +108,7 @@ export const seoConfig = {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "JCP Maquinarias",
-      "description": "Líderes en maquinaria industrial para panaderías en Argentina. Amasadoras, hornos rotativos, sobadoras y repuestos originales.",
+      "description": "Líderes en amasadoras industriales, trinchadoras y sobadoras panaderas en Argentina. Repuestos originales y asesoramiento especializado.",
       "url": "https://jcpamasadoras.com",
       "logo": "https://jcpamasadoras.com/Assets/logojcp.png",
       "telephone": "+54 11 6396 2947",
@@ -123,7 +123,7 @@ export const seoConfig = {
       "industry": "Maquinaria Industrial",
       "knowsAbout": [
         "Amasadoras Industriales",
-        "Hornos Rotativos",
+        "Trinchadoras",
         "Sobadoras",
         "Maquinaria Panadería",
         "Repuestos Originales"

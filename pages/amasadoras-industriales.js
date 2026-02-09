@@ -152,7 +152,7 @@ export default function AmasadorasIndustriales() {
                 Cómo Elegir tu Amasadora Industrial Ideal
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Nuestra experiencia de más de 20 años nos permite guiarte en la elección correcta 
+                Nuestra experiencia de más de 50 años nos permite guiarte en la elección correcta 
                 para maximizar tu inversión y productividad.
               </p>
             </div>

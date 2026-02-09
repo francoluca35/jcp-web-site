@@ -588,7 +588,7 @@ export function ModernCatalog() {
         {/* <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
               { icon: TrendingUp, value: "200+", label: "Instalaciones", color: "text-[#ff6b35]" },
-              { icon: Award, value: "20+", label: "Años Experiencia", color: "text-[#ffd23f]" },
+              { icon: Award, value: "50+", label: "Años Experiencia", color: "text-[#ffd23f]" },
               { icon: Shield, value: "100%", label: "Mano de obra Garantizadoa", color: "text-[#ff6b35]" },
               { icon: Settings, value: "24/7", label: "Soporte Técnico", color: "text-[#ffd23f]" }
             ].map((stat, index) => (
