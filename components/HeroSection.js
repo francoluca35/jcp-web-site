@@ -80,7 +80,7 @@ export function HeroSection() {
       </div>
       
       {/* Overlay oscuro para mejorar legibilidad */}
-      <div className="absolute inset-0 bg-black/30 lg:bg-black/40"></div>
+      <div className="absolute inset-0 bg-black/50 lg:bg-black/40"></div>
 
       {/* Contenido centrado */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
