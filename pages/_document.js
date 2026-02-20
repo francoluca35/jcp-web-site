@@ -15,12 +15,7 @@ export default function Document() {
           content="0_y9ramkSULynQRxCiveQiNgnMafq5ejYYkmw_eCQ7o"
         />
         
-        {/* Preload de fuentes críticas */}
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-          as="style"
-        />
+        {/* Fuente opcional: el sitio usa system fonts por defecto; sin preload para evitar "preloaded but not used" */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"

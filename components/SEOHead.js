@@ -80,16 +80,12 @@ const SEOHead = ({
       {/* Manifest */}
       <link rel="manifest" href="/manifest.json" />
       
-      {/* Preload de recursos críticos */}
-      {seoConfig.performance.criticalResources.map((resource, index) => (
-        <link 
-          key={index}
-          rel="preload" 
-          href={resource} 
-          as={resource.endsWith('.json') ? 'fetch' : 'image'}
-          crossOrigin="anonymous"
-        />
-      ))}
+      {/* Preload solo del logo (usado en header). No preload de JSON para evitar "preloaded but not used". */}
+      <link
+        rel="preload"
+        href="/Assets/logojcp.png"
+        as="image"
+      />
       
       {/* Datos estructurados */}
       {structuredDataList.map((data, index) => (

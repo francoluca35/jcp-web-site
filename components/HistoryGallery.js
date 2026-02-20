@@ -8,7 +8,7 @@ export function HistoryGallery() {
 
   // Array de imágenes de la historia - puedes agregar más imágenes aquí
   const images = [
-    { src: "/Assets/about3.png", alt: "Fabricación de maquinarias" },
+    { src: "/Assets/galpon.jpeg", alt: "Fabricación de maquinarias" },
     { src: "/Assets/about.jpg", alt: "Equipo de trabajo JCP" },
     { src: "/Assets/home2.png", alt: "Maquinaria en producción" },
     { src: "/Assets/home3.png", alt: "Taller de fabricación" },
@@ -30,6 +30,9 @@ export function HistoryGallery() {
     { src: "/Assets/maquinarias/WhatsApp Image 2026-01-10 at 6.14.38 PM.jpeg", alt: "Maquinaria industrial en uso" },
     { src: "/Assets/maquinarias/WhatsApp Image 2026-01-10 at 6.14.41 PM.jpeg", alt: "Maquinaria industrial en taller" },
     { src: "/Assets/maquinarias/WhatsApp Image 2026-01-10 at 6.14.44 PM.jpeg", alt: "Maquinaria industrial en showroom" },
+    { src: "/Assets/repuesto.jpeg", alt: "Maquinaria industrial en showroom" },
+    { src: "/Assets/1.jpeg", alt: "Maquinaria industrial en showroom" },
+    { src: "/Assets/2.jpeg", alt: "Maquinaria industrial en showroom" }
   ];
 
   const openImage = (image) => {

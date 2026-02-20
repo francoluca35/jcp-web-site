@@ -245,7 +245,7 @@ export function PartsAndServicesSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center bg-gradient-to-r from-[#ff6b35]/20 to-[#ffd23f]/20 rounded-full px-6 py-3 mb-6 border border-[#ff6b35]/30">
             <Cog className="h-5 w-5 text-[#ffd23f] mr-2 animate-spin" />
-            <span className="text-white font-bold uppercase tracking-wide">Repuestos Industriales</span>
+            <span className="text-white font-bold uppercase tracking-wide">Repuestos Todas las Marcas</span>
           </div>
           <h2 className="text-4xl lg:text-6xl font-black text-white mb-6">
             <span className=" bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] bg-clip-text text-transparent">

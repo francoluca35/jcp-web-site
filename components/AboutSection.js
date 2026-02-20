@@ -22,8 +22,10 @@ export function AboutSection() {
   const images = [
    
     "/Assets/about2.jpeg",
-    "/Assets/about3.png",
-    "/Assets/maquina3.jpeg"
+    "/Assets/galpon.jpeg",
+    "/Assets/maquina3.jpeg",
+    "/Assets/1.jpeg",
+    "/Assets/2.jpeg"
    
   ];
 
