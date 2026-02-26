@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 export function HeroSection() {
   // Array de imágenes para desktop - fácil de expandir agregando más rutas aquí
   const images = [
-    "/Assets/homee.jpeg",
+    "/Assets/home.png",
     "/Assets/home2.png",
     "/Assets/home3.png",
     // "/Assets/home4.png",

@@ -22,7 +22,7 @@ export function AboutSection() {
   const images = [
    
     "/Assets/about2.jpeg",
-    "/Assets/galpon.jpeg",
+    "/Assets/home.png",
     "/Assets/maquina3.jpeg",
     "/Assets/1.jpeg",
     "/Assets/2.jpeg"
