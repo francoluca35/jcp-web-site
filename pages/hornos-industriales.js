@@ -144,7 +144,7 @@ export default function HornosIndustriales() {
                 <Button 
                   variant="outline"
                   className="border-2 border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white font-semibold px-8 py-4 rounded-lg transition-all duration-200"
-                  onClick={() => window.open('https://wa.me/541163962947?text=Hola, necesito asesoramiento para elegir un horno industrial', '_blank')}
+                  onClick={() => window.open('https://wa.me/5491163962947?text=Hola, necesito asesoramiento para elegir un horno industrial', '_blank')}
                 >
                   Consulta Técnica
                   <Users className="ml-2 h-5 w-5" />
@@ -375,7 +375,7 @@ export default function HornosIndustriales() {
                       </div>
                       <Button 
                         className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-semibold px-6 py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 border-0"
-                        onClick={() => window.open(`https://wa.me/541163962947?text=Hola, me interesa el ${horno.name}`, '_blank')}
+                        onClick={() => window.open(`https://wa.me/5491163962947?text=Hola, me interesa el ${horno.name}`, '_blank')}
                       >
                         Consultar
                       </Button>
@@ -401,7 +401,7 @@ export default function HornosIndustriales() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 className="bg-white text-[#ff6b35] hover:bg-gray-100 font-semibold px-8 py-4 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-                onClick={() => window.open('https://wa.me/541163962947?text=Hola, necesito asesoramiento para elegir un horno industrial según mi producción', '_blank')}
+                onClick={() => window.open('https://wa.me/5491163962947?text=Hola, necesito asesoramiento para elegir un horno industrial según mi producción', '_blank')}
               >
                 <Users className="mr-2 h-5 w-5" />
                 Consulta Técnica Gratuita

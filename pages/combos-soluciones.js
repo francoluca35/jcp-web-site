@@ -189,7 +189,7 @@ export default function CombosSoluciones() {
                 <Button 
                   variant="outline"
                   className="border-2 border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white font-semibold px-8 py-4 rounded-lg transition-all duration-200"
-                  onClick={() => window.open('https://wa.me/541163962947?text=Hola, me interesa conocer más sobre los combos de equipamiento', '_blank')}
+                  onClick={() => window.open('https://wa.me/5491163962947?text=Hola, me interesa conocer más sobre los combos de equipamiento', '_blank')}
                 >
                   Asesoramiento Gratuito
                   <Users className="ml-2 h-5 w-5" />
@@ -321,7 +321,7 @@ export default function CombosSoluciones() {
                       </div>
                       <Button 
                         className="bg-gradient-to-r from-[#ff6b35] to-[#ffd23f] hover:from-[#ff5722] hover:to-[#ffcc02] text-white font-semibold px-6 py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 border-0"
-                        onClick={() => window.open(`https://wa.me/541163962947?text=Hola, me interesa el ${combo.name}`, '_blank')}
+                        onClick={() => window.open(`https://wa.me/5491163962947?text=Hola, me interesa el ${combo.name}`, '_blank')}
                       >
                         Consultar Combo
                       </Button>
@@ -347,7 +347,7 @@ export default function CombosSoluciones() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 className="bg-white text-[#ff6b35] hover:bg-gray-100 font-semibold px-8 py-4 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-                onClick={() => window.open('https://wa.me/541163962947?text=Hola, necesito un combo personalizado para mi negocio', '_blank')}
+                onClick={() => window.open('https://wa.me/5491163962947?text=Hola, necesito un combo personalizado para mi negocio', '_blank')}
               >
                 <Users className="mr-2 h-5 w-5" />
                 Consulta Personalizada

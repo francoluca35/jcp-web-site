@@ -176,7 +176,7 @@ export default function Blog() {
                 <Button 
                   variant="outline"
                   className="border-2 border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white font-semibold px-8 py-4 rounded-lg transition-all duration-200"
-                  onClick={() => window.open('https://wa.me/541163962947?text=Hola, tengo una consulta técnica sobre maquinaria de panadería', '_blank')}
+                  onClick={() => window.open('https://wa.me/5491163962947?text=Hola, tengo una consulta técnica sobre maquinaria de panadería', '_blank')}
                 >
                   Consulta Técnica
                   <User className="ml-2 h-5 w-5" />
